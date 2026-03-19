@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* ───────────────────────────────────────────
+   PPA Design System — Custom Properties
+   ─────────────────────────────────────────── */
+
+@theme {
+  /* Brand Colors */
+  --color-ppa-navy: #0a1628;
+  --color-ppa-navy-light: #121f36;
+  --color-ppa-slate: #1a2a44;
+  --color-ppa-steel: #2d3f5e;
+  --color-ppa-accent: #3b82f6;
+  --color-ppa-accent-bright: #60a5fa;
+  --color-ppa-gold: #f59e0b;
+  --color-ppa-gold-light: #fbbf24;
+  --color-ppa-white: #f8fafc;
+  --color-ppa-gray: #94a3b8;
+  --color-ppa-gray-light: #cbd5e1;
+  --color-ppa-success: #10b981;
+  --color-ppa-danger: #ef4444;
+
+  /* Typography */
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  /* Spacing scale */
+  --spacing-section: 6rem;
+  --spacing-section-sm: 4rem;
+}
+
+/* ───────────────────────────────────────────
+   Base Styles
+   ─────────────────────────────────────────── */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-ppa-navy);
+  color: var(--color-ppa-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ───────────────────────────────────────────
+   Utility Classes
+   ─────────────────────────────────────────── */
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-ppa-accent-bright), var(--color-ppa-gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+}
+
+.bg-radial-glow {
+  background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+}
+
+/* Section divider line */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-ppa-steel),
+    transparent
+  );
+}
+
+/* Glassmorphism card */
+.glass-card {
+  background: rgba(18, 31, 54, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.glass-card:hover {
+  border-color: rgba(59, 130, 246, 0.25);
+  background: rgba(18, 31, 54, 0.8);
+}
