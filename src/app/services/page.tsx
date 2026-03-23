@@ -1,17 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  WrenchScrewdriverIcon,
-  ClipboardDocumentCheckIcon,
-  BoltIcon,
-  ShieldCheckIcon,
-  CpuChipIcon,
-  ChartBarIcon,
-  ArrowRightIcon,
-  PhoneIcon,
-  CheckCircleIcon,
-} from "@heroicons/react/24/outline";
 import { COMPANY, SERVICES } from "@/lib/constants";
 
 const SERVICE_IMAGES: Record<string, string> = {
@@ -21,15 +10,6 @@ const SERVICE_IMAGES: Record<string, string> = {
   "structural-repairs": "/images/Winglet-Install-04.jpg",
   avionics: "/images/Winglet-Install-05.jpg",
   "maintenance-management": "/images/Wing-MX---Travis-Angel.jpg",
-};
-
-const SERVICE_ICONS: Record<string, React.ElementType> = {
-  wrench: WrenchScrewdriverIcon,
-  clipboard: ClipboardDocumentCheckIcon,
-  bolt: BoltIcon,
-  shield: ShieldCheckIcon,
-  cpu: CpuChipIcon,
-  chart: ChartBarIcon,
 };
 
 const SERVICE_DETAILS: Record<
@@ -120,8 +100,8 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="pt-44 pb-20 relative overflow-hidden">
+      {/* Hero — Full bleed image */}
+      <section className="relative h-[75vh] min-h-[550px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <Image
             src="/images/Wing-MX.jpg"
@@ -130,48 +110,45 @@ export default function ServicesPage() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-ppa-navy/75" />
-          <div className="absolute inset-0 bg-gradient-to-r from-ppa-navy/90 via-ppa-navy/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ppa-black via-ppa-black/60 to-ppa-black/30" />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <p className="text-ppa-accent text-sm font-semibold uppercase tracking-wider mb-4">
+        <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="h-px w-8 bg-ppa-brass" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
               Our Services
-            </p>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-              Full-service maintenance.{" "}
-              <span className="text-ppa-gray">Specialist execution.</span>
-            </h1>
-            <p className="text-lg text-ppa-gray-light leading-relaxed mb-8">
-              Every service we offer is backed by deep type-specific experience
-              across Hawker, Citation, and Challenger aircraft. No generalist
-              guesswork — just precise, efficient maintenance from technicians
-              who know your airframe.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/quote"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold text-white bg-ppa-accent hover:bg-ppa-accent-bright rounded-xl transition-all shadow-lg shadow-ppa-accent/25"
-              >
-                Request a Quote
-                <ArrowRightIcon className="h-4 w-4" />
-              </Link>
-              <a
-                href={`tel:${COMPANY.phoneRaw}`}
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold text-ppa-gold border border-ppa-gold/30 hover:bg-ppa-gold/10 rounded-xl transition-all"
-              >
-                <PhoneIcon className="h-4 w-4" />
-                AOG? Call Now
-              </a>
-            </div>
+            </span>
+          </div>
+          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-ppa-white leading-[0.9] mb-6">
+            Full-Service Maintenance.
+            <br />
+            <span className="text-ppa-muted">Specialist Execution.</span>
+          </h1>
+          <p className="text-lg text-ppa-light/70 max-w-xl font-light mb-8">
+            Every service we offer is backed by deep type-specific experience
+            across Hawker, Citation, and Challenger aircraft.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link
+              href="/quote"
+              className="inline-flex items-center justify-center px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-black bg-ppa-brass hover:bg-ppa-brass-light transition-all"
+            >
+              Request a Quote
+            </Link>
+            <a
+              href={`tel:${COMPANY.phoneRaw}`}
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-brass border border-ppa-brass/40 hover:bg-ppa-brass/10 transition-all"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-ppa-gold animate-pulse" />
+              AOG? Call Now
+            </a>
           </div>
         </div>
       </section>
 
       {/* Service sections */}
       {SERVICES.map((service, i) => {
-        const Icon = SERVICE_ICONS[service.icon];
         const details = SERVICE_DETAILS[service.slug];
         const isEven = i % 2 === 0;
 
@@ -179,27 +156,25 @@ export default function ServicesPage() {
           <section
             key={service.slug}
             id={service.slug}
-            className={`py-20 ${isEven ? "" : "bg-ppa-navy-light border-y border-white/5"}`}
+            className={`py-20 lg:py-28 ${!isEven ? "bg-ppa-dark" : ""}`}
           >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+              <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
                 <div className={isEven ? "" : "lg:order-2"}>
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="h-12 w-12 rounded-xl bg-ppa-accent/10 flex items-center justify-center">
-                      <Icon className="h-6 w-6 text-ppa-accent" />
-                    </div>
-                    <h2 className="text-3xl font-bold text-white">
-                      {service.name}
-                    </h2>
-                  </div>
-                  <p className="text-ppa-gray-light leading-relaxed mb-8">
+                  <span className="font-display text-6xl text-ppa-border leading-none">
+                    0{i + 1}
+                  </span>
+                  <h2 className="font-display text-3xl sm:text-4xl text-ppa-white leading-none mt-2 mb-6">
+                    {service.name}
+                  </h2>
+                  <p className="text-ppa-gray font-light leading-relaxed mb-8">
                     {details?.description}
                   </p>
                   <ul className="space-y-3 mb-8">
                     {details?.features.map((feature) => (
                       <li key={feature} className="flex items-start gap-3">
-                        <CheckCircleIcon className="h-5 w-5 text-ppa-success flex-shrink-0 mt-0.5" />
-                        <span className="text-ppa-gray-light text-sm">
+                        <span className="text-ppa-brass mt-1.5 text-xs">+</span>
+                        <span className="text-ppa-light/80 text-sm">
                           {feature}
                         </span>
                       </li>
@@ -207,15 +182,17 @@ export default function ServicesPage() {
                   </ul>
                   <Link
                     href="/quote"
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-ppa-accent hover:text-ppa-accent-bright transition-colors"
+                    className="inline-flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.15em] text-ppa-brass hover:text-ppa-brass-light transition-colors"
                   >
-                    Get a quote for {service.name.toLowerCase()}
-                    <ArrowRightIcon className="h-4 w-4" />
+                    Get a Quote
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
                   </Link>
                 </div>
 
                 <div
-                  className={`aspect-[4/3] rounded-2xl overflow-hidden relative ${isEven ? "" : "lg:order-1"}`}
+                  className={`aspect-[4/3] relative overflow-hidden ${isEven ? "" : "lg:order-1"}`}
                 >
                   <Image
                     src={SERVICE_IMAGES[service.slug] || "/images/Aircraft-MX.jpg"}

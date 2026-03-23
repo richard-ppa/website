@@ -2,31 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
-import {
-  WrenchScrewdriverIcon,
-  ClipboardDocumentCheckIcon,
-  BoltIcon,
-  ShieldCheckIcon,
-  CpuChipIcon,
-  ChartBarIcon,
-  ArrowRightIcon,
-  PhoneIcon,
-} from "@heroicons/react/24/outline";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { CountUp } from "@/components/CountUp";
+import { HorizontalGallery } from "@/components/HorizontalGallery";
+import { PhotoGrid } from "@/components/PhotoGrid";
 import { COMPANY, AIRFRAMES, SERVICES } from "@/lib/constants";
 
-const SERVICE_ICONS: Record<string, React.ElementType> = {
-  wrench: WrenchScrewdriverIcon,
-  clipboard: ClipboardDocumentCheckIcon,
-  bolt: BoltIcon,
-  shield: ShieldCheckIcon,
-  cpu: CpuChipIcon,
-  chart: ChartBarIcon,
-};
-
-// Map airframe slugs to their showcase images
 const AIRFRAME_IMAGES: Record<string, { src: string; alt: string }> = {
   hawker: {
     src: "/images/Engine-MX.jpg",
@@ -42,165 +25,210 @@ const AIRFRAME_IMAGES: Record<string, { src: string; alt: string }> = {
   },
 };
 
+const GALLERY_IMAGES = [
+  { src: "/images/PPA-01.jpg", alt: "PPA hangar operations" },
+  { src: "/images/Winglet-Install-02.jpg", alt: "Winglet installation precision work" },
+  { src: "/images/PPA-04.jpg", alt: "Aircraft maintenance at PPA" },
+  { src: "/images/Wing-MX.jpg", alt: "Wing inspection from below" },
+  { src: "/images/PPA-07.jpg", alt: "PPA facility and team" },
+  { src: "/images/Tech-at-Station.jpg", alt: "Technician at workstation" },
+  { src: "/images/PPA-10.jpg", alt: "Hangar operations overview" },
+  { src: "/images/Winglet-MX---James02.jpg", alt: "Senior tech James at work" },
+  { src: "/images/PPA-12.jpg", alt: "PPA aircraft servicing" },
+];
+
+const PHOTO_GRID = [
+  { src: "/images/Winglet-Install-05.jpg", alt: "Winglet installation with hangar view" },
+  { src: "/images/Winglet-MX---James02.jpg", alt: "Precision riveting work" },
+  { src: "/images/Wing-MX.jpg", alt: "Aircraft underside inspection" },
+  { src: "/images/Winglet-Install-02.jpg", alt: "Winglet components on workbench" },
+  { src: "/images/Tail-Work-2.jpg", alt: "Tail section maintenance" },
+  { src: "/images/Engine-MX.jpg", alt: "Engine maintenance" },
+  { src: "/images/Interior-Work.jpg", alt: "Interior cabin work" },
+  { src: "/images/Wing-Work-4.jpg", alt: "Wing structural repair" },
+];
+
 export default function HomePage() {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
   return (
     <>
-      {/* ─── HERO ─── */}
-      <section className="relative min-h-screen flex items-center pt-44 pb-20 overflow-hidden">
-        {/* Hero background image */}
-        <div className="absolute inset-0">
+      {/* ─── HERO — Full viewport, cinematic ─── */}
+      <section ref={heroRef} className="relative h-screen flex items-end overflow-hidden">
+        {/* Parallax background */}
+        <motion.div style={{ y: heroY }} className="absolute inset-0">
           <Image
-            src="/images/Winglet-Install-03.jpg"
-            alt="PPA technician working on aircraft wing silhouetted against hangar door at sunset"
+            src="/images/tail-image.jpg"
+            alt="Business jet tail section at Plane Place Aviation hangar"
             fill
-            className="object-cover object-center"
+            className="object-cover"
             priority
             quality={90}
           />
-          {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-ppa-navy/75" />
-          <div className="absolute inset-0 bg-gradient-to-r from-ppa-navy/90 via-ppa-navy/60 to-transparent" />
-        </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-ppa-black via-ppa-black/40 to-ppa-black/20" />
+        </motion.div>
 
-        {/* Subtle grid overlay */}
-        <div className="absolute inset-0 bg-grid opacity-30" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-ppa-navy to-transparent" />
+        {/* Hero content */}
+        <motion.div
+          style={{ opacity: heroOpacity }}
+          className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16 lg:pb-24"
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex items-center gap-3 mb-6"
+          >
+            <span className="h-px w-8 bg-ppa-brass" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
+              FAA Part 145 Certified
+            </span>
+          </motion.div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="max-w-4xl">
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 mb-8 text-xs font-medium text-ppa-accent-bright bg-ppa-accent/10 border border-ppa-accent/20 rounded-full backdrop-blur-sm"
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="font-display text-[clamp(3rem,8vw,7.5rem)] leading-[0.9] tracking-wide text-ppa-white max-w-5xl"
+          >
+            Specialist MRO for
+            <br />
+            <span className="text-brass-gradient">Hawker, Citation</span>
+            <br />
+            <span className="text-brass-gradient">& Challenger</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.5 }}
+            className="mt-6 text-lg sm:text-xl text-ppa-light/80 max-w-xl font-light leading-relaxed"
+          >
+            Founder-led. Fast turnaround. Transparent pricing.
+            We only work on three airframe families — and we do
+            it better than anyone.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.7 }}
+            className="mt-10 flex flex-col sm:flex-row gap-4"
+          >
+            <Link
+              href="/quote"
+              className="inline-flex items-center justify-center px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-black bg-ppa-brass hover:bg-ppa-brass-light transition-all"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-ppa-success animate-pulse" />
-              FAA Part 145 Certified Repair Station
-            </motion.div>
-
-            {/* Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.08] tracking-tight"
+              Request a Quote
+            </Link>
+            <a
+              href={`tel:${COMPANY.phoneRaw}`}
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-brass border border-ppa-brass/40 hover:bg-ppa-brass/10 transition-all"
             >
-              <span className="text-white">The specialist MRO for</span>
-              <br />
-              <span className="text-gradient">
-                Hawker, Citation &amp; Challenger
-              </span>
-            </motion.h1>
+              <span className="h-1.5 w-1.5 rounded-full bg-ppa-gold animate-pulse" />
+              AOG? Call Now
+            </a>
+          </motion.div>
+        </motion.div>
 
-            {/* Subheadline */}
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-6 text-lg sm:text-xl text-ppa-gray-light max-w-2xl leading-relaxed"
-            >
-              Founder-led, fast turnaround, transparent pricing. We only work on
-              three airframe families — and we do it better than anyone.
-            </motion.p>
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2 }}
+          className="absolute bottom-8 right-10 hidden lg:flex flex-col items-center gap-2"
+        >
+          <span className="text-[10px] uppercase tracking-[0.2em] text-ppa-muted rotate-90 origin-center translate-y-4">Scroll</span>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="w-px h-8 bg-ppa-brass/50"
+          />
+        </motion.div>
+      </section>
 
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-10 flex flex-col sm:flex-row gap-4"
-            >
-              <Link
-                href="/quote"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold text-white bg-ppa-accent hover:bg-ppa-accent-bright rounded-xl transition-all shadow-lg shadow-ppa-accent/25 hover:shadow-ppa-accent/40 hover:-translate-y-0.5"
-              >
-                Request a Quote
-                <ArrowRightIcon className="h-4 w-4" />
-              </Link>
-              <a
-                href={`tel:${COMPANY.phoneRaw}`}
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold text-ppa-gold border border-ppa-gold/30 hover:bg-ppa-gold/10 rounded-xl transition-all"
-              >
-                <PhoneIcon className="h-4 w-4" />
-                AOG? Call Now
-              </a>
-            </motion.div>
-
-            {/* Tagline + location */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="mt-16"
-            >
-              <p className="text-xl sm:text-2xl font-semibold italic tracking-wide text-ppa-accent-bright">
-                Precise. Professional. Attentive.
+      {/* ─── STATS BAR ─── */}
+      <section className="bg-ppa-dark border-y border-ppa-border">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-10 grid grid-cols-2 lg:grid-cols-4 gap-8">
+          {[
+            { value: 40, suffix: "+", label: "Technicians" },
+            { value: 3, suffix: "", label: "Airframe Families" },
+            { value: 25, suffix: "+", label: "Aircraft Capacity" },
+            { value: 2, suffix: "", label: "State AOG Coverage", prefix: "" },
+          ].map((stat) => (
+            <div key={stat.label} className="text-center lg:text-left">
+              <p className="font-display text-4xl sm:text-5xl text-ppa-brass leading-none">
+                <CountUp end={stat.value} suffix={stat.suffix} prefix={stat.prefix} />
               </p>
-            </motion.div>
-          </div>
+              <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-muted">
+                {stat.label}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* ─── DIVIDER ─── */}
-      <div className="section-divider" />
-
-      {/* ─── AIRFRAMES ─── */}
-      <section className="py-24 sm:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ─── AIRFRAMES — Large editorial cards ─── */}
+      <section className="py-24 lg:py-32">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <AnimatedSection>
-            <div className="text-center mb-16">
-              <p className="text-ppa-accent text-sm font-semibold uppercase tracking-wider mb-3">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="h-px w-8 bg-ppa-brass" />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
                 Specialist Focus
-              </p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
-                Three airframe families.
-                <br />
-                <span className="text-ppa-gray">Zero compromises.</span>
-              </h2>
-              <p className="mt-4 text-ppa-gray-light max-w-2xl mx-auto">
-                Every tool, part, and procedure in our facility is optimized for
-                Hawker, Citation, and Challenger. Our techs don&apos;t context-switch
-                between a King Air and a Gulfstream.
-              </p>
+              </span>
             </div>
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-white leading-none mb-4">
+              Three Airframe Families.
+              <br />
+              <span className="text-ppa-muted">Zero Compromises.</span>
+            </h2>
+            <p className="text-ppa-gray max-w-xl mb-16 font-light">
+              Every tool, part, and procedure in our facility is optimized for
+              Hawker, Citation, and Challenger. Our techs don&apos;t
+              context-switch between a King Air and a Gulfstream.
+            </p>
           </AnimatedSection>
 
-          <div className="grid lg:grid-cols-3 gap-6">
+          <div className="grid lg:grid-cols-3 gap-3">
             {Object.values(AIRFRAMES).map((airframe, i) => {
               const img = AIRFRAME_IMAGES[airframe.slug];
               return (
-                <AnimatedSection key={airframe.slug} delay={i * 0.15}>
+                <AnimatedSection key={airframe.slug} delay={i * 0.12}>
                   <Link
                     href={`/aircraft/${airframe.slug}`}
-                    className="group block glass-card rounded-2xl overflow-hidden h-full transition-all duration-300 hover:-translate-y-1"
+                    className="group block relative overflow-hidden aspect-[3/4] lg:aspect-[2/3]"
                   >
-                    {/* Aircraft image */}
-                    <div className="h-56 relative overflow-hidden">
-                      <Image
-                        src={img.src}
-                        alt={img.alt}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-ppa-navy-light/90 via-transparent to-transparent" />
-                      <div className="absolute bottom-4 left-6">
-                        <span className="text-3xl font-bold text-white drop-shadow-lg">
-                          {airframe.name}
-                        </span>
-                      </div>
-                    </div>
+                    <Image
+                      src={img.src}
+                      alt={img.alt}
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-ppa-black via-ppa-black/30 to-transparent" />
+                    <div className="absolute inset-0 bg-ppa-black/10 group-hover:bg-transparent transition-colors duration-500" />
 
-                    <div className="p-8 pt-4">
-                      <p className="text-sm text-ppa-accent mb-3">
+                    <div className="absolute bottom-0 left-0 right-0 p-6 lg:p-8">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-brass mb-2">
+                        {airframe.manufacturer}
+                      </p>
+                      <h3 className="font-display text-4xl lg:text-5xl text-ppa-white leading-none mb-3">
+                        {airframe.name}
+                      </h3>
+                      <p className="text-sm text-ppa-light/70 mb-4">
                         {airframe.models.join(" / ")}
                       </p>
-                      <p className="text-ppa-gray-light text-sm leading-relaxed mb-4">
-                        {airframe.description}
-                      </p>
-                      <span className="inline-flex items-center gap-1.5 text-sm font-medium text-ppa-accent group-hover:text-ppa-accent-bright transition-colors">
-                        View capabilities
-                        <ArrowRightIcon className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                      <span className="inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.15em] text-ppa-brass group-hover:text-ppa-brass-light transition-colors">
+                        View Capabilities
+                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
                       </span>
                     </div>
                   </Link>
@@ -211,254 +239,239 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ─── HORIZONTAL GALLERY STRIP ─── */}
+      <section className="py-2 overflow-hidden">
+        <HorizontalGallery images={GALLERY_IMAGES} />
+      </section>
+
       {/* ─── SERVICES ─── */}
-      <section className="py-24 sm:py-32 relative overflow-hidden">
-        {/* Background image with dark overlay */}
+      <section className="py-24 lg:py-32 relative overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/Aircraft-MX.jpg"
-            alt="PPA hangar with multiple aircraft undergoing maintenance"
+            src="/images/Winglet-Install-03.jpg"
+            alt="PPA technician silhouette working on wing at sunset"
             fill
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-ppa-navy/90" />
+          <div className="absolute inset-0 bg-ppa-black/85" />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10">
           <AnimatedSection>
-            <div className="text-center mb-16">
-              <p className="text-ppa-accent text-sm font-semibold uppercase tracking-wider mb-3">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="h-px w-8 bg-ppa-brass" />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
                 What We Do
-              </p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
-                Full-service maintenance.
-                <br />
-                <span className="text-ppa-gray">Specialist execution.</span>
-              </h2>
+              </span>
             </div>
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-white leading-none mb-16">
+              Full-Service Maintenance.
+              <br />
+              <span className="text-ppa-muted">Specialist Execution.</span>
+            </h2>
           </AnimatedSection>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {SERVICES.map((service, i) => {
-              const Icon = SERVICE_ICONS[service.icon];
-              return (
-                <AnimatedSection key={service.slug} delay={i * 0.1}>
-                  <div className="glass-card rounded-2xl p-8 h-full group hover:-translate-y-1 transition-all duration-300">
-                    <div className="h-12 w-12 rounded-xl bg-ppa-accent/10 flex items-center justify-center mb-5 group-hover:bg-ppa-accent/20 transition-colors">
-                      <Icon className="h-6 w-6 text-ppa-accent" />
-                    </div>
-                    <h3 className="text-lg font-bold text-white mb-2">
-                      {service.name}
-                    </h3>
-                    <p className="text-sm text-ppa-gray-light leading-relaxed">
-                      {service.short}
-                    </p>
-                  </div>
-                </AnimatedSection>
-              );
-            })}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-ppa-border/50">
+            {SERVICES.map((service, i) => (
+              <AnimatedSection key={service.slug} delay={i * 0.08}>
+                <div className="bg-ppa-black/60 backdrop-blur-sm p-8 lg:p-10 h-full group hover:bg-ppa-black/80 transition-colors duration-300">
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-brass">
+                    0{i + 1}
+                  </span>
+                  <h3 className="font-display text-2xl text-ppa-white mt-3 mb-3">
+                    {service.name}
+                  </h3>
+                  <p className="text-sm text-ppa-gray leading-relaxed">
+                    {service.short}
+                  </p>
+                </div>
+              </AnimatedSection>
+            ))}
           </div>
 
           <AnimatedSection delay={0.3}>
-            <div className="text-center mt-12">
+            <div className="mt-12">
               <Link
                 href="/services"
-                className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-ppa-accent border border-ppa-accent/30 hover:bg-ppa-accent/10 rounded-xl transition-colors"
+                className="inline-flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.15em] text-ppa-brass hover:text-ppa-brass-light transition-colors"
               >
-                View all services
-                <ArrowRightIcon className="h-4 w-4" />
+                View All Services
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
               </Link>
             </div>
           </AnimatedSection>
         </div>
       </section>
 
-      {/* ─── WHY PPA ─── */}
-      <section className="py-24 sm:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection>
-            <div className="text-center mb-16">
-              <p className="text-ppa-accent text-sm font-semibold uppercase tracking-wider mb-3">
-                Why PPA
-              </p>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white">
-                Built by operators,
-                <br />
-                <span className="text-ppa-gray">for operators.</span>
-              </h2>
-              <p className="mt-4 text-ppa-gray-light max-w-2xl mx-auto">
-                Founders Tristan Noe and Travis Roberson came from the operator
-                side — charter ops, maintenance management, and aircraft
-                ownership. They built the MRO they wished existed as customers.
-              </p>
-            </div>
-          </AnimatedSection>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Narrow Specialization",
-                description:
-                  "Three airframe families. Every tool, part, and procedure optimized for Hawker, Citation, and Challenger.",
-              },
-              {
-                title: "Transparent Pricing",
-                description:
-                  "Detailed quotes upfront, clear scope documentation, proactive communication on any changes.",
-              },
-              {
-                title: "Documentation Quality",
-                description:
-                  "Audit-ready, thorough maintenance records on every work order. Your records protect your aircraft's value.",
-              },
-              {
-                title: "AOG Response",
-                description:
-                  "Mobile maintenance team covering Texas and Oklahoma. When your aircraft is down, we come to you.",
-              },
-              {
-                title: "Strategic Location",
-                description:
-                  "30 minutes from DFW with significantly lower operating costs. Lower overhead means better value for you.",
-              },
-              {
-                title: "Founder Accountability",
-                description:
-                  "Tristan and Travis are on the floor across our three hangars, not in a corporate office. The owners answer the phone.",
-              },
-            ].map((item, i) => (
-              <AnimatedSection key={item.title} delay={i * 0.1}>
-                <div className="relative pl-6 border-l-2 border-ppa-accent/30 hover:border-ppa-accent transition-colors">
-                  <h3 className="text-lg font-bold text-white mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-ppa-gray-light leading-relaxed">
-                    {item.description}
-                  </p>
+      {/* ─── WHY PPA — Split image/text ─── */}
+      <section className="py-24 lg:py-32">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+            <AnimatedSection direction="left">
+              <div className="relative">
+                <div className="aspect-[4/5] relative overflow-hidden">
+                  <Image
+                    src="/images/Winglet-Install---01.jpg"
+                    alt="PPA technicians collaborating on winglet structural work"
+                    fill
+                    className="object-cover"
+                  />
                 </div>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
+                {/* Overlapping accent image */}
+                <div className="absolute -bottom-8 -right-8 w-2/5 aspect-square overflow-hidden border-4 border-ppa-black hidden lg:block">
+                  <Image
+                    src="/images/Tech-at-Station.jpg"
+                    alt="PPA technician at precision workstation"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+            </AnimatedSection>
 
-      {/* ─── TEAM / FOUNDERS ─── */}
-      <section className="py-24 sm:py-32 bg-ppa-navy-light border-y border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <AnimatedSection>
+            <AnimatedSection direction="right">
               <div>
-                <p className="text-ppa-accent text-sm font-semibold uppercase tracking-wider mb-3">
-                  Leadership
-                </p>
-                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-                  The owners answer the phone.
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="h-px w-8 bg-ppa-brass" />
+                  <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
+                    Why PPA
+                  </span>
+                </div>
+                <h2 className="font-display text-4xl sm:text-5xl text-ppa-white leading-none mb-6">
+                  Built by Operators,
+                  <br />
+                  <span className="text-ppa-muted">For Operators.</span>
                 </h2>
-                <p className="text-ppa-gray-light leading-relaxed mb-4">
-                  Plane Place Aviation was founded by Tristan Noe and
-                  Travis Roberson — two operators who spent years on the customer
-                  side of the MRO relationship. They experienced the
-                  frustrations of unclear pricing, missed turnaround dates, and
-                  impersonal service firsthand.
+                <p className="text-ppa-gray leading-relaxed mb-10 font-light">
+                  Founders Tristan Noe and Travis Roberson came from the operator
+                  side — charter ops, maintenance management, and aircraft
+                  ownership. They built the MRO they wished existed as customers.
                 </p>
-                <p className="text-ppa-gray-light leading-relaxed mb-8">
-                  They built PPA to be different: a specialist shop with
-                  operator-level understanding, transparent communication, and
-                  the accountability that comes from founders who are on the
-                  floor every day.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  {COMPANY.founders.map((founder) => (
-                    <div key={founder.email} className="glass-card rounded-xl p-5 flex-1">
-                      <p className="font-bold text-white">{founder.name}</p>
-                      <p className="text-sm text-ppa-gray mb-2">
-                        {founder.title}
-                      </p>
-                      <a
-                        href={`mailto:${founder.email}`}
-                        className="text-sm text-ppa-accent hover:text-ppa-accent-bright transition-colors"
-                      >
-                        {founder.email}
-                      </a>
+
+                <div className="space-y-6">
+                  {[
+                    {
+                      title: "Narrow Specialization",
+                      description: "Three airframe families. Every tool, part, and procedure optimized.",
+                    },
+                    {
+                      title: "Transparent Pricing",
+                      description: "Detailed quotes upfront. Proactive communication on any changes.",
+                    },
+                    {
+                      title: "Documentation Quality",
+                      description: "Audit-ready records on every work order. Protecting your aircraft's value.",
+                    },
+                    {
+                      title: "AOG Response",
+                      description: "Mobile team covering Texas and Oklahoma. When you're down, we come to you.",
+                    },
+                    {
+                      title: "Founder Accountability",
+                      description: "Tristan and Travis are on the floor, not in a corporate office.",
+                    },
+                  ].map((item, i) => (
+                    <div key={item.title} className="flex gap-4">
+                      <span className="text-ppa-brass font-display text-lg mt-0.5">
+                        0{i + 1}
+                      </span>
+                      <div>
+                        <h3 className="text-ppa-white font-semibold mb-1">
+                          {item.title}
+                        </h3>
+                        <p className="text-sm text-ppa-muted leading-relaxed">
+                          {item.description}
+                        </p>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             </AnimatedSection>
-
-            <AnimatedSection delay={0.2}>
-              <div className="aspect-[4/3] rounded-2xl overflow-hidden relative">
-                <Image
-                  src="/images/Winglet-Install---01.jpg"
-                  alt="PPA technicians collaborating on winglet structural work in the Cleburne hangar"
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-ppa-navy/40 to-transparent" />
-              </div>
-            </AnimatedSection>
           </div>
         </div>
       </section>
 
-      {/* ─── PHOTO GALLERY STRIP ─── */}
-      <section className="py-2 bg-ppa-navy">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-          {[
-            { src: "/images/Winglet-Install-05.jpg", alt: "PPA tech working on winglet installation with hangar view" },
-            { src: "/images/Winglet-MX---James02.jpg", alt: "Senior PPA technician performing precision riveting work" },
-            { src: "/images/Wing-MX.jpg", alt: "PPA technician inspecting aircraft underside in hangar" },
-            { src: "/images/Winglet-Install-02.jpg", alt: "PPA technician drilling winglet components on workbench" },
-          ].map((photo) => (
-            <div key={photo.src} className="aspect-[4/3] relative overflow-hidden">
-              <Image
-                src={photo.src}
-                alt={photo.alt}
-                fill
-                className="object-cover hover:scale-105 transition-transform duration-500"
-              />
+      {/* ─── TEAM PHOTO — Full bleed ─── */}
+      <section className="relative">
+        <AnimatedSection direction="scale">
+          <div className="aspect-[21/9] lg:aspect-[3/1] relative overflow-hidden">
+            <Image
+              src="/images/PPA-Employees.jpg"
+              alt="The full Plane Place Aviation team in front of the Cleburne hangar"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-ppa-black/60 via-transparent to-ppa-black/20" />
+            <div className="absolute bottom-0 left-0 right-0 p-6 lg:p-10">
+              <p className="font-display text-3xl lg:text-5xl text-ppa-white">
+                40+ Technicians. One Team.
+              </p>
+              <p className="text-ppa-light/70 mt-2">Cleburne, Texas — KCPT</p>
             </div>
-          ))}
-        </div>
+          </div>
+        </AnimatedSection>
+      </section>
+
+      {/* ─── PHOTO GRID ─── */}
+      <section className="py-2">
+        <PhotoGrid photos={PHOTO_GRID} />
       </section>
 
       {/* ─── LOCATION ─── */}
-      <section className="py-24 sm:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <AnimatedSection>
-            <p className="text-ppa-accent text-sm font-semibold uppercase tracking-wider mb-3">
-              Location
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              Cleburne, Texas — KCPT
-            </h2>
-            <p className="text-ppa-gray-light max-w-2xl mx-auto mb-8">
-              30 minutes south of DFW, with lower operating costs that translate
-              to better value for our customers. Fly directly into Cleburne
-              Regional Airport — we operate out of three hangars on the field.
-            </p>
-          </AnimatedSection>
-
-          <AnimatedSection delay={0.2}>
-            <div className="aspect-[21/9] rounded-2xl overflow-hidden relative max-w-5xl mx-auto">
-              <Image
-                src="/images/Wing-MX---Travis-Angel.jpg"
-                alt="PPA technicians working on aircraft wing with business jet in background at Cleburne hangar"
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-ppa-navy/60 to-transparent" />
-              <div className="absolute bottom-6 left-8 text-left">
-                <p className="text-white font-bold text-lg">
-                  {COMPANY.address.street}
-                </p>
-                <p className="text-ppa-gray-light text-sm">
-                  {COMPANY.address.city}, {COMPANY.address.state}{" "}
-                  {COMPANY.address.zip} — {COMPANY.address.airport}
-                </p>
+      <section className="py-24 lg:py-32">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <AnimatedSection>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="h-px w-8 bg-ppa-brass" />
+                <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
+                  Location
+                </span>
               </div>
-            </div>
-          </AnimatedSection>
+              <h2 className="font-display text-4xl sm:text-5xl text-ppa-white leading-none mb-6">
+                Cleburne, Texas
+                <br />
+                <span className="text-ppa-muted">KCPT</span>
+              </h2>
+              <p className="text-ppa-gray font-light leading-relaxed mb-8">
+                30 minutes south of DFW, with lower operating costs that
+                translate to better value for our customers. Fly directly into
+                Cleburne Regional Airport — we operate out of three hangars on the field.
+              </p>
+              <div className="space-y-2 text-sm text-ppa-gray mb-8">
+                <p>{COMPANY.address.street}</p>
+                <p>
+                  {COMPANY.address.city}, {COMPANY.address.state}{" "}
+                  {COMPANY.address.zip}
+                </p>
+                <p className="text-ppa-brass">{COMPANY.address.airport}</p>
+              </div>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.15em] text-ppa-brass hover:text-ppa-brass-light transition-colors"
+              >
+                Get in Touch
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </AnimatedSection>
+
+            <AnimatedSection delay={0.15}>
+              <div className="aspect-[4/3] relative overflow-hidden">
+                <Image
+                  src="/images/Wing-MX---Travis-Angel.jpg"
+                  alt="PPA technicians working on aircraft wing at Cleburne hangar"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-ppa-black/30 to-transparent" />
+              </div>
+            </AnimatedSection>
+          </div>
         </div>
       </section>
     </>

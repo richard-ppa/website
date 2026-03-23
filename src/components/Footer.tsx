@@ -4,27 +4,29 @@ import { COMPANY, NAV_LINKS, AIRFRAMES, SERVICES } from "@/lib/constants";
 
 export function Footer() {
   return (
-    <footer className="bg-ppa-navy-light border-t border-white/5">
-      {/* CTA Banner */}
-      <div className="bg-ppa-accent/5 border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-            Ready to talk maintenance?
-          </h2>
-          <p className="text-ppa-gray mb-6 max-w-xl mx-auto">
-            Whether you need a scheduled inspection, a pre-purchase evaluation,
-            or AOG support right now — we&apos;re here.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+    <footer className="bg-ppa-dark border-t border-ppa-border">
+      {/* CTA Strip */}
+      <div className="border-b border-ppa-border">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16 lg:py-20 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+          <div>
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-white leading-none">
+              Ready to Talk Maintenance?
+            </h2>
+            <p className="mt-3 text-ppa-gray max-w-lg">
+              Whether you need a scheduled inspection, a pre-purchase
+              evaluation, or AOG support right now — we&apos;re here.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3">
             <Link
               href="/quote"
-              className="px-8 py-3 text-sm font-semibold text-white bg-ppa-accent hover:bg-ppa-accent-bright rounded-lg transition-colors shadow-lg shadow-ppa-accent/20"
+              className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-black bg-ppa-brass hover:bg-ppa-brass-light transition-colors"
             >
               Request a Quote
             </Link>
             <a
               href={`tel:${COMPANY.phoneRaw}`}
-              className="px-8 py-3 text-sm font-semibold text-ppa-accent border border-ppa-accent/30 hover:bg-ppa-accent/10 rounded-lg transition-colors"
+              className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-brass border border-ppa-brass/40 hover:bg-ppa-brass/10 transition-colors text-center"
             >
               Call {COMPANY.phone}
             </a>
@@ -33,36 +35,34 @@ export function Footer() {
       </div>
 
       {/* Footer columns */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           {/* Brand */}
           <div>
-            <div className="mb-4">
-              <Image
-                src="/images/logo-white.png"
-                alt="Plane Place Aviation"
-                width={200}
-                height={57}
-                className="h-12 w-auto"
-              />
-            </div>
-            <p className="text-ppa-gray text-sm leading-relaxed mb-4">
+            <Image
+              src="/images/logo-white.png"
+              alt="Plane Place Aviation"
+              width={180}
+              height={51}
+              className="h-10 w-auto mb-5"
+            />
+            <p className="text-sm text-ppa-muted leading-relaxed mb-5">
               FAA Part 145 repair station specializing exclusively in Hawker,
               Citation, and Challenger aircraft.
             </p>
-            <div className="space-y-1.5 text-sm text-ppa-gray">
+            <div className="space-y-1 text-sm text-ppa-muted">
               <p>{COMPANY.address.street}</p>
               <p>
                 {COMPANY.address.city}, {COMPANY.address.state}{" "}
                 {COMPANY.address.zip}
               </p>
-              <p className="text-ppa-gray-light">{COMPANY.address.airport}</p>
+              <p className="text-ppa-gray">{COMPANY.address.airport}</p>
             </div>
           </div>
 
           {/* Services */}
           <div>
-            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-4">
+            <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-gray mb-5">
               Services
             </h3>
             <ul className="space-y-2.5">
@@ -70,7 +70,7 @@ export function Footer() {
                 <li key={service.slug}>
                   <Link
                     href={`/services#${service.slug}`}
-                    className="text-sm text-ppa-gray hover:text-ppa-accent-bright transition-colors"
+                    className="text-sm text-ppa-muted hover:text-ppa-brass transition-colors"
                   >
                     {service.name}
                   </Link>
@@ -81,18 +81,18 @@ export function Footer() {
 
           {/* Aircraft */}
           <div>
-            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-4">
-              Aircraft We Serve
+            <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-gray mb-5">
+              Aircraft
             </h3>
             <ul className="space-y-2.5">
               {Object.values(AIRFRAMES).map((airframe) => (
                 <li key={airframe.slug}>
                   <Link
                     href={`/aircraft/${airframe.slug}`}
-                    className="text-sm text-ppa-gray hover:text-ppa-accent-bright transition-colors"
+                    className="text-sm text-ppa-muted hover:text-ppa-brass transition-colors"
                   >
                     {airframe.name}{" "}
-                    <span className="text-ppa-steel">
+                    <span className="text-ppa-muted/50">
                       ({airframe.models.join(", ")})
                     </span>
                   </Link>
@@ -100,7 +100,7 @@ export function Footer() {
               ))}
             </ul>
 
-            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mt-8 mb-4">
+            <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-gray mt-8 mb-5">
               Company
             </h3>
             <ul className="space-y-2.5">
@@ -108,7 +108,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-ppa-gray hover:text-ppa-accent-bright transition-colors"
+                    className="text-sm text-ppa-muted hover:text-ppa-brass transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -119,29 +119,29 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="text-white font-semibold text-sm uppercase tracking-wider mb-4">
+            <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-gray mb-5">
               Contact
             </h3>
             <div className="space-y-4">
               <div>
-                <p className="text-xs text-ppa-gray uppercase tracking-wider mb-1">
+                <p className="text-[11px] uppercase tracking-[0.15em] text-ppa-muted mb-1">
                   AOG Hotline
                 </p>
                 <a
                   href={`tel:${COMPANY.phoneRaw}`}
-                  className="text-lg font-bold text-ppa-gold hover:text-ppa-gold-light transition-colors"
+                  className="text-xl font-bold text-ppa-brass hover:text-ppa-brass-light transition-colors"
                 >
                   {COMPANY.phone}
                 </a>
               </div>
               {COMPANY.founders.map((founder) => (
                 <div key={founder.email}>
-                  <p className="text-sm text-ppa-gray-light">
+                  <p className="text-sm text-ppa-gray">
                     {founder.name}, {founder.title}
                   </p>
                   <a
                     href={`mailto:${founder.email}`}
-                    className="text-sm text-ppa-accent hover:text-ppa-accent-bright transition-colors"
+                    className="text-sm text-ppa-muted hover:text-ppa-brass transition-colors"
                   >
                     {founder.email}
                   </a>
@@ -150,12 +150,12 @@ export function Footer() {
             </div>
 
             {/* Social */}
-            <div className="flex gap-4 mt-6">
+            <div className="flex gap-4 mt-8">
               <a
                 href={COMPANY.social.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-ppa-gray hover:text-white transition-colors"
+                className="text-ppa-muted hover:text-ppa-brass transition-colors"
                 aria-label="LinkedIn"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -166,7 +166,7 @@ export function Footer() {
                 href={COMPANY.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-ppa-gray hover:text-white transition-colors"
+                className="text-ppa-muted hover:text-ppa-brass transition-colors"
                 aria-label="Facebook"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -177,7 +177,7 @@ export function Footer() {
                 href={COMPANY.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-ppa-gray hover:text-white transition-colors"
+                className="text-ppa-muted hover:text-ppa-brass transition-colors"
                 aria-label="Instagram"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -190,8 +190,8 @@ export function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-ppa-gray">
+      <div className="border-t border-ppa-border">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-ppa-muted">
           <p>&copy; {new Date().getFullYear()} Plane Place Aviation. All rights reserved.</p>
           <p>FAA Part 145 Repair Station &mdash; Cleburne, Texas</p>
         </div>

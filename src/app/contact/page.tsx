@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { PhoneIcon, EnvelopeIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import { COMPANY } from "@/lib/constants";
 
 export const metadata: Metadata = {
@@ -13,113 +12,104 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="pt-44 pb-20 relative overflow-hidden">
+      <section className="relative h-[55vh] min-h-[400px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/Winglet-Install-05.jpg"
-            alt="PPA technician working on aircraft winglet with hangar door and runway visible"
+            src="/images/PPA-HGR-98.jpg"
+            alt="Plane Place Aviation Hangar 98 in Cleburne, Texas"
             fill
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-ppa-navy/80" />
-          <div className="absolute inset-0 bg-gradient-to-r from-ppa-navy/90 via-ppa-navy/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ppa-black via-ppa-black/40 to-ppa-black/10" />
         </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <p className="text-ppa-accent text-sm font-semibold uppercase tracking-wider mb-4">
+        <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="h-px w-8 bg-ppa-brass" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
               Contact Us
-            </p>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-              Let&apos;s talk about{" "}
-              <span className="text-ppa-gray">your aircraft.</span>
-            </h1>
-            <p className="text-lg text-ppa-gray-light leading-relaxed">
-              Whether you need a scheduled inspection, a pre-purchase evaluation,
-              or AOG support right now — reach out directly. The founders answer
-              the phone.
-            </p>
+            </span>
           </div>
+          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-ppa-white leading-[0.9]">
+            Let&apos;s Talk About
+            <br />
+            <span className="text-ppa-muted">Your Aircraft.</span>
+          </h1>
         </div>
       </section>
 
-      {/* Contact grid */}
-      <section className="pb-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-3 gap-6 mb-16">
-            {/* AOG Hotline */}
+      {/* Contact cards */}
+      <section className="py-16 border-b border-ppa-border">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+          <div className="grid lg:grid-cols-3 gap-px bg-ppa-border">
+            {/* AOG */}
             <a
               href={`tel:${COMPANY.phoneRaw}`}
-              className="glass-card rounded-2xl p-8 group hover:-translate-y-1 transition-all duration-300 hover:border-ppa-gold/30"
+              className="bg-ppa-black p-8 lg:p-10 group hover:bg-ppa-dark transition-colors"
             >
-              <div className="h-12 w-12 rounded-xl bg-ppa-gold/10 flex items-center justify-center mb-5">
-                <PhoneIcon className="h-6 w-6 text-ppa-gold" />
-              </div>
-              <h2 className="text-lg font-bold text-white mb-1">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-brass">
                 AOG Hotline
-              </h2>
-              <p className="text-2xl font-bold text-ppa-gold group-hover:text-ppa-gold-light transition-colors">
+              </span>
+              <p className="font-display text-3xl sm:text-4xl text-ppa-brass group-hover:text-ppa-brass-light transition-colors mt-3">
                 {COMPANY.phone}
               </p>
-              <p className="text-sm text-ppa-gray mt-2">
-                Aircraft down? Call us now. TX & OK mobile coverage.
+              <p className="text-sm text-ppa-muted mt-3">
+                Aircraft down? Call us now. TX &amp; OK mobile coverage.
               </p>
             </a>
 
             {/* Email */}
-            <div className="glass-card rounded-2xl p-8">
-              <div className="h-12 w-12 rounded-xl bg-ppa-accent/10 flex items-center justify-center mb-5">
-                <EnvelopeIcon className="h-6 w-6 text-ppa-accent" />
+            <div className="bg-ppa-black p-8 lg:p-10">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-brass">
+                Email
+              </span>
+              <div className="mt-4 space-y-4">
+                {COMPANY.founders.map((founder) => (
+                  <div key={founder.email}>
+                    <p className="text-sm text-ppa-light">
+                      {founder.name}, {founder.title}
+                    </p>
+                    <a
+                      href={`mailto:${founder.email}`}
+                      className="text-sm text-ppa-muted hover:text-ppa-brass transition-colors"
+                    >
+                      {founder.email}
+                    </a>
+                  </div>
+                ))}
               </div>
-              <h2 className="text-lg font-bold text-white mb-3">Email</h2>
-              {COMPANY.founders.map((founder) => (
-                <div key={founder.email} className="mb-2">
-                  <p className="text-sm text-ppa-gray-light">
-                    {founder.name}, {founder.title}
-                  </p>
-                  <a
-                    href={`mailto:${founder.email}`}
-                    className="text-sm text-ppa-accent hover:text-ppa-accent-bright transition-colors"
-                  >
-                    {founder.email}
-                  </a>
-                </div>
-              ))}
             </div>
 
             {/* Location */}
-            <div className="glass-card rounded-2xl p-8">
-              <div className="h-12 w-12 rounded-xl bg-ppa-accent/10 flex items-center justify-center mb-5">
-                <MapPinIcon className="h-6 w-6 text-ppa-accent" />
+            <div className="bg-ppa-black p-8 lg:p-10">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-brass">
+                Visit Us
+              </span>
+              <div className="mt-4 text-sm space-y-1">
+                <p className="text-ppa-light">{COMPANY.address.street}</p>
+                <p className="text-ppa-light">
+                  {COMPANY.address.city}, {COMPANY.address.state}{" "}
+                  {COMPANY.address.zip}
+                </p>
+                <p className="text-ppa-brass mt-2">{COMPANY.address.airport}</p>
               </div>
-              <h2 className="text-lg font-bold text-white mb-3">Visit Us</h2>
-              <p className="text-sm text-ppa-gray-light">
-                {COMPANY.address.street}
-              </p>
-              <p className="text-sm text-ppa-gray-light">
-                {COMPANY.address.city}, {COMPANY.address.state}{" "}
-                {COMPANY.address.zip}
-              </p>
-              <p className="text-sm text-ppa-accent mt-2">
-                {COMPANY.address.airport}
-              </p>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Contact form */}
-          <div className="grid lg:grid-cols-2 gap-16">
+      {/* Contact form + image */}
+      <section className="py-20 lg:py-28">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
             <div>
-              <h2 className="text-2xl font-bold text-white mb-6">
-                Send us a message
+              <h2 className="font-display text-3xl sm:text-4xl text-ppa-white leading-none mb-8">
+                Send Us a Message
               </h2>
               <form className="space-y-5">
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label
-                      htmlFor="name"
-                      className="block text-sm font-medium text-ppa-gray-light mb-2"
-                    >
+                    <label htmlFor="name" className="form-label">
                       Name *
                     </label>
                     <input
@@ -127,22 +117,19 @@ export default function ContactPage() {
                       id="name"
                       name="name"
                       required
-                      className="w-full px-4 py-3 rounded-xl bg-ppa-slate/50 border border-white/10 text-white placeholder:text-ppa-steel focus:outline-none focus:border-ppa-accent/50 focus:ring-1 focus:ring-ppa-accent/50 transition-colors"
+                      className="form-input"
                       placeholder="Your name"
                     />
                   </div>
                   <div>
-                    <label
-                      htmlFor="company"
-                      className="block text-sm font-medium text-ppa-gray-light mb-2"
-                    >
+                    <label htmlFor="company" className="form-label">
                       Company
                     </label>
                     <input
                       type="text"
                       id="company"
                       name="company"
-                      className="w-full px-4 py-3 rounded-xl bg-ppa-slate/50 border border-white/10 text-white placeholder:text-ppa-steel focus:outline-none focus:border-ppa-accent/50 focus:ring-1 focus:ring-ppa-accent/50 transition-colors"
+                      className="form-input"
                       placeholder="Company name"
                     />
                   </div>
@@ -150,10 +137,7 @@ export default function ContactPage() {
 
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium text-ppa-gray-light mb-2"
-                    >
+                    <label htmlFor="email" className="form-label">
                       Email *
                     </label>
                     <input
@@ -161,61 +145,54 @@ export default function ContactPage() {
                       id="email"
                       name="email"
                       required
-                      className="w-full px-4 py-3 rounded-xl bg-ppa-slate/50 border border-white/10 text-white placeholder:text-ppa-steel focus:outline-none focus:border-ppa-accent/50 focus:ring-1 focus:ring-ppa-accent/50 transition-colors"
+                      className="form-input"
                       placeholder="you@company.com"
                     />
                   </div>
                   <div>
-                    <label
-                      htmlFor="phone"
-                      className="block text-sm font-medium text-ppa-gray-light mb-2"
-                    >
+                    <label htmlFor="phone" className="form-label">
                       Phone
                     </label>
                     <input
                       type="tel"
                       id="phone"
                       name="phone"
-                      className="w-full px-4 py-3 rounded-xl bg-ppa-slate/50 border border-white/10 text-white placeholder:text-ppa-steel focus:outline-none focus:border-ppa-accent/50 focus:ring-1 focus:ring-ppa-accent/50 transition-colors"
+                      className="form-input"
                       placeholder="(555) 123-4567"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium text-ppa-gray-light mb-2"
-                  >
+                  <label htmlFor="message" className="form-label">
                     Message *
                   </label>
                   <textarea
                     id="message"
                     name="message"
                     required
-                    rows={5}
-                    className="w-full px-4 py-3 rounded-xl bg-ppa-slate/50 border border-white/10 text-white placeholder:text-ppa-steel focus:outline-none focus:border-ppa-accent/50 focus:ring-1 focus:ring-ppa-accent/50 transition-colors resize-none"
+                    rows={6}
+                    className="form-input resize-none"
                     placeholder="Tell us about your aircraft and what you need..."
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="px-8 py-3 text-sm font-semibold text-white bg-ppa-accent hover:bg-ppa-accent-bright rounded-xl transition-colors shadow-lg shadow-ppa-accent/20"
+                  className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-black bg-ppa-brass hover:bg-ppa-brass-light transition-colors"
                 >
                   Send Message
                 </button>
               </form>
             </div>
 
-            <div className="aspect-square lg:aspect-auto rounded-2xl overflow-hidden relative min-h-[400px]">
+            <div className="relative overflow-hidden min-h-[400px]">
               <Image
                 src="/images/Winglet-Install---James.jpg"
-                alt="PPA technician James performing detailed winglet work in the Cleburne hangar"
+                alt="PPA technician James performing detailed winglet work"
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-ppa-navy/30 to-transparent" />
             </div>
           </div>
         </div>

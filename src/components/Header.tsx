@@ -1,35 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bars3Icon, XMarkIcon, PhoneIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { COMPANY, NAV_LINKS } from "@/lib/constants";
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [aircraftOpen, setAircraftOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      {/* Main nav */}
-      <nav className="bg-ppa-navy/80 backdrop-blur-xl border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-32">
-          {/* Logo — real PPA logo, prominently sized */}
+      <nav
+        className={`relative transition-all duration-500 ${
+          scrolled
+            ? "bg-ppa-black/95 backdrop-blur-md border-b border-ppa-border/50"
+            : "bg-transparent"
+        }`}
+      >
+        {/* Gradient scrim for readability over hero images */}
+        <div
+          className={`absolute inset-0 h-[150px] bg-gradient-to-b from-black/60 via-black/30 to-transparent pointer-events-none transition-opacity duration-500 ${
+            scrolled ? "opacity-0" : "opacity-100"
+          }`}
+        />
+        <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center justify-between h-28 lg:h-36">
+          {/* Logo */}
           <Link href="/" className="flex items-center shrink-0">
             <Image
               src="/images/logo-white.png"
-              alt="Plane Place Aviation — Hawker, Citation & Challenger MRO"
-              width={280}
-              height={80}
-              className="h-20 sm:h-[100px] w-auto"
+              alt="Plane Place Aviation"
+              width={300}
+              height={85}
+              className="h-[78px] lg:h-[117px] w-auto"
               priority
             />
           </Link>
 
-          {/* Desktop nav — larger text for bigger header */}
-          <div className="hidden lg:flex items-center gap-2">
+          {/* Desktop nav */}
+          <div className="hidden lg:flex items-center gap-1">
             {NAV_LINKS.map((link) =>
               link.children ? (
                 <div
@@ -38,24 +55,23 @@ export function Header() {
                   onMouseEnter={() => setAircraftOpen(true)}
                   onMouseLeave={() => setAircraftOpen(false)}
                 >
-                  <button className="flex items-center gap-1 px-5 py-3 text-base text-ppa-gray-light hover:text-white transition-colors rounded-lg hover:bg-white/5">
+                  <button className="px-4 py-2 text-[13px] font-medium uppercase tracking-[0.15em] text-ppa-gray hover:text-ppa-white transition-colors">
                     {link.label}
-                    <ChevronDownIcon className="h-4 w-4" />
                   </button>
                   <AnimatePresence>
                     {aircraftOpen && (
                       <motion.div
-                        initial={{ opacity: 0, y: 8 }}
+                        initial={{ opacity: 0, y: 4 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 8 }}
+                        exit={{ opacity: 0, y: 4 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute top-full left-0 mt-1 w-52 py-2 glass-card rounded-xl shadow-2xl"
+                        className="absolute top-full left-0 mt-0 w-48 py-2 bg-ppa-dark border border-ppa-border"
                       >
                         {link.children.map((child) => (
                           <Link
                             key={child.href}
                             href={child.href}
-                            className="block px-5 py-3 text-sm text-ppa-gray-light hover:text-white hover:bg-white/5 transition-colors"
+                            className="block px-5 py-2.5 text-[13px] text-ppa-gray hover:text-ppa-brass hover:bg-ppa-surface transition-colors"
                           >
                             {child.label}
                           </Link>
@@ -68,7 +84,7 @@ export function Header() {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className="px-5 py-3 text-base text-ppa-gray-light hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                  className="px-4 py-2 text-[13px] font-medium uppercase tracking-[0.15em] text-ppa-gray hover:text-ppa-white transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -76,33 +92,40 @@ export function Header() {
             )}
           </div>
 
-          {/* CTA + AOG + Mobile toggle */}
+          {/* Right side */}
           <div className="flex items-center gap-4">
-            <div className="hidden sm:flex flex-col items-stretch gap-3">
-              <Link
-                href="/quote"
-                className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-ppa-accent hover:bg-ppa-accent-bright rounded-full transition-colors shadow-lg shadow-ppa-accent/20"
-              >
-                Request a Quote
-              </Link>
-              <a
-                href={`tel:${COMPANY.phoneRaw}`}
-                className="inline-flex items-center justify-center gap-2 px-4 py-1.5 text-xs font-semibold text-ppa-gold bg-ppa-gold/10 border border-ppa-gold/25 rounded-full hover:bg-ppa-gold/20 hover:text-ppa-gold-light transition-colors"
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-ppa-gold animate-pulse" />
-                AOG? Call {COMPANY.phone}
-              </a>
-            </div>
+            <a
+              href={`tel:${COMPANY.phoneRaw}`}
+              className="hidden md:flex items-center gap-2 text-[13px] font-medium text-ppa-brass hover:text-ppa-brass-light transition-colors"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-ppa-brass animate-pulse" />
+              AOG: {COMPANY.phone}
+            </a>
+            <Link
+              href="/quote"
+              className="hidden sm:inline-flex px-6 py-2.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-black bg-ppa-brass hover:bg-ppa-brass-light transition-colors"
+            >
+              Get a Quote
+            </Link>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-2 text-ppa-gray-light hover:text-white rounded-lg hover:bg-white/5"
+              className="lg:hidden p-2 text-ppa-white"
               aria-label="Toggle navigation menu"
             >
-              {mobileOpen ? (
-                <XMarkIcon className="h-7 w-7" />
-              ) : (
-                <Bars3Icon className="h-7 w-7" />
-              )}
+              <div className="w-6 flex flex-col gap-1.5">
+                <motion.span
+                  animate={mobileOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
+                  className="block h-[1.5px] w-full bg-current"
+                />
+                <motion.span
+                  animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
+                  className="block h-[1.5px] w-full bg-current"
+                />
+                <motion.span
+                  animate={mobileOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
+                  className="block h-[1.5px] w-full bg-current"
+                />
+              </div>
             </button>
           </div>
         </div>
@@ -114,14 +137,14 @@ export function Header() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="lg:hidden overflow-hidden border-t border-white/5"
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:hidden overflow-hidden bg-ppa-black border-t border-ppa-border"
             >
-              <div className="px-4 py-4 space-y-1">
+              <div className="px-6 py-8 space-y-1">
                 {NAV_LINKS.map((link) =>
                   link.children ? (
                     <div key={link.label}>
-                      <div className="px-4 py-3 text-sm font-medium text-ppa-gray">
+                      <div className="px-0 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-muted">
                         {link.label}
                       </div>
                       {link.children.map((child) => (
@@ -129,7 +152,7 @@ export function Header() {
                           key={child.href}
                           href={child.href}
                           onClick={() => setMobileOpen(false)}
-                          className="block px-8 py-2.5 text-sm text-ppa-gray-light hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                          className="block px-4 py-2.5 text-sm text-ppa-gray hover:text-ppa-brass transition-colors"
                         >
                           {child.label}
                         </Link>
@@ -140,19 +163,27 @@ export function Header() {
                       key={link.label}
                       href={link.href}
                       onClick={() => setMobileOpen(false)}
-                      className="block px-4 py-3 text-sm text-ppa-gray-light hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                      className="block py-3 text-sm font-medium text-ppa-light hover:text-ppa-brass transition-colors"
                     >
                       {link.label}
                     </Link>
                   )
                 )}
-                <Link
-                  href="/quote"
-                  onClick={() => setMobileOpen(false)}
-                  className="block mt-3 px-4 py-3 text-sm font-semibold text-center text-white bg-ppa-accent rounded-lg"
-                >
-                  Request a Quote
-                </Link>
+                <div className="pt-6 space-y-3">
+                  <Link
+                    href="/quote"
+                    onClick={() => setMobileOpen(false)}
+                    className="block w-full py-3 text-sm font-semibold text-center text-ppa-black bg-ppa-brass uppercase tracking-wider"
+                  >
+                    Request a Quote
+                  </Link>
+                  <a
+                    href={`tel:${COMPANY.phoneRaw}`}
+                    className="block w-full py-3 text-sm font-semibold text-center text-ppa-brass border border-ppa-brass/30"
+                  >
+                    AOG: {COMPANY.phone}
+                  </a>
+                </div>
               </div>
             </motion.div>
           )}
