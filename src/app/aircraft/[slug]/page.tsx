@@ -10,8 +10,9 @@ const AIRFRAME_KEYS = Object.keys(AIRFRAMES) as AirframeKey[];
 
 const AIRFRAME_HERO_IMAGES: Record<string, { src: string; alt: string; position?: string }> = {
   hawker: {
-    src: "/images/tech-on-lift.jpg",
-    alt: "PPA technician working on a Hawker aircraft from a lift",
+    src: "/images/hawker-mx.jpg",
+    alt: "Hawker aircraft undergoing maintenance at Plane Place Aviation",
+    position: "center 30%",
   },
   citation: {
     src: "/images/hangar-work.jpg",
@@ -19,8 +20,9 @@ const AIRFRAME_HERO_IMAGES: Record<string, { src: string; alt: string; position?
     position: "center 20%",
   },
   challenger: {
-    src: "/images/Winglet-Install-04.jpg",
-    alt: "PPA technician riveting structural components on a Challenger winglet",
+    src: "/images/Challenger-MX.jpg",
+    alt: "Challenger aircraft undergoing maintenance at Plane Place Aviation",
+    position: "center 35%",
   },
 };
 
@@ -72,6 +74,9 @@ export function generateMetadata({
     return {
       title: `${airframe.name} Maintenance & Inspections — ${airframe.models.join(", ")}`,
       description: `FAA Part 145 specialist maintenance for ${airframe.name} ${airframe.models.join(", ")} aircraft. Phase inspections, pre-purchase inspections, AOG response, and more in Cleburne, Texas.`,
+      alternates: {
+        canonical: `https://ppa.aero/aircraft/${slug}`,
+      },
     };
   });
 }

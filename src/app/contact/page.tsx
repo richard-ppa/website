@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Contact — AOG Hotline, Quote Requests & Location",
   description:
     "Contact Plane Place Aviation in Cleburne, Texas. AOG hotline: (817) 768-8884. Request a quote, schedule maintenance, or fly into KCPT — we operate out of three hangars on the field.",
+  alternates: {
+    canonical: "https://ppa.aero/contact",
+  },
 };
 
 export default function ContactPage() {
@@ -15,8 +18,8 @@ export default function ContactPage() {
       <section className="relative h-[55vh] min-h-[400px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/PPA-HGR-98.jpg"
-            alt="Plane Place Aviation Hangar 98 in Cleburne, Texas"
+            src="/images/about-us.jpg"
+            alt="Plane Place Aviation team and facility"
             fill
             className="object-cover"
             priority

@@ -95,6 +95,9 @@ export const metadata: Metadata = {
   title: "Aircraft Maintenance Services — Hawker, Citation & Challenger",
   description:
     "Full-service aircraft maintenance for Hawker, Citation, and Challenger. Phase inspections, pre-purchase inspections, AOG response, structural repairs, avionics, and maintenance management.",
+  alternates: {
+    canonical: "https://ppa.aero/services",
+  },
 };
 
 export default function ServicesPage() {

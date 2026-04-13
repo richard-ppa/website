@@ -97,7 +97,7 @@ export default function HomePage() {
             transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="font-display text-[clamp(3rem,8vw,7.5rem)] leading-[0.9] tracking-wide text-ppa-white max-w-5xl"
           >
-            Specialist MRO for
+            MRO Specialist for
             <br />
             <span className="text-brass-gradient">Hawker, Citation</span>
             <br />
@@ -463,8 +463,8 @@ export default function HomePage() {
             <AnimatedSection delay={0.15}>
               <div className="aspect-[4/3] relative overflow-hidden">
                 <Image
-                  src="/images/Wing-MX---Travis-Angel.jpg"
-                  alt="PPA technicians working on aircraft wing at Cleburne hangar"
+                  src="/images/PPA-Sign.jpg"
+                  alt="Plane Place Aviation sign and hangar at Cleburne Regional Airport"
                   fill
                   className="object-cover"
                 />

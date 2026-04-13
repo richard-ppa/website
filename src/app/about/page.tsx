@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "About — Founder-Led Aircraft MRO in Cleburne, TX",
   description:
     "Plane Place Aviation was founded by Tristan Noe and Travis Roberson — operators who built the MRO they wished existed. Precise. Professional. Attentive. FAA Part 145, Cleburne, Texas.",
+  alternates: {
+    canonical: "https://ppa.aero/about",
+  },
 };
 
 export default function AboutPage() {
@@ -138,26 +141,35 @@ export default function AboutPage() {
             The Owners Answer the Phone.
           </h2>
 
-          <div className="grid sm:grid-cols-2 gap-6 max-w-3xl">
-            {COMPANY.founders.map((founder) => (
-              <div key={founder.email} className="border border-ppa-border p-8">
-                <div className="w-16 h-16 bg-ppa-surface flex items-center justify-center mb-5">
-                  <span className="font-display text-2xl text-ppa-brass">
-                    {founder.name.split(" ").map((n) => n[0]).join("")}
-                  </span>
+          <div className="grid sm:grid-cols-2 gap-8">
+            {COMPANY.founders.map((founder) => {
+              const headshot =
+                founder.name === "Tristan Noe"
+                  ? "/images/Tristan.jpg"
+                  : "/images/Travis.jpg";
+              return (
+                <div key={founder.email} className="p-10 flex flex-col items-center text-center">
+                  <div className="w-[291px] h-[291px] relative rounded-full overflow-hidden mb-6">
+                    <Image
+                      src={headshot}
+                      alt={`${founder.name}, ${founder.title}`}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <h3 className="font-display text-3xl text-ppa-white">
+                    {founder.name}
+                  </h3>
+                  <p className="text-sm text-ppa-brass mb-3">{founder.title}</p>
+                  <a
+                    href={`mailto:${founder.email}`}
+                    className="text-sm text-ppa-muted hover:text-ppa-brass transition-colors"
+                  >
+                    {founder.email}
+                  </a>
                 </div>
-                <h3 className="font-display text-2xl text-ppa-white">
-                  {founder.name}
-                </h3>
-                <p className="text-sm text-ppa-brass mb-3">{founder.title}</p>
-                <a
-                  href={`mailto:${founder.email}`}
-                  className="text-sm text-ppa-muted hover:text-ppa-brass transition-colors"
-                >
-                  {founder.email}
-                </a>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -166,9 +178,9 @@ export default function AboutPage() {
       <section>
         <div className="grid grid-cols-3 gap-1">
           {[
-            { src: "/images/PPA-01.jpg", alt: "PPA operations" },
+            { src: "/images/PPA-22.jpg", alt: "PPA operations" },
             { src: "/images/PPA-Employees.jpg", alt: "PPA team" },
-            { src: "/images/PPA-04.jpg", alt: "PPA facility" },
+            { src: "/images/PPA-HGR-98.jpg", alt: "PPA facility" },
           ].map((photo) => (
             <div key={photo.src} className="aspect-[16/9] relative overflow-hidden">
               <Image src={photo.src} alt={photo.alt} fill className="object-cover" />
