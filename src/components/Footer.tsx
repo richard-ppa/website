@@ -4,12 +4,12 @@ import { COMPANY, NAV_LINKS, AIRFRAMES, SERVICES } from "@/lib/constants";
 
 export function Footer() {
   return (
-    <footer className="bg-ppa-dark border-t border-ppa-border">
+    <footer className="bg-ppa-light border-t border-ppa-border">
       {/* CTA Strip */}
       <div className="border-b border-ppa-border">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16 lg:py-20 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
           <div>
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-white leading-none">
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-black leading-none">
               Ready to Talk Maintenance?
             </h2>
             <p className="mt-3 text-ppa-gray max-w-lg">
@@ -20,7 +20,7 @@ export function Footer() {
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               href="/quote"
-              className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-black bg-ppa-brass hover:bg-ppa-brass-light transition-colors"
+              className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark transition-colors"
             >
               Request a Quote
             </Link>
@@ -40,29 +40,29 @@ export function Footer() {
           {/* Brand */}
           <div>
             <Image
-              src="/images/logo-white.png"
+              src="/images/logo.png"
               alt="Plane Place Aviation"
               width={180}
               height={51}
               className="h-10 w-auto mb-5"
             />
-            <p className="text-sm text-ppa-muted leading-relaxed mb-5">
+            <p className="text-sm text-ppa-gray leading-relaxed mb-5">
               FAA Part 145 repair station specializing exclusively in Hawker,
               Citation, and Challenger aircraft.
             </p>
-            <div className="space-y-1 text-sm text-ppa-muted">
+            <div className="space-y-1 text-sm text-ppa-gray">
               <p>{COMPANY.address.street}</p>
               <p>
                 {COMPANY.address.city}, {COMPANY.address.state}{" "}
                 {COMPANY.address.zip}
               </p>
-              <p className="text-ppa-gray">{COMPANY.address.airport}</p>
+              <p className="text-ppa-dark">{COMPANY.address.airport}</p>
             </div>
           </div>
 
           {/* Services */}
           <div>
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-gray mb-5">
+            <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-muted mb-5">
               Services
             </h3>
             <ul className="space-y-2.5">
@@ -70,7 +70,7 @@ export function Footer() {
                 <li key={service.slug}>
                   <Link
                     href={`/services#${service.slug}`}
-                    className="text-sm text-ppa-muted hover:text-ppa-brass transition-colors"
+                    className="text-sm text-ppa-gray hover:text-ppa-brass transition-colors"
                   >
                     {service.name}
                   </Link>
@@ -81,7 +81,7 @@ export function Footer() {
 
           {/* Aircraft */}
           <div>
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-gray mb-5">
+            <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-muted mb-5">
               Aircraft
             </h3>
             <ul className="space-y-2.5">
@@ -89,10 +89,10 @@ export function Footer() {
                 <li key={airframe.slug}>
                   <Link
                     href={`/aircraft/${airframe.slug}`}
-                    className="text-sm text-ppa-muted hover:text-ppa-brass transition-colors"
+                    className="text-sm text-ppa-gray hover:text-ppa-brass transition-colors"
                   >
                     {airframe.name}{" "}
-                    <span className="text-ppa-muted/50">
+                    <span className="text-ppa-muted">
                       ({airframe.models.join(", ")})
                     </span>
                   </Link>
@@ -100,7 +100,7 @@ export function Footer() {
               ))}
             </ul>
 
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-gray mt-8 mb-5">
+            <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-muted mt-8 mb-5">
               Company
             </h3>
             <ul className="space-y-2.5">
@@ -108,7 +108,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-ppa-muted hover:text-ppa-brass transition-colors"
+                    className="text-sm text-ppa-gray hover:text-ppa-brass transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -119,7 +119,7 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-gray mb-5">
+            <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-muted mb-5">
               Contact
             </h3>
             <div className="space-y-4">
@@ -129,19 +129,19 @@ export function Footer() {
                 </p>
                 <a
                   href={`tel:${COMPANY.phoneRaw}`}
-                  className="text-xl font-bold text-ppa-brass hover:text-ppa-brass-light transition-colors"
+                  className="text-xl font-bold text-ppa-brass hover:text-ppa-brass-dark transition-colors"
                 >
                   {COMPANY.phone}
                 </a>
               </div>
               {COMPANY.founders.map((founder) => (
                 <div key={founder.email}>
-                  <p className="text-sm text-ppa-gray">
+                  <p className="text-sm text-ppa-dark">
                     {founder.name}, {founder.title}
                   </p>
                   <a
                     href={`mailto:${founder.email}`}
-                    className="text-sm text-ppa-muted hover:text-ppa-brass transition-colors"
+                    className="text-sm text-ppa-gray hover:text-ppa-brass transition-colors"
                   >
                     {founder.email}
                   </a>
@@ -155,7 +155,7 @@ export function Footer() {
                 href={COMPANY.social.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-ppa-muted hover:text-ppa-brass transition-colors"
+                className="text-ppa-gray hover:text-ppa-brass transition-colors"
                 aria-label="LinkedIn"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -166,7 +166,7 @@ export function Footer() {
                 href={COMPANY.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-ppa-muted hover:text-ppa-brass transition-colors"
+                className="text-ppa-gray hover:text-ppa-brass transition-colors"
                 aria-label="Facebook"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -177,7 +177,7 @@ export function Footer() {
                 href={COMPANY.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-ppa-muted hover:text-ppa-brass transition-colors"
+                className="text-ppa-gray hover:text-ppa-brass transition-colors"
                 aria-label="Instagram"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">

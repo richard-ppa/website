@@ -46,12 +46,12 @@ export default function AboutPage() {
       <section className="py-20 lg:py-28">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="max-w-3xl">
-            <p className="text-xl lg:text-2xl text-ppa-light font-light leading-relaxed">
+            <p className="text-xl lg:text-2xl text-ppa-dark font-light leading-relaxed">
               Plane Place Aviation is an FAA Part 145 repair station in
               Cleburne, Texas that exclusively serves Hawker, Citation, and
               Challenger operators. We deliver deep airframe expertise,
               reliable turnaround times, and transparent pricing — all backed
-              by founders who came from the operator side.
+              by founders who still run the company.
             </p>
           </div>
         </div>
@@ -80,27 +80,31 @@ export default function AboutPage() {
                   Our Story
                 </span>
               </div>
-              <h2 className="font-display text-4xl sm:text-5xl text-ppa-white leading-none mb-8">
-                The MRO We Wished Existed
+              <h2 className="font-display text-4xl sm:text-5xl text-ppa-black leading-none mb-8">
+                How We Got Here
               </h2>
               <div className="space-y-5 text-ppa-gray font-light leading-relaxed">
                 <p>
-                  Tristan Noe and Travis Roberson spent years on the customer
-                  side of the MRO relationship — managing charter operations,
-                  overseeing maintenance programs, and dealing with the
-                  frustrations that come with unclear pricing, missed
-                  turnaround dates, and impersonal service.
+                  Plane Place Aviation was founded in 2022 on a simple premise:
+                  operators of Hawker, Citation, and Challenger aircraft
+                  deserved an MRO that took their airframes seriously — with
+                  dedicated tooling, type-specific expertise, and documentation
+                  that protects an aircraft&apos;s value over decades, not just
+                  hours.
                 </p>
                 <p>
-                  They decided to build the MRO they wished had existed when
-                  they were operators. The premise was simple: narrow the focus
-                  to three airframe families, hire experienced technicians,
-                  communicate transparently, and be accountable.
+                  That meant narrowing the focus. Three airframe families,
+                  nothing else. It meant hiring technicians who wanted to go
+                  deep rather than wide. And it meant being direct about scope,
+                  timeline, and price — treating every work order as part of
+                  the aircraft&apos;s permanent record.
                 </p>
                 <p>
-                  The approach hasn&apos;t changed — specialization,
-                  transparency, and accountability remain the foundation of
-                  everything we do.
+                  Four years in, the approach hasn&apos;t changed. Tristan Noe
+                  and Travis Roberson still run the shop day-to-day — setting
+                  the schedule, reviewing work, and putting hands on the
+                  airplanes alongside their technicians. The owners still
+                  answer the phone.
                 </p>
               </div>
             </div>
@@ -122,7 +126,7 @@ export default function AboutPage() {
       {/* Tagline — Full width */}
       <section className="py-16 lg:py-24 border-y border-ppa-border">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
-          <p className="font-display text-5xl sm:text-6xl lg:text-7xl text-brass-gradient leading-none">
+          <p className="font-display text-5xl sm:text-6xl lg:text-7xl text-ppa-brass leading-none">
             Precise. Professional. Attentive.
           </p>
         </div>
@@ -137,7 +141,7 @@ export default function AboutPage() {
               Leadership
             </span>
           </div>
-          <h2 className="font-display text-4xl sm:text-5xl text-ppa-white leading-none mb-16">
+          <h2 className="font-display text-4xl sm:text-5xl text-ppa-black leading-none mb-16">
             The Owners Answer the Phone.
           </h2>
 
@@ -157,7 +161,7 @@ export default function AboutPage() {
                       className="object-cover"
                     />
                   </div>
-                  <h3 className="font-display text-3xl text-ppa-white">
+                  <h3 className="font-display text-3xl text-ppa-black">
                     {founder.name}
                   </h3>
                   <p className="text-sm text-ppa-brass mb-3">{founder.title}</p>
@@ -200,7 +204,7 @@ export default function AboutPage() {
                   Certifications
                 </span>
               </div>
-              <h2 className="font-display text-4xl sm:text-5xl text-ppa-white leading-none mb-8">
+              <h2 className="font-display text-4xl sm:text-5xl text-ppa-black leading-none mb-8">
                 Certified. Trusted. Proven.
               </h2>
               <div className="space-y-4">
@@ -211,7 +215,7 @@ export default function AboutPage() {
                   <div key={cert.name} className="flex gap-4 p-5 border border-ppa-border">
                     <span className="text-ppa-brass font-display text-xl mt-0.5">+</span>
                     <div>
-                      <h3 className="text-ppa-white font-semibold mb-1">{cert.name}</h3>
+                      <h3 className="text-ppa-black font-semibold mb-1">{cert.name}</h3>
                       <p className="text-sm text-ppa-muted">{cert.desc}</p>
                     </div>
                   </div>
@@ -226,7 +230,7 @@ export default function AboutPage() {
                   Location
                 </span>
               </div>
-              <h2 className="font-display text-4xl text-ppa-white leading-none mb-6">
+              <h2 className="font-display text-4xl text-ppa-black leading-none mb-6">
                 Cleburne, Texas — KCPT
               </h2>
               <p className="text-ppa-gray font-light leading-relaxed mb-6">

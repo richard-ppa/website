@@ -50,10 +50,10 @@ export default function QuotePage() {
       {/* Form */}
       <section className="py-16 lg:py-24">
         <div className="max-w-3xl mx-auto px-6 lg:px-10">
-          <form className="space-y-8">
+          <form className="space-y-8" encType="multipart/form-data">
             {/* Contact info */}
             <div>
-              <h2 className="font-display text-2xl text-ppa-white mb-6">
+              <h2 className="font-display text-2xl text-ppa-black mb-6">
                 Your Information
               </h2>
               <div className="grid sm:grid-cols-2 gap-5">
@@ -80,7 +80,7 @@ export default function QuotePage() {
 
             {/* Aircraft info */}
             <div>
-              <h2 className="font-display text-2xl text-ppa-white mb-6">
+              <h2 className="font-display text-2xl text-ppa-black mb-6">
                 Aircraft Information
               </h2>
               <div className="grid sm:grid-cols-2 gap-5">
@@ -141,9 +141,28 @@ export default function QuotePage() {
               />
             </div>
 
+            {/* Attachments */}
+            <div>
+              <label htmlFor="attachments" className="form-label">
+                Attachments
+              </label>
+              <input
+                type="file"
+                id="attachments"
+                name="attachments"
+                multiple
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx,.txt,.csv"
+                className="block w-full text-sm text-ppa-dark file:mr-4 file:px-5 file:py-2.5 file:border-0 file:bg-ppa-light file:text-ppa-dark file:text-[11px] file:font-semibold file:uppercase file:tracking-[0.1em] hover:file:bg-ppa-border/50 cursor-pointer border border-ppa-border"
+              />
+              <p className="mt-2 text-xs text-ppa-muted">
+                Squawk lists, logbook pages, prior work orders, or anything else
+                helpful. PDF, DOC, XLS, or image formats.
+              </p>
+            </div>
+
             <button
               type="submit"
-              className="w-full py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-black bg-ppa-brass hover:bg-ppa-brass-light transition-colors"
+              className="w-full py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark transition-colors"
             >
               Submit Quote Request
             </button>

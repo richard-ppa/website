@@ -18,12 +18,11 @@ const SERVICE_DETAILS: Record<
 > = {
   "scheduled-maintenance": {
     description:
-      "Phase inspections, annual inspections, and all scheduled maintenance events for Hawker, Citation, and Challenger aircraft. We plan the work, source the parts, and deliver your aircraft on time with audit-ready documentation.",
+      "Scheduled maintenance events for Hawker, Citation, and Challenger aircraft. We specialize in heavy maintenance inspections — planning the work, sourcing the parts, and delivering your aircraft on time with audit-ready documentation.",
     features: [
-      "Phase 1-4 inspections",
-      "Annual and biennial inspections",
-      "96-month and 192-month inspections",
-      "8-year and 16-year inspections",
+      "Phase 1-5 inspections",
+      "12, 24, 36, 48, 96, and 192-month inspections",
+      "B, C, D, E, F, G, 4-year, and 8-year inspections",
       "Compliance with all applicable ADs and SBs",
       "Detailed work scope and timeline upfront",
     ],
@@ -55,11 +54,12 @@ const SERVICE_DETAILS: Record<
   },
   "structural-repairs": {
     description:
-      "FAA-approved structural engineering and repair for all three airframe families. From corrosion treatment to major structural repairs, our team has the certifications and experience to return your aircraft to service.",
+      "FAA-approved structural engineering, repair, and modifications for all three airframe families. From corrosion treatment to major structural repairs and approved modifications, our team has the certifications and experience to return your aircraft to service.",
     features: [
       "Corrosion treatment and prevention",
       "Skin and panel repairs",
       "Frame and stringer repairs",
+      "Approved structural modifications",
       "FAA-approved repair data and DER support",
       "Non-destructive testing (NDT)",
       "Documentation for resale value protection",
@@ -79,7 +79,7 @@ const SERVICE_DETAILS: Record<
   },
   "maintenance-management": {
     description:
-      "Consulting and management services from founders who spent years on the operator side. We help you plan maintenance events, manage budgets, and make informed decisions about your aircraft.",
+      "Consulting and management from people who specialize in your aircraft's maintenance. We help you plan maintenance events, manage budgets, and make informed decisions about your aircraft.",
     features: [
       "Maintenance tracking and scheduling",
       "Budget forecasting and cost analysis",
@@ -159,7 +159,7 @@ export default function ServicesPage() {
           <section
             key={service.slug}
             id={service.slug}
-            className={`py-20 lg:py-28 ${!isEven ? "bg-ppa-dark" : ""}`}
+            className={`py-20 lg:py-28 ${!isEven ? "bg-ppa-light" : ""}`}
           >
             <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
               <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
@@ -167,7 +167,7 @@ export default function ServicesPage() {
                   <span className="font-display text-6xl text-ppa-border leading-none">
                     0{i + 1}
                   </span>
-                  <h2 className="font-display text-3xl sm:text-4xl text-ppa-white leading-none mt-2 mb-6">
+                  <h2 className="font-display text-3xl sm:text-4xl text-ppa-black leading-none mt-2 mb-6">
                     {service.name}
                   </h2>
                   <p className="text-ppa-gray font-light leading-relaxed mb-8">
@@ -177,7 +177,7 @@ export default function ServicesPage() {
                     {details?.features.map((feature) => (
                       <li key={feature} className="flex items-start gap-3">
                         <span className="text-ppa-brass mt-1.5 text-xs">+</span>
-                        <span className="text-ppa-light/80 text-sm">
+                        <span className="text-ppa-dark text-sm">
                           {feature}
                         </span>
                       </li>

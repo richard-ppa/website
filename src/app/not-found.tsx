@@ -12,7 +12,7 @@ export default function NotFound() {
         <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass mb-6">
           404 — Page Not Found
         </p>
-        <h1 className="font-display text-6xl sm:text-7xl lg:text-8xl text-ppa-white leading-[0.9] mb-6">
+        <h1 className="font-display text-6xl sm:text-7xl lg:text-8xl text-ppa-black leading-[0.9] mb-6">
           Nothing Here.
         </h1>
         <p className="text-lg text-ppa-gray font-light max-w-md mx-auto mb-12">
@@ -21,7 +21,7 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/"
-            className="inline-flex items-center justify-center px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-black bg-ppa-brass hover:bg-ppa-brass-light transition-all"
+            className="inline-flex items-center justify-center px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark transition-all"
           >
             Back to Home
           </Link>
@@ -35,15 +35,15 @@ export default function NotFound() {
         <div className="mt-16 grid sm:grid-cols-3 gap-6 max-w-2xl mx-auto text-left">
           <Link href="/services" className="group p-5 border border-ppa-border hover:border-ppa-brass/30 transition-colors">
             <p className="text-ppa-brass text-[11px] font-semibold uppercase tracking-[0.2em] mb-2">Services</p>
-            <p className="text-sm text-ppa-muted group-hover:text-ppa-light transition-colors">Maintenance, inspections, AOG response</p>
+            <p className="text-sm text-ppa-gray group-hover:text-ppa-dark transition-colors">Maintenance, inspections, AOG response</p>
           </Link>
           <Link href="/aircraft/hawker" className="group p-5 border border-ppa-border hover:border-ppa-brass/30 transition-colors">
             <p className="text-ppa-brass text-[11px] font-semibold uppercase tracking-[0.2em] mb-2">Aircraft</p>
-            <p className="text-sm text-ppa-muted group-hover:text-ppa-light transition-colors">Hawker, Citation, Challenger</p>
+            <p className="text-sm text-ppa-gray group-hover:text-ppa-dark transition-colors">Hawker, Citation, Challenger</p>
           </Link>
           <Link href="/quote" className="group p-5 border border-ppa-border hover:border-ppa-brass/30 transition-colors">
             <p className="text-ppa-brass text-[11px] font-semibold uppercase tracking-[0.2em] mb-2">Quote</p>
-            <p className="text-sm text-ppa-muted group-hover:text-ppa-light transition-colors">Request transparent pricing</p>
+            <p className="text-sm text-ppa-gray group-hover:text-ppa-dark transition-colors">Request transparent pricing</p>
           </Link>
         </div>
       </div>

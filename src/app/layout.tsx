@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Barlow } from "next/font/google";
+import { Archivo, Geist } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
-const bebasNeue = Bebas_Neue({
-  weight: "400",
+const archivo = Archivo({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-bebas",
+  variable: "--font-archivo",
+  axes: ["wdth"],
 });
 
-const barlow = Barlow({
+const geist = Geist({
   weight: ["300", "400", "500", "600", "700"],
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-barlow",
+  variable: "--font-geist",
 });
 
 export const metadata: Metadata = {
@@ -109,7 +109,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${bebasNeue.variable} ${barlow.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${geist.variable}`}>
       <head>
         {/* Google Analytics — replace G-XXXXXXXXXX with your GA4 measurement ID */}
         {process.env.NEXT_PUBLIC_GA_ID && (

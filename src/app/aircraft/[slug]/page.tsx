@@ -36,26 +36,26 @@ const AIRFRAME_SERVICE_IMAGES: Record<string, { src: string; alt: string }> = {
     alt: "Two PPA technicians inspecting Citation aircraft underside",
   },
   challenger: {
-    src: "/images/Winglet-Install---01.jpg",
-    alt: "PPA team collaborating on Challenger structural maintenance",
+    src: "/images/challenger-in-shop.jpg",
+    alt: "Challenger aircraft in the PPA shop undergoing maintenance",
   },
 };
 
 const AIRFRAME_GALLERY: Record<string, { src: string; alt: string }[]> = {
   hawker: [
-    { src: "/images/PPA-01.jpg", alt: "Hawker maintenance operations" },
-    { src: "/images/PPA-02.jpg", alt: "Hawker in PPA hangar" },
-    { src: "/images/PPA-03.jpg", alt: "Hawker inspection work" },
+    { src: "/images/hawker-mx.jpg", alt: "Hawker maintenance operations" },
+    { src: "/images/Engine-MX.jpg", alt: "Hawker engine work" },
+    { src: "/images/Hawker-XP.jpg", alt: "Hawker 800XP in hangar" },
   ],
   citation: [
-    { src: "/images/PPA-10.jpg", alt: "Citation maintenance operations" },
-    { src: "/images/PPA-11.jpg", alt: "Citation in PPA hangar" },
-    { src: "/images/PPA-12.jpg", alt: "Citation detail work" },
+    { src: "/images/Wing-MX-2.jpg", alt: "Citation wing inspection" },
+    { src: "/images/Wing-MX.jpg", alt: "Citation underside wing work" },
+    { src: "/images/Interior-Work.jpg", alt: "Citation interior maintenance" },
   ],
   challenger: [
-    { src: "/images/PPA-21.jpg", alt: "Challenger maintenance" },
-    { src: "/images/PPA-22.jpg", alt: "Challenger in PPA hangar" },
-    { src: "/images/PPA-23.jpg", alt: "Challenger detail work" },
+    { src: "/images/challenger.jpg", alt: "Challenger aircraft at PPA" },
+    { src: "/images/Winglet-Install-04.jpg", alt: "Challenger winglet structural work" },
+    { src: "/images/Dalton-on-workstation.jpg", alt: "Technician performing Challenger maintenance" },
   ],
 };
 
@@ -136,7 +136,7 @@ export default async function AirframePage({
       <section className="py-16 lg:py-20 border-b border-ppa-border">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <p className="text-xl text-ppa-light font-light leading-relaxed">
+            <p className="text-xl text-ppa-dark font-light leading-relaxed">
               {airframe.description}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 lg:justify-end">
@@ -158,7 +158,7 @@ export default async function AirframePage({
       </section>
 
       {/* Models served */}
-      <section className="py-20 lg:py-28 bg-ppa-dark">
+      <section className="py-20 lg:py-28 bg-ppa-light">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="flex items-center gap-3 mb-4">
             <span className="h-px w-8 bg-ppa-brass" />
@@ -172,7 +172,7 @@ export default async function AirframePage({
                 key={model}
                 className="border border-ppa-border px-8 py-6 text-center min-w-[160px]"
               >
-                <p className="font-display text-3xl text-ppa-white leading-none">
+                <p className="font-display text-3xl text-ppa-black leading-none">
                   {airframe.name}
                 </p>
                 <p className="font-display text-2xl text-ppa-brass mt-1">
@@ -208,7 +208,7 @@ export default async function AirframePage({
                   Capabilities
                 </span>
               </div>
-              <h2 className="font-display text-4xl sm:text-5xl text-ppa-white leading-none mb-6">
+              <h2 className="font-display text-4xl sm:text-5xl text-ppa-black leading-none mb-6">
                 {airframe.name} Services
               </h2>
               <p className="text-ppa-gray font-light leading-relaxed mb-10">
@@ -222,7 +222,7 @@ export default async function AirframePage({
                 {airframe.services.map((service) => (
                   <li key={service} className="flex items-start gap-3">
                     <span className="text-ppa-brass mt-1 text-sm">+</span>
-                    <span className="text-ppa-light/80">{service}</span>
+                    <span className="text-ppa-dark">{service}</span>
                   </li>
                 ))}
               </ul>
@@ -241,9 +241,9 @@ export default async function AirframePage({
       </section>
 
       {/* Other airframes */}
-      <section className="py-20 lg:py-28 bg-ppa-dark border-t border-ppa-border">
+      <section className="py-20 lg:py-28 bg-ppa-light border-t border-ppa-border">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <h2 className="font-display text-3xl sm:text-4xl text-ppa-white leading-none mb-10">
+          <h2 className="font-display text-3xl sm:text-4xl text-ppa-black leading-none mb-10">
             We Also Specialize In
           </h2>
           <div className="grid sm:grid-cols-2 gap-3">

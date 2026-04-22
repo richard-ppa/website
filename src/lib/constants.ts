@@ -45,8 +45,8 @@ export const AIRFRAMES = {
     description:
       "Deep expertise across the entire Hawker 800 series — from the classic 800 through the 900XP and 1000. Our technicians know these airframes inside and out.",
     services: [
-      "Phase inspections",
-      "96/192-month inspections",
+      "B, C, D, E, F, G inspections",
+      "4-year and 8-year inspections",
       "Landing gear overhaul",
       "Structural repairs",
       "Avionics upgrades",
@@ -58,9 +58,9 @@ export const AIRFRAMES = {
     name: "Citation",
     slug: "citation",
     manufacturer: "Cessna / Textron Aviation",
-    models: ["550", "560", "560XL/XLS", "650", "680"],
+    models: ["525 series", "550", "560", "560XL/XLS", "680", "680A"],
     description:
-      "Full-service maintenance for the Citation 550 through 680 line. Whether it's a scheduled phase inspection or an unscheduled squawk, we have the tooling, parts, and type experience to turn your Citation quickly.",
+      "Full-service maintenance for the Citation 525 series through the 680A. Whether it's a scheduled phase inspection or an unscheduled squawk, we have the tooling, parts, and type experience to turn your Citation quickly.",
     services: [
       "Phase inspections",
       "Annual inspections",
@@ -110,9 +110,9 @@ export const SERVICES = [
     icon: "bolt",
   },
   {
-    name: "Structural Repairs",
+    name: "Structural Repairs / Modifications",
     slug: "structural-repairs",
-    short: "FAA-approved structural engineering and repair on all three airframe families.",
+    short: "FAA-approved structural engineering, repair, and modifications on all three airframe families.",
     icon: "shield",
   },
   {

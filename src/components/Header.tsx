@@ -22,111 +22,140 @@ export function Header() {
       <nav
         className={`relative transition-all duration-500 ${
           scrolled
-            ? "bg-ppa-black/95 backdrop-blur-md border-b border-ppa-border/50"
+            ? "bg-ppa-white/95 backdrop-blur-md border-b border-ppa-border"
             : "bg-transparent"
         }`}
       >
-        {/* Gradient scrim for readability over hero images */}
+        {/* Gradient scrim for readability over hero images (unscrolled only) */}
         <div
-          className={`absolute inset-0 h-[150px] bg-gradient-to-b from-black/60 via-black/30 to-transparent pointer-events-none transition-opacity duration-500 ${
+          className={`absolute inset-0 h-[180px] bg-gradient-to-b from-black/75 via-black/45 to-transparent pointer-events-none transition-opacity duration-500 ${
             scrolled ? "opacity-0" : "opacity-100"
           }`}
         />
-        <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center justify-between h-28 lg:h-36">
-          {/* Logo */}
+        <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center justify-between h-24 lg:h-32">
+          {/* Logo — single SVG, invert filter applied when unscrolled for visibility on dark hero */}
           <Link href="/" className="flex items-center shrink-0">
             <Image
-              src="/images/logo-white.png"
+              src="/images/logo.svg"
               alt="Plane Place Aviation"
-              width={300}
-              height={85}
-              className="h-[78px] lg:h-[117px] w-auto"
+              width={609}
+              height={224}
+              className={`h-14 lg:h-20 w-auto transition-[filter] duration-500 ${
+                scrolled ? "" : "brightness-0 invert"
+              }`}
               priority
             />
           </Link>
 
-          {/* Desktop nav */}
-          <div className="hidden lg:flex items-center gap-1">
-            {NAV_LINKS.map((link) =>
-              link.children ? (
-                <div
-                  key={link.label}
-                  className="relative"
-                  onMouseEnter={() => setAircraftOpen(true)}
-                  onMouseLeave={() => setAircraftOpen(false)}
-                >
-                  <button className="px-4 py-2 text-[13px] font-medium uppercase tracking-[0.15em] text-ppa-gray hover:text-ppa-white transition-colors">
-                    {link.label}
-                  </button>
-                  <AnimatePresence>
-                    {aircraftOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 4 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute top-full left-0 mt-0 w-48 py-2 bg-ppa-dark border border-ppa-border"
-                      >
-                        {link.children.map((child) => (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            className="block px-5 py-2.5 text-[13px] text-ppa-gray hover:text-ppa-brass hover:bg-ppa-surface transition-colors"
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+          {/* Right cluster — two rows on desktop (AOG+CTA above nav), single row on mobile */}
+          <div className="flex flex-col items-end gap-3 lg:gap-4">
+            {/* Top row — AOG phone + CTA + mobile hamburger */}
+            <div className="flex items-center gap-5">
+              <a
+                href={`tel:${COMPANY.phoneRaw}`}
+                className={`hidden md:flex items-center gap-2 text-[12px] font-medium tracking-[0.02em] transition-colors ${
+                  scrolled
+                    ? "text-ppa-brass hover:text-ppa-brass-dark"
+                    : "text-ppa-brass-bright hover:text-ppa-white"
+                }`}
+              >
+                <span
+                  className={`h-1.5 w-1.5 rounded-full animate-pulse ${
+                    scrolled ? "bg-ppa-brass" : "bg-ppa-brass-bright"
+                  }`}
+                />
+                AOG: {COMPANY.phone}
+              </a>
+              <Link
+                href="/quote"
+                className={`hidden sm:inline-flex px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors ${
+                  scrolled
+                    ? "text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark"
+                    : "text-ppa-white border border-ppa-white/40 hover:bg-ppa-white hover:text-ppa-black"
+                }`}
+              >
+                Get a Quote
+              </Link>
+              <button
+                onClick={() => setMobileOpen(!mobileOpen)}
+                className={`lg:hidden p-2 transition-colors ${
+                  scrolled ? "text-ppa-black" : "text-ppa-white"
+                }`}
+                aria-label="Toggle navigation menu"
+              >
+                <div className="w-6 flex flex-col gap-1.5">
+                  <motion.span
+                    animate={mobileOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
+                    className="block h-[1.5px] w-full bg-current"
+                  />
+                  <motion.span
+                    animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
+                    className="block h-[1.5px] w-full bg-current"
+                  />
+                  <motion.span
+                    animate={mobileOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
+                    className="block h-[1.5px] w-full bg-current"
+                  />
                 </div>
-              ) : (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="px-4 py-2 text-[13px] font-medium uppercase tracking-[0.15em] text-ppa-gray hover:text-ppa-white transition-colors"
-                >
-                  {link.label}
-                </Link>
-              )
-            )}
-          </div>
+              </button>
+            </div>
 
-          {/* Right side */}
-          <div className="flex items-center gap-4">
-            <a
-              href={`tel:${COMPANY.phoneRaw}`}
-              className="hidden md:flex items-center gap-2 text-[13px] font-medium text-ppa-brass hover:text-ppa-brass-light transition-colors"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-ppa-brass animate-pulse" />
-              AOG: {COMPANY.phone}
-            </a>
-            <Link
-              href="/quote"
-              className="hidden sm:inline-flex px-6 py-2.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-black bg-ppa-brass hover:bg-ppa-brass-light transition-colors"
-            >
-              Get a Quote
-            </Link>
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-2 text-ppa-white"
-              aria-label="Toggle navigation menu"
-            >
-              <div className="w-6 flex flex-col gap-1.5">
-                <motion.span
-                  animate={mobileOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
-                  className="block h-[1.5px] w-full bg-current"
-                />
-                <motion.span
-                  animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-                  className="block h-[1.5px] w-full bg-current"
-                />
-                <motion.span
-                  animate={mobileOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
-                  className="block h-[1.5px] w-full bg-current"
-                />
-              </div>
-            </button>
+            {/* Bottom row — desktop nav links, right-aligned */}
+            <div className="hidden lg:flex items-center gap-0.5 -mr-3.5">
+              {NAV_LINKS.map((link) =>
+                link.children ? (
+                  <div
+                    key={link.label}
+                    className="relative"
+                    onMouseEnter={() => setAircraftOpen(true)}
+                    onMouseLeave={() => setAircraftOpen(false)}
+                  >
+                    <button
+                      className={`px-3.5 py-2 text-[12px] font-medium tracking-[0.05em] transition-colors ${
+                        scrolled
+                          ? "text-ppa-dark hover:text-ppa-black"
+                          : "text-ppa-white/85 hover:text-ppa-white"
+                      }`}
+                    >
+                      {link.label}
+                    </button>
+                    <AnimatePresence>
+                      {aircraftOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 4 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 4 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute top-full right-0 mt-0 w-48 py-2 bg-ppa-white border border-ppa-border shadow-lg"
+                        >
+                          {link.children.map((child) => (
+                            <Link
+                              key={child.href}
+                              href={child.href}
+                              className="block px-5 py-2.5 text-[13px] text-ppa-dark hover:text-ppa-brass hover:bg-ppa-light transition-colors"
+                            >
+                              {child.label}
+                            </Link>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className={`px-3.5 py-2 text-[12px] font-medium tracking-[0.05em] transition-colors ${
+                      scrolled
+                        ? "text-ppa-dark hover:text-ppa-black"
+                        : "text-ppa-white/85 hover:text-ppa-white"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
+            </div>
           </div>
         </div>
 
@@ -138,7 +167,7 @@ export function Header() {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:hidden overflow-hidden bg-ppa-black border-t border-ppa-border"
+              className="lg:hidden overflow-hidden bg-ppa-white border-t border-ppa-border"
             >
               <div className="px-6 py-8 space-y-1">
                 {NAV_LINKS.map((link) =>
@@ -152,7 +181,7 @@ export function Header() {
                           key={child.href}
                           href={child.href}
                           onClick={() => setMobileOpen(false)}
-                          className="block px-4 py-2.5 text-sm text-ppa-gray hover:text-ppa-brass transition-colors"
+                          className="block px-4 py-2.5 text-sm text-ppa-dark hover:text-ppa-brass transition-colors"
                         >
                           {child.label}
                         </Link>
@@ -163,7 +192,7 @@ export function Header() {
                       key={link.label}
                       href={link.href}
                       onClick={() => setMobileOpen(false)}
-                      className="block py-3 text-sm font-medium text-ppa-light hover:text-ppa-brass transition-colors"
+                      className="block py-3 text-sm font-medium text-ppa-dark hover:text-ppa-brass transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -173,13 +202,13 @@ export function Header() {
                   <Link
                     href="/quote"
                     onClick={() => setMobileOpen(false)}
-                    className="block w-full py-3 text-sm font-semibold text-center text-ppa-black bg-ppa-brass uppercase tracking-wider"
+                    className="block w-full py-3 text-sm font-semibold text-center text-ppa-white bg-ppa-brass uppercase tracking-wider"
                   >
                     Request a Quote
                   </Link>
                   <a
                     href={`tel:${COMPANY.phoneRaw}`}
-                    className="block w-full py-3 text-sm font-semibold text-center text-ppa-brass border border-ppa-brass/30"
+                    className="block w-full py-3 text-sm font-semibold text-center text-ppa-brass border border-ppa-brass/40"
                   >
                     AOG: {COMPANY.phone}
                   </a>

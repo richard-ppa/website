@@ -48,33 +48,33 @@ export default function ContactPage() {
             {/* AOG */}
             <a
               href={`tel:${COMPANY.phoneRaw}`}
-              className="bg-ppa-black p-8 lg:p-10 group hover:bg-ppa-dark transition-colors"
+              className="bg-ppa-white p-8 lg:p-10 group hover:bg-ppa-light transition-colors"
             >
               <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-brass">
                 AOG Hotline
               </span>
-              <p className="font-display text-3xl sm:text-4xl text-ppa-brass group-hover:text-ppa-brass-light transition-colors mt-3">
+              <p className="font-display text-3xl sm:text-4xl text-ppa-brass group-hover:text-ppa-brass-dark transition-colors mt-3">
                 {COMPANY.phone}
               </p>
-              <p className="text-sm text-ppa-muted mt-3">
+              <p className="text-sm text-ppa-gray mt-3">
                 Aircraft down? Call us now. TX &amp; OK mobile coverage.
               </p>
             </a>
 
             {/* Email */}
-            <div className="bg-ppa-black p-8 lg:p-10">
+            <div className="bg-ppa-white p-8 lg:p-10">
               <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-brass">
                 Email
               </span>
               <div className="mt-4 space-y-4">
                 {COMPANY.founders.map((founder) => (
                   <div key={founder.email}>
-                    <p className="text-sm text-ppa-light">
+                    <p className="text-sm text-ppa-dark">
                       {founder.name}, {founder.title}
                     </p>
                     <a
                       href={`mailto:${founder.email}`}
-                      className="text-sm text-ppa-muted hover:text-ppa-brass transition-colors"
+                      className="text-sm text-ppa-gray hover:text-ppa-brass transition-colors"
                     >
                       {founder.email}
                     </a>
@@ -84,13 +84,13 @@ export default function ContactPage() {
             </div>
 
             {/* Location */}
-            <div className="bg-ppa-black p-8 lg:p-10">
+            <div className="bg-ppa-white p-8 lg:p-10">
               <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-brass">
                 Visit Us
               </span>
               <div className="mt-4 text-sm space-y-1">
-                <p className="text-ppa-light">{COMPANY.address.street}</p>
-                <p className="text-ppa-light">
+                <p className="text-ppa-dark">{COMPANY.address.street}</p>
+                <p className="text-ppa-dark">
                   {COMPANY.address.city}, {COMPANY.address.state}{" "}
                   {COMPANY.address.zip}
                 </p>
@@ -106,7 +106,7 @@ export default function ContactPage() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
             <div>
-              <h2 className="font-display text-3xl sm:text-4xl text-ppa-white leading-none mb-8">
+              <h2 className="font-display text-3xl sm:text-4xl text-ppa-black leading-none mb-8">
                 Send Us a Message
               </h2>
               <form className="space-y-5">
@@ -182,7 +182,7 @@ export default function ContactPage() {
 
                 <button
                   type="submit"
-                  className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-black bg-ppa-brass hover:bg-ppa-brass-light transition-colors"
+                  className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark transition-colors"
                 >
                   Send Message
                 </button>

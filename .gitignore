@@ -5,3 +5,10 @@ out/
 .env.local
 *.tsbuildinfo
 next-env.d.ts
+
+# Local-only notes
+.impeccable.md
+.wrangler/
+
+# Source documents should not ship in public/
+public/blog/**/*.docx
