@@ -184,9 +184,19 @@ export default function ServicesPage() {
                 <div
                   className={`max-w-2xl ${textRight ? "ml-auto" : ""}`}
                 >
-                  <span className="font-display text-7xl lg:text-[9rem] text-ppa-brass-bright/40 leading-none block mb-3">
-                    {number}
-                  </span>
+                  <div className="relative inline-block mb-3">
+                    <div
+                      aria-hidden
+                      className="absolute inset-0 blur-xl opacity-60 pointer-events-none"
+                      style={{
+                        background:
+                          "conic-gradient(from 210deg at 50% 50%, #00eaff 0deg, #00aeef 90deg, #3b82f6 180deg, #1e3a8a 270deg, #00eaff 360deg)",
+                      }}
+                    />
+                    <span className="relative font-display text-7xl lg:text-[9rem] text-[#00aeef]/40 leading-none block">
+                      {number}
+                    </span>
+                  </div>
                   <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-white leading-[0.95] mb-6">
                     {service.name}
                   </h2>
