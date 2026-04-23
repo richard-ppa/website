@@ -18,19 +18,30 @@ export default function BlogIndexPage() {
 
   return (
     <>
-      {/* Header */}
-      <section className="pt-32 pb-16 lg:pt-40 lg:pb-20 border-b border-ppa-border">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+      {/* Header — cinematic hero */}
+      <section className="relative h-[65vh] min-h-[480px] flex items-end overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/tech-on-lift.jpg"
+            alt="PPA technician on a lift working on a business jet"
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-ppa-black via-ppa-black/55 to-ppa-black/10" />
+        </div>
+        <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16 lg:pb-20">
           <div className="flex items-center gap-3 mb-6">
-            <span className="h-px w-8 bg-ppa-brass" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
+            <span className="h-px w-8 bg-ppa-brass-bright" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass-bright">
               Field Insights
             </span>
           </div>
-          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-ppa-black leading-[0.95] max-w-4xl">
+          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-ppa-white leading-[0.95] max-w-4xl">
             Notes from the hangar floor.
           </h1>
-          <p className="mt-6 text-lg text-ppa-gray font-light max-w-2xl leading-relaxed">
+          <p className="mt-6 text-lg text-ppa-light/85 font-light max-w-2xl leading-relaxed">
             Trends we&apos;re seeing across the Hawker, Citation, and Challenger
             fleets — written by the technicians doing the work.
           </p>

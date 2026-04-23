@@ -42,6 +42,12 @@ export const AIRFRAMES = {
     slug: "hawker",
     manufacturer: "Hawker Beechcraft",
     models: ["800", "800XP", "900XP", "1000"],
+    modelSpecs: {
+      "800": { class: "Midsize", engines: "2× Honeywell TFE731-5R", range: "2,540 nm" },
+      "800XP": { class: "Midsize", engines: "2× Honeywell TFE731-5BR", range: "2,540 nm" },
+      "900XP": { class: "Midsize", engines: "2× Honeywell TFE731-50BR", range: "2,818 nm" },
+      "1000": { class: "Super-midsize", engines: "2× P&WC PW305", range: "3,050 nm" },
+    },
     description:
       "Deep expertise across the entire Hawker 800 series — from the classic 800 through the 900XP and 1000. Our technicians know these airframes inside and out.",
     services: [
@@ -58,7 +64,15 @@ export const AIRFRAMES = {
     name: "Citation",
     slug: "citation",
     manufacturer: "Cessna / Textron Aviation",
-    models: ["525 series", "550", "560", "560XL/XLS", "680", "680A"],
+    models: ["525", "550", "560", "560XL/XLS", "680", "680A"],
+    modelSpecs: {
+      "525": { class: "Light", engines: "2× Williams FJ44", range: "1,500–2,200 nm" },
+      "550": { class: "Light-midsize", engines: "2× P&WC PW530A", range: "1,900 nm" },
+      "560": { class: "Midsize", engines: "2× P&WC JT15D / PW535A", range: "1,900 nm" },
+      "560XL/XLS": { class: "Midsize", engines: "2× P&WC PW545B/C", range: "2,100 nm" },
+      "680": { class: "Super-midsize", engines: "2× P&WC PW306C", range: "3,000 nm" },
+      "680A": { class: "Super-midsize", engines: "2× P&WC PW306D", range: "3,200 nm" },
+    },
     description:
       "Full-service maintenance for the Citation 525 series through the 680A. Whether it's a scheduled phase inspection or an unscheduled squawk, we have the tooling, parts, and type experience to turn your Citation quickly.",
     services: [
@@ -76,6 +90,13 @@ export const AIRFRAMES = {
     slug: "challenger",
     manufacturer: "Bombardier",
     models: ["300", "350", "604", "605", "650"],
+    modelSpecs: {
+      "300": { class: "Super-midsize", engines: "2× Honeywell HTF7000", range: "3,100 nm" },
+      "350": { class: "Super-midsize", engines: "2× Honeywell HTF7350", range: "3,200 nm" },
+      "604": { class: "Large-cabin", engines: "2× GE CF34-3B", range: "4,027 nm" },
+      "605": { class: "Large-cabin", engines: "2× GE CF34-3B", range: "4,077 nm" },
+      "650": { class: "Large-cabin", engines: "2× GE CF34-3B", range: "4,000 nm" },
+    },
     description:
       "Specialist Challenger maintenance from the 300/350 through the 604/605/650. Our team delivers on complex inspection events, structural work, and everything in between.",
     services: [

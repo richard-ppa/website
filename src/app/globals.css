@@ -21,7 +21,7 @@
   --color-ppa-border: oklch(0.86 0.010 230);        /* hairline / divider */
   --color-ppa-surface: oklch(0.93 0.008 230);       /* card surface */
   --color-ppa-light: oklch(0.95 0.006 230);         /* raised surface / subtle panel */
-  --color-ppa-white: oklch(0.98 0.003 230);         /* primary canvas, paper white */
+  --color-ppa-white: #f7f6f3;                       /* primary canvas, warm paper */
 
   /* Accent — cyan, darker for AA+ contrast on light canvas
      Name "brass" is retained for class-name continuity. Value is deep cyan. */
@@ -29,6 +29,10 @@
   --color-ppa-brass-light: oklch(0.62 0.130 230);   /* hover / soft accent */
   --color-ppa-brass-dark: oklch(0.40 0.150 230);    /* highest-emphasis accent */
   --color-ppa-brass-bright: oklch(0.78 0.110 230);  /* INVERSE use — for cyan text on dark overlays/photos */
+
+  /* Brand navy — from logo (#273b81). Used as inverse surface / CTA background. */
+  --color-ppa-navy: #273b81;
+  --color-ppa-navy-dark: #1d2d64;
 
   /* Functional — tuned for light canvas readability */
   --color-ppa-gold: oklch(0.65 0.150 75);

@@ -15,8 +15,8 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      {/* Hero — Full-bleed team photo */}
-      <section className="relative h-[70vh] min-h-[500px] flex items-end overflow-hidden">
+      {/* Hero — Full-screen team photo with intro */}
+      <section className="relative h-screen min-h-[700px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <Image
             src="/images/tech-working-on-wing.jpg"
@@ -25,47 +25,31 @@ export default function AboutPage() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-ppa-black via-ppa-black/40 to-ppa-black/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ppa-black via-ppa-black/50 to-ppa-black/10" />
         </div>
-        <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="h-px w-8 bg-ppa-brass" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
+        <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-20 lg:pb-24">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="h-px w-8 bg-ppa-brass-bright" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass-bright">
               About PPA
             </span>
           </div>
-          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-ppa-white leading-[0.9]">
-            Built by Operators,
-            <br />
-            <span className="text-ppa-muted">For Operators.</span>
-          </h1>
-        </div>
-      </section>
-
-      {/* Intro text */}
-      <section className="py-20 lg:py-28">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <div className="max-w-3xl">
-            <p className="text-xl lg:text-2xl text-ppa-dark font-light leading-relaxed">
-              Plane Place Aviation is an FAA Part 145 repair station in
-              Cleburne, Texas that exclusively serves Hawker, Citation, and
-              Challenger operators. We deliver deep airframe expertise,
-              reliable turnaround times, and transparent pricing — all backed
-              by founders who still run the company.
-            </p>
+          <div className="flex flex-col lg:flex-row lg:items-stretch gap-8 lg:gap-12">
+            <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-ppa-white leading-[0.9] shrink-0">
+              Built by Operators,
+              <br />
+              <span className="text-ppa-muted">For Operators.</span>
+            </h1>
+            <div className="lg:border-l-2 lg:border-ppa-brass-bright lg:pl-12 flex items-center">
+              <p className="text-lg lg:text-xl text-ppa-light/85 font-light leading-relaxed max-w-xl">
+                Plane Place Aviation is an FAA Part 145 repair station in
+                Cleburne, Texas that exclusively serves Hawker, Citation, and
+                Challenger operators. We deliver deep airframe expertise,
+                reliable turnaround times, and transparent pricing — all backed
+                by founders who still run the company.
+              </p>
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* Facility — Full-bleed */}
-      <section>
-        <div className="aspect-[21/9] relative overflow-hidden">
-          <Image
-            src="/images/Aircraft-MX.jpg"
-            alt="PPA hangar with multiple business jets undergoing maintenance in Cleburne, Texas"
-            fill
-            className="object-cover"
-          />
         </div>
       </section>
 

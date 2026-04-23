@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, Geist } from "next/font/google";
+import { Archivo, Geist, Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -16,6 +16,13 @@ const geist = Geist({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-geist",
+});
+
+const inter = Inter({
+  weight: ["400"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -109,7 +116,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${archivo.variable} ${geist.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${geist.variable} ${inter.variable}`}>
       <head>
         {/* Google Analytics — replace G-XXXXXXXXXX with your GA4 measurement ID */}
         {process.env.NEXT_PUBLIC_GA_ID && (

@@ -5,7 +5,7 @@ import { COMPANY, SERVICES } from "@/lib/constants";
 
 const SERVICE_IMAGES: Record<string, string> = {
   "scheduled-maintenance": "/images/Engine-MX.jpg",
-  "pre-purchase-inspections": "/images/Wing-MX-2.jpg",
+  "pre-purchase-inspections": "/images/Wing-Work-4.jpg",
   "aog-response": "/images/Aircraft-MX.jpg",
   "structural-repairs": "/images/Winglet-Install-04.jpg",
   avionics: "/images/Winglet-Install-05.jpg",
@@ -150,59 +150,68 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Service sections */}
+      {/* Service sections — cinematic full-bleed, alternating text side for rhythm */}
       {SERVICES.map((service, i) => {
         const details = SERVICE_DETAILS[service.slug];
-        const isEven = i % 2 === 0;
+        const number = `0${i + 1}`;
+        const image =
+          SERVICE_IMAGES[service.slug] || "/images/Aircraft-MX.jpg";
+        const altText = `PPA technician performing ${service.name.toLowerCase()} on business jet`;
+        const textRight = i % 2 === 1; // flip text panel side every other section
 
         return (
           <section
             key={service.slug}
             id={service.slug}
-            className={`py-20 lg:py-28 ${!isEven ? "bg-ppa-light" : ""}`}
+            className="relative h-[85vh] min-h-[620px] overflow-hidden"
           >
-            <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-              <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-                <div className={isEven ? "" : "lg:order-2"}>
-                  <span className="font-display text-6xl text-ppa-border leading-none">
-                    0{i + 1}
+            <Image
+              src={image}
+              alt={altText}
+              fill
+              className="object-cover"
+              sizes="100vw"
+            />
+            <div
+              className={`absolute inset-0 ${
+                textRight
+                  ? "bg-gradient-to-l from-ppa-black via-ppa-black/70 to-ppa-black/10"
+                  : "bg-gradient-to-r from-ppa-black via-ppa-black/70 to-ppa-black/10"
+              }`}
+            />
+            <div className="absolute inset-0 flex items-end">
+              <div className="w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16 lg:pb-24">
+                <div
+                  className={`max-w-2xl ${textRight ? "ml-auto" : ""}`}
+                >
+                  <span className="font-display text-7xl lg:text-[9rem] text-ppa-brass-bright/40 leading-none block mb-3">
+                    {number}
                   </span>
-                  <h2 className="font-display text-3xl sm:text-4xl text-ppa-black leading-none mt-2 mb-6">
+                  <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-white leading-[0.95] mb-6">
                     {service.name}
                   </h2>
-                  <p className="text-ppa-gray font-light leading-relaxed mb-8">
+                  <p className="text-lg text-ppa-light/85 font-light leading-relaxed mb-8 max-w-xl">
                     {details?.description}
                   </p>
-                  <ul className="space-y-3 mb-8">
+                  <div className="flex flex-wrap gap-2 mb-10 max-w-xl">
                     {details?.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-3">
-                        <span className="text-ppa-brass mt-1.5 text-xs">+</span>
-                        <span className="text-ppa-dark text-sm">
-                          {feature}
-                        </span>
-                      </li>
+                      <span
+                        key={feature}
+                        className="text-xs text-ppa-white border border-ppa-white/30 px-3 py-1.5 backdrop-blur-sm"
+                      >
+                        {feature}
+                      </span>
                     ))}
-                  </ul>
+                  </div>
                   <Link
                     href="/quote"
-                    className="inline-flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.15em] text-ppa-brass hover:text-ppa-brass-light transition-colors"
+                    className="inline-flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.15em] text-ppa-brass-bright hover:text-ppa-white transition-colors"
                   >
                     Get a Quote
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
                   </Link>
-                </div>
-
-                <div
-                  className={`aspect-[4/3] relative overflow-hidden ${isEven ? "" : "lg:order-1"}`}
-                >
-                  <Image
-                    src={SERVICE_IMAGES[service.slug] || "/images/Aircraft-MX.jpg"}
-                    alt={`PPA technician performing ${service.name.toLowerCase()} on business jet`}
-                    fill
-                    className="object-cover"
-                  />
                 </div>
               </div>
             </div>

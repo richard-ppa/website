@@ -41,6 +41,21 @@ const AIRFRAME_SERVICE_IMAGES: Record<string, { src: string; alt: string }> = {
   },
 };
 
+const AIRFRAME_FLEET_BACKGROUND: Record<string, { src: string; alt: string } | undefined> = {
+  hawker: {
+    src: "/images/Hawker-850-wide.jpg",
+    alt: "Hawker 850 on the ramp",
+  },
+  challenger: {
+    src: "/images/Challenger-350.jpg",
+    alt: "Challenger 350 on the ramp",
+  },
+  citation: {
+    src: "/images/Citation-680.jpg",
+    alt: "Citation 680 Sovereign on the ramp",
+  },
+};
+
 const AIRFRAME_GALLERY: Record<string, { src: string; alt: string }[]> = {
   hawker: [
     { src: "/images/hawker-mx.jpg", alt: "Hawker maintenance operations" },
@@ -95,6 +110,7 @@ export default async function AirframePage({
 
   const heroImg = AIRFRAME_HERO_IMAGES[slug];
   const serviceImg = AIRFRAME_SERVICE_IMAGES[slug];
+  const fleetBg = AIRFRAME_FLEET_BACKGROUND[slug];
   const gallery = AIRFRAME_GALLERY[slug] || [];
   const otherAirframes = Object.values(AIRFRAMES).filter(
     (a) => a.slug !== slug
@@ -157,29 +173,126 @@ export default async function AirframePage({
         </div>
       </section>
 
-      {/* Models served */}
-      <section className="py-20 lg:py-28 bg-ppa-light">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="h-px w-8 bg-ppa-brass" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
-              Models We Service
-            </span>
-          </div>
-          <div className="flex flex-wrap gap-3 mt-8">
-            {airframe.models.map((model) => (
-              <div
-                key={model}
-                className="border border-ppa-border px-8 py-6 text-center min-w-[160px]"
-              >
-                <p className="font-display text-3xl text-ppa-black leading-none">
-                  {airframe.name}
-                </p>
-                <p className="font-display text-2xl text-ppa-brass mt-1">
-                  {model}
-                </p>
+      {/* Models served — editorial spec rows */}
+      <section
+        className={`relative py-24 lg:py-32 overflow-hidden ${
+          fleetBg ? "" : "bg-ppa-light"
+        }`}
+      >
+        {fleetBg && (
+          <>
+            <Image
+              src={fleetBg.src}
+              alt={fleetBg.alt}
+              fill
+              className="object-cover"
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-ppa-black/70" />
+          </>
+        )}
+        <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10">
+          <div className="flex items-end justify-between gap-8 mb-12 lg:mb-16 flex-wrap">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <span
+                  className={`h-px w-8 ${
+                    fleetBg ? "bg-ppa-brass-bright" : "bg-ppa-brass"
+                  }`}
+                />
+                <span
+                  className={`text-[11px] font-semibold uppercase tracking-[0.25em] ${
+                    fleetBg ? "text-ppa-brass-bright" : "text-ppa-brass"
+                  }`}
+                >
+                  Models We Service
+                </span>
               </div>
-            ))}
+              <h2
+                className={`font-display text-4xl sm:text-5xl lg:text-6xl leading-[0.95] ${
+                  fleetBg ? "text-ppa-white" : "text-ppa-black"
+                }`}
+              >
+                The {airframe.name} Fleet
+              </h2>
+            </div>
+            <p
+              className={`text-sm max-w-xs ${
+                fleetBg ? "text-ppa-light/80" : "text-ppa-muted"
+              }`}
+            >
+              Every model in the {airframe.name} family — type-rated technicians,
+              the tooling, and the parts network to support each one.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-x-8 gap-y-12 lg:gap-x-10 pt-10 lg:pt-14">
+            {airframe.models.map((model) => {
+              const specs = (airframe.modelSpecs as Record<string, { class: string; engines: string; range: string }>)?.[model];
+              const parts = model.match(/^(\d+)(.*)$/);
+              const numberPart = parts?.[1] ?? model;
+              const suffixPart = parts?.[2] ?? "";
+              return (
+                <div key={model} className="flex-1 min-w-[170px] text-center">
+                  <p
+                    className={`font-display text-4xl lg:text-5xl leading-[0.9] mb-8 ${
+                      fleetBg ? "text-ppa-white" : "text-ppa-black"
+                    }`}
+                  >
+                    {numberPart}
+                    {suffixPart && (
+                      <span className="font-normal text-[0.75em]">{suffixPart}</span>
+                    )}
+                  </p>
+                  {specs && (
+                    <dl
+                      className={`divide-y border-y ${
+                        fleetBg
+                          ? "divide-ppa-brass-bright border-ppa-brass-bright"
+                          : "divide-ppa-brass border-ppa-brass"
+                      }`}
+                    >
+                      <div className="py-4">
+                        <dt
+                          className={`text-[10px] font-semibold uppercase tracking-[0.22em] mb-1.5 ${
+                            fleetBg ? "text-ppa-brass-bright" : "text-ppa-muted"
+                          }`}
+                        >
+                          Class
+                        </dt>
+                        <dd className={`text-sm ${fleetBg ? "text-ppa-light" : "text-ppa-dark"}`}>
+                          {specs.class}
+                        </dd>
+                      </div>
+                      <div className="py-4">
+                        <dt
+                          className={`text-[10px] font-semibold uppercase tracking-[0.22em] mb-1.5 ${
+                            fleetBg ? "text-ppa-brass-bright" : "text-ppa-muted"
+                          }`}
+                        >
+                          Engines
+                        </dt>
+                        <dd className={`text-sm ${fleetBg ? "text-ppa-light" : "text-ppa-dark"}`}>
+                          {specs.engines}
+                        </dd>
+                      </div>
+                      <div className="py-4">
+                        <dt
+                          className={`text-[10px] font-semibold uppercase tracking-[0.22em] mb-1.5 ${
+                            fleetBg ? "text-ppa-brass-bright" : "text-ppa-muted"
+                          }`}
+                        >
+                          Range
+                        </dt>
+                        <dd className={`text-sm ${fleetBg ? "text-ppa-light" : "text-ppa-dark"}`}>
+                          {specs.range}
+                        </dd>
+                      </div>
+                    </dl>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -197,44 +310,56 @@ export default async function AirframePage({
         </section>
       )}
 
-      {/* Services for this airframe */}
-      <section className="py-20 lg:py-28">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="h-px w-8 bg-ppa-brass" />
-                <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
+      {/* Capabilities — cinematic full-bleed */}
+      <section className="relative h-[85vh] min-h-[620px] overflow-hidden">
+        <Image
+          src={serviceImg.src}
+          alt={serviceImg.alt}
+          fill
+          className="object-cover"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-ppa-black via-ppa-black/70 to-ppa-black/10" />
+        <div className="absolute inset-0 flex items-end">
+          <div className="w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16 lg:pb-24">
+            <div className="max-w-2xl">
+              <span className="font-display text-6xl lg:text-[8rem] text-ppa-brass-bright/40 leading-[0.85] block mb-3">
+                {airframe.name}
+              </span>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="h-px w-8 bg-ppa-brass-bright" />
+                <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass-bright">
                   Capabilities
                 </span>
               </div>
-              <h2 className="font-display text-4xl sm:text-5xl text-ppa-black leading-none mb-6">
+              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-white leading-[0.95] mb-6">
                 {airframe.name} Services
               </h2>
-              <p className="text-ppa-gray font-light leading-relaxed mb-10">
-                Our technicians have deep, hands-on experience with every
-                model in the {airframe.name} family. From routine phase
-                inspections to complex structural work, we have the tooling,
-                parts access, and type-specific knowledge to keep your{" "}
-                {airframe.name} flying.
+              <p className="text-lg text-ppa-light/85 font-light leading-relaxed mb-8 max-w-xl">
+                Our technicians have deep, hands-on experience with every model
+                in the {airframe.name} family. From routine phase inspections
+                to complex structural work, we have the tooling, parts access,
+                and type-specific knowledge to keep your {airframe.name} flying.
               </p>
-              <ul className="space-y-4">
+              <div className="flex flex-wrap gap-2 mb-10 max-w-xl">
                 {airframe.services.map((service) => (
-                  <li key={service} className="flex items-start gap-3">
-                    <span className="text-ppa-brass mt-1 text-sm">+</span>
-                    <span className="text-ppa-dark">{service}</span>
-                  </li>
+                  <span
+                    key={service}
+                    className="text-xs text-ppa-white border border-ppa-white/30 px-3 py-1.5 backdrop-blur-sm"
+                  >
+                    {service}
+                  </span>
                 ))}
-              </ul>
-            </div>
-
-            <div className="aspect-[4/3] relative overflow-hidden">
-              <Image
-                src={serviceImg.src}
-                alt={serviceImg.alt}
-                fill
-                className="object-cover"
-              />
+              </div>
+              <Link
+                href="/quote"
+                className="inline-flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.15em] text-ppa-brass-bright hover:text-ppa-white transition-colors"
+              >
+                Get a Quote
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
             </div>
           </div>
         </div>

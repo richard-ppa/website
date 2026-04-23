@@ -6,13 +6,13 @@ export function Footer() {
   return (
     <footer className="bg-ppa-light border-t border-ppa-border">
       {/* CTA Strip */}
-      <div className="border-b border-ppa-border">
+      <div className="bg-ppa-brass">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16 lg:py-20 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
           <div>
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-black leading-none">
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-white leading-none">
               Ready to Talk Maintenance?
             </h2>
-            <p className="mt-3 text-ppa-gray max-w-lg">
+            <p className="mt-3 text-ppa-white/80 max-w-lg">
               Whether you need a scheduled inspection, a pre-purchase
               evaluation, or AOG support right now — we&apos;re here.
             </p>
@@ -20,13 +20,13 @@ export function Footer() {
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               href="/quote"
-              className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark transition-colors"
+              className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-brass bg-ppa-white hover:bg-ppa-light transition-colors"
             >
               Request a Quote
             </Link>
             <a
               href={`tel:${COMPANY.phoneRaw}`}
-              className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-brass border border-ppa-brass/40 hover:bg-ppa-brass/10 transition-colors text-center"
+              className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-white border border-ppa-white/50 hover:bg-ppa-white/10 transition-colors text-center"
             >
               Call {COMPANY.phone}
             </a>
