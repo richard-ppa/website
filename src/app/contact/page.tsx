@@ -15,7 +15,7 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative h-[55vh] min-h-[400px] flex items-end overflow-hidden">
+      <section className="relative h-screen min-h-[700px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <Image
             src="/images/about-us.jpg"
