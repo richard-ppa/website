@@ -5,7 +5,7 @@ import { COMPANY, SERVICES } from "@/lib/constants";
 
 const SERVICE_IMAGES: Record<string, string> = {
   "scheduled-maintenance": "/images/Engine-MX.jpg",
-  "pre-purchase-inspections": "/images/Wing-Work-4.jpg",
+  "pre-purchase-inspections": "/images/pre-purchase.jpg",
   "aog-response": "/images/Aircraft-MX.jpg",
   "structural-repairs": "/images/Winglet-Install-04.jpg",
   avionics: "/images/avionics.jpg",
@@ -104,7 +104,7 @@ export default function ServicesPage() {
   return (
     <>
       {/* Hero — Full bleed image */}
-      <section className="relative h-[75vh] min-h-[550px] flex items-end overflow-hidden">
+      <section className="relative h-screen min-h-[700px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <Image
             src="/images/Wing-MX.jpg"
@@ -159,7 +159,6 @@ export default function ServicesPage() {
         const altText = `PPA technician performing ${service.name.toLowerCase()} on business jet`;
         const textRight = i % 2 === 1; // flip text panel side every other section
         const flipImage =
-          service.slug === "pre-purchase-inspections" ||
           service.slug === "structural-repairs" ||
           service.slug === "maintenance-management";
 
@@ -167,7 +166,7 @@ export default function ServicesPage() {
           <section
             key={service.slug}
             id={service.slug}
-            className="relative h-[85vh] min-h-[620px] overflow-hidden"
+            className="relative h-[85vh] min-h-[620px] overflow-hidden border-t border-ppa-white/20"
           >
             <Image
               src={image}
