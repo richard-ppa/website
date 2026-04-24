@@ -28,8 +28,8 @@ const AIRFRAME_HERO_IMAGES: Record<string, { src: string; alt: string; position?
 
 const AIRFRAME_SERVICE_IMAGES: Record<string, { src: string; alt: string }> = {
   hawker: {
-    src: "/images/Winglet-MX---James02.jpg",
-    alt: "Senior PPA technician performing precision work on a Hawker wing",
+    src: "/images/Tech-at-Station.jpg",
+    alt: "PPA technician at workstation reviewing Hawker maintenance records",
   },
   citation: {
     src: "/images/Wing-MX-2.jpg",
@@ -332,10 +332,7 @@ export default async function AirframePage({
                   Capabilities
                 </span>
               </div>
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-white leading-[0.95] mb-6">
-                {airframe.name} Services
-              </h2>
-              <p className="text-lg text-ppa-light/85 font-light leading-relaxed mb-8 max-w-xl">
+              <p className="text-lg text-ppa-light/85 font-light leading-relaxed mb-8 max-w-xl mt-6">
                 Our technicians have deep, hands-on experience with every model
                 in the {airframe.name} family. From routine phase inspections
                 to complex structural work, we have the tooling, parts access,

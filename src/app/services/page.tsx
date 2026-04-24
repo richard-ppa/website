@@ -8,7 +8,7 @@ const SERVICE_IMAGES: Record<string, string> = {
   "pre-purchase-inspections": "/images/Wing-Work-4.jpg",
   "aog-response": "/images/Aircraft-MX.jpg",
   "structural-repairs": "/images/Winglet-Install-04.jpg",
-  avionics: "/images/Winglet-Install-05.jpg",
+  avionics: "/images/avionics.jpg",
   "maintenance-management": "/images/Wing-MX---Travis-Angel.jpg",
 };
 
@@ -158,6 +158,10 @@ export default function ServicesPage() {
           SERVICE_IMAGES[service.slug] || "/images/Aircraft-MX.jpg";
         const altText = `PPA technician performing ${service.name.toLowerCase()} on business jet`;
         const textRight = i % 2 === 1; // flip text panel side every other section
+        const flipImage =
+          service.slug === "pre-purchase-inspections" ||
+          service.slug === "structural-repairs" ||
+          service.slug === "maintenance-management";
 
         return (
           <section
@@ -169,7 +173,7 @@ export default function ServicesPage() {
               src={image}
               alt={altText}
               fill
-              className="object-cover"
+              className={`object-cover ${flipImage ? "scale-x-[-1]" : ""}`}
               sizes="100vw"
             />
             <div
