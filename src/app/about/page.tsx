@@ -36,9 +36,9 @@ export default function AboutPage() {
           </div>
           <div className="flex flex-col lg:flex-row lg:items-stretch gap-8 lg:gap-12">
             <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-ppa-white leading-[0.9] shrink-0">
-              Built by Operators,
+              Built by Mechanics.
               <br />
-              <span className="text-ppa-muted">For Operators.</span>
+              <span className="text-ppa-muted">Run by Mechanics.</span>
             </h1>
             <div className="lg:border-l-2 lg:border-ppa-brass-bright lg:pl-12 flex items-center">
               <p className="text-lg lg:text-xl text-ppa-light/85 font-light leading-relaxed max-w-xl">
@@ -69,26 +69,29 @@ export default function AboutPage() {
               </h2>
               <div className="space-y-5 text-ppa-gray font-light leading-relaxed">
                 <p>
-                  Plane Place Aviation was founded in 2022 on a simple premise:
-                  operators of Hawker, Citation, and Challenger aircraft
-                  deserved an MRO that took their airframes seriously — with
-                  dedicated tooling, type-specific expertise, and documentation
-                  that protects an aircraft&apos;s value over decades, not just
-                  hours.
+                  Plane Place Aviation was founded in 2022 by Tristan Noe and
+                  Travis Roberson — two veterans of the aircraft maintenance
+                  world. Both spent years on MRO floors, much of that time
+                  turning wrenches on aircraft owned by charter operators, and
+                  later in aircraft maintenance management. They&apos;d seen
+                  what the industry did well, what it kept getting wrong, and
+                  where customers walked away frustrated.
                 </p>
                 <p>
-                  That meant narrowing the focus. Three airframe families,
-                  nothing else. It meant hiring technicians who wanted to go
-                  deep rather than wide. And it meant being direct about scope,
-                  timeline, and price — treating every work order as part of
-                  the aircraft&apos;s permanent record.
+                  So they started Plane Place Aviation with a simple brief: a
+                  shop where operators feel confident handing over their
+                  aircraft, and a place where the people doing the work want to
+                  come in every day. Tristan and Travis are still on the floor
+                  — not in a corporate office — answering the questions and
+                  signing the work.
                 </p>
                 <p>
-                  Four years in, the approach hasn&apos;t changed. Tristan Noe
-                  and Travis Roberson still run the shop day-to-day — setting
-                  the schedule, reviewing work, and putting hands on the
-                  airplanes alongside their technicians. The owners still
-                  answer the phone.
+                  That&apos;s what specialization buys you. We only work on
+                  Hawker, Citation, and Challenger aircraft. Every tool, every
+                  procedure, every technician&apos;s reps point at the same
+                  three airframe families. The result isn&apos;t a
+                  &ldquo;first-class experience&rdquo; — it&apos;s the right
+                  answer, the first time.
                 </p>
               </div>
             </div>
