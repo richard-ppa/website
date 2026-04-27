@@ -6,7 +6,7 @@ import { COMPANY, SERVICES } from "@/lib/constants";
 const SERVICE_IMAGES: Record<string, string> = {
   "scheduled-maintenance": "/images/Engine-MX.jpg",
   "pre-purchase-inspections": "/images/pp-inspection.jpg",
-  "aog-response": "/images/Aircraft-MX.jpg",
+  "aog-response": "/images/aog.jpg",
   "structural-repairs": "/images/Winglet-Install-04.jpg",
   avionics: "/images/avionics.jpg",
   "maintenance-management": "/images/pre-purchase.png",
