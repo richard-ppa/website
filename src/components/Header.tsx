@@ -155,88 +155,87 @@ export function Header() {
               Get a Quote
             </Link>
             <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className={`lg:hidden p-2 transition-colors ${
+              type="button"
+              onClick={() => setMobileOpen((open) => !open)}
+              className={`lg:hidden relative z-10 p-3 -m-1 cursor-pointer transition-colors touch-manipulation ${
                 scrolled ? "text-ppa-black" : "text-ppa-white"
               }`}
               aria-label="Toggle navigation menu"
+              aria-expanded={mobileOpen}
             >
-              <div className="w-6 flex flex-col gap-1.5">
-                <motion.span
-                  animate={mobileOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
-                  className="block h-[1.5px] w-full bg-current"
-                />
-                <motion.span
-                  animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-                  className="block h-[1.5px] w-full bg-current"
-                />
-                <motion.span
-                  animate={mobileOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
-                  className="block h-[1.5px] w-full bg-current"
-                />
-              </div>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+                className="w-6 h-6 pointer-events-none"
+                aria-hidden="true"
+              >
+                {mobileOpen ? (
+                  <path d="M6 6L18 18M6 18L18 6" />
+                ) : (
+                  <>
+                    <path d="M4 7h16" />
+                    <path d="M4 12h16" />
+                    <path d="M4 17h16" />
+                  </>
+                )}
+              </svg>
             </button>
           </div>
         </div>
 
         {/* Mobile nav */}
-        <AnimatePresence>
-          {mobileOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:hidden overflow-hidden bg-ppa-white border-t border-ppa-border"
-            >
-              <div className="px-6 py-8 space-y-1">
-                {NAV_LINKS.map((link) =>
-                  link.children ? (
-                    <div key={link.label}>
-                      <div className="px-0 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-muted">
-                        {link.label}
-                      </div>
-                      {link.children.map((child) => (
-                        <Link
-                          key={child.href}
-                          href={child.href}
-                          onClick={() => setMobileOpen(false)}
-                          className="block px-4 py-2.5 text-sm text-ppa-dark hover:text-ppa-brass transition-colors"
-                        >
-                          {child.label}
-                        </Link>
-                      ))}
-                    </div>
-                  ) : (
-                    <Link
-                      key={link.label}
-                      href={link.href}
-                      onClick={() => setMobileOpen(false)}
-                      className="block py-3 text-sm font-normal text-ppa-dark hover:text-ppa-brass transition-colors"
-                    >
+        {mobileOpen && (
+          <div className="lg:hidden bg-ppa-white border-t border-ppa-border">
+            <div className="px-6 py-8 space-y-1">
+              {NAV_LINKS.map((link) =>
+                link.children ? (
+                  <div key={link.label}>
+                    <div className="px-0 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-muted">
                       {link.label}
-                    </Link>
-                  )
-                )}
-                <div className="pt-6 space-y-3">
+                    </div>
+                    {link.children.map((child) => (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        onClick={() => setMobileOpen(false)}
+                        className="block px-4 py-2.5 text-sm text-ppa-dark hover:text-ppa-brass transition-colors"
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
                   <Link
-                    href="/quote"
+                    key={link.label}
+                    href={link.href}
                     onClick={() => setMobileOpen(false)}
-                    className="block w-full py-3 text-sm font-semibold text-center text-ppa-white bg-ppa-brass uppercase tracking-wider"
+                    className="block py-3 text-sm font-normal text-ppa-dark hover:text-ppa-brass transition-colors"
                   >
-                    Request a Quote
+                    {link.label}
                   </Link>
-                  <a
-                    href={`tel:${COMPANY.phoneRaw}`}
-                    className="block w-full py-3 text-sm font-semibold text-center text-ppa-brass border border-ppa-brass/40"
-                  >
-                    AOG: {COMPANY.phone}
-                  </a>
-                </div>
+                )
+              )}
+              <div className="pt-6 space-y-3">
+                <Link
+                  href="/quote"
+                  onClick={() => setMobileOpen(false)}
+                  className="block w-full py-3 text-sm font-semibold text-center text-ppa-white bg-ppa-brass uppercase tracking-wider"
+                >
+                  Request a Quote
+                </Link>
+                <a
+                  href={`tel:${COMPANY.phoneRaw}`}
+                  className="block w-full py-3 text-sm font-semibold text-center text-ppa-brass border border-ppa-brass/40"
+                >
+                  AOG: {COMPANY.phone}
+                </a>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+          </div>
+        )}
       </nav>
     </header>
   );

@@ -120,47 +120,72 @@ export default function AboutPage() {
       </section>
 
       {/* Leadership */}
-      <section className="py-24 lg:py-32">
+      <section className="py-16 lg:py-24">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-3">
             <span className="h-px w-8 bg-ppa-brass" />
             <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
               Leadership
             </span>
           </div>
-          <h2 className="font-display text-4xl sm:text-5xl text-ppa-black leading-none mb-16">
-            The Owners Answer the Phone.
+          <h2 className="font-display text-4xl sm:text-5xl text-ppa-black leading-none mb-10">
+            The Team Behind the Work.
           </h2>
 
-          <div className="grid sm:grid-cols-2 gap-8">
-            {COMPANY.founders.map((founder) => {
-              const headshot =
-                founder.name === "Tristan Noe"
-                  ? "/images/Tristan.jpg"
-                  : "/images/Travis.jpg";
-              return (
-                <div key={founder.email} className="p-10 flex flex-col items-center text-center">
-                  <div className="w-[291px] h-[291px] relative rounded-full overflow-hidden mb-6">
-                    <Image
-                      src={headshot}
-                      alt={`${founder.name}, ${founder.title}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <h3 className="font-display text-3xl text-ppa-black">
-                    {founder.name}
-                  </h3>
-                  <p className="text-sm text-ppa-brass mb-3">{founder.title}</p>
-                  <a
-                    href={`mailto:${founder.email}`}
-                    className="text-sm text-ppa-muted hover:text-ppa-brass transition-colors"
-                  >
-                    {founder.email}
-                  </a>
+          {/* Founders — featured row */}
+          <div className="grid sm:grid-cols-2 gap-8 lg:gap-16 mb-10 lg:mb-14">
+            {COMPANY.leadership.slice(0, 2).map((member) => (
+              <div
+                key={member.name}
+                className="flex flex-col items-center text-center"
+              >
+                <div className="w-52 h-52 lg:w-64 lg:h-64 relative overflow-hidden mb-4 bg-ppa-surface rounded-2xl shadow-xl">
+                  <Image
+                    src={member.photo}
+                    alt={`${member.name}, ${member.title}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 208px, 256px"
+                  />
                 </div>
-              );
-            })}
+                <span className="h-[2px] w-10 bg-ppa-brass mb-3" />
+                <h3 className="font-display text-3xl lg:text-4xl text-ppa-black leading-tight">
+                  {member.name}
+                </h3>
+                <p className="text-sm text-ppa-brass mt-1.5 max-w-xs">
+                  {member.title}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-ppa-border mb-10 lg:mb-12" />
+
+          {/* Leadership / Leads — uniform row */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
+            {COMPANY.leadership.slice(2).map((member) => (
+              <div
+                key={member.name}
+                className="flex flex-col items-center text-center"
+              >
+                <div className="w-[8.4rem] h-[8.4rem] lg:w-[10.8rem] lg:h-[10.8rem] relative overflow-hidden mb-3 bg-ppa-surface rounded-xl shadow-xl">
+                  <Image
+                    src={member.photo}
+                    alt={`${member.name}, ${member.title}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 135px, 173px"
+                  />
+                </div>
+                <h3 className="font-display text-lg text-ppa-black leading-tight">
+                  {member.name}
+                </h3>
+                <p className="text-xs text-ppa-brass mt-1 uppercase tracking-[0.1em]">
+                  {member.title}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

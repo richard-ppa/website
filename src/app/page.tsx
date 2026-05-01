@@ -13,8 +13,8 @@ const AIRFRAME_IMAGES: Record<string, { src: string; alt: string }> = {
     alt: "Hawker aircraft at Plane Place Aviation",
   },
   citation: {
-    src: "/images/citation.jpg",
-    alt: "Citation maintenance at Plane Place Aviation",
+    src: "/images/Citation-Hangar.jpg",
+    alt: "Citation aircraft in the PPA hangar",
   },
   challenger: {
     src: "/images/challenger.jpg",

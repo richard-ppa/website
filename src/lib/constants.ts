@@ -16,13 +16,50 @@ export const COMPANY = {
   founders: [
     {
       name: "Tristan Noe",
-      title: "Co-Founder",
+      title: "Co-Founder / Director of Maintenance",
       email: "tristan@ppa.aero",
     },
     {
       name: "Travis Roberson",
-      title: "Co-Founder",
+      title: "Co-Founder / VP of Maintenance",
       email: "travis@ppa.aero",
+    },
+  ],
+  leadership: [
+    {
+      name: "Tristan Noe",
+      title: "Co-Founder / Director of Maintenance",
+      photo: "/images/Tristan.jpg",
+    },
+    {
+      name: "Travis Roberson",
+      title: "Co-Founder / VP of Maintenance",
+      photo: "/images/Travis.jpg",
+    },
+    {
+      name: "Ron Larson",
+      title: "Accountable Manager",
+      photo: "/images/Ron-Larson.jpg",
+    },
+    {
+      name: "Ron Reiling",
+      title: "Sales Manager",
+      photo: "/images/Ron-Reiling.jpg",
+    },
+    {
+      name: "Chris Zamora",
+      title: "Citation Lead",
+      photo: "/images/Chris-Zamora.jpg",
+    },
+    {
+      name: "Angel Zamora",
+      title: "Hawker Lead",
+      photo: "/images/Angel-Zamora.jpg",
+    },
+    {
+      name: "Dalton Friesenhahn",
+      title: "Challenger Lead",
+      photo: "/images/Dalton.jpg",
     },
   ],
   tagline: "Precise. Professional. Attentive.",
