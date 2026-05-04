@@ -98,6 +98,28 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://ppa.aero/services",
   },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://ppa.aero/services",
+    siteName: "Plane Place Aviation",
+    title: "Aircraft Maintenance Services — Hawker, Citation & Challenger",
+    description:
+      "Full-service aircraft maintenance for Hawker, Citation, and Challenger. Phase inspections, pre-purchase inspections, AOG response, structural repairs, avionics, and maintenance management.",
+    images: [
+      {
+        url: "https://ppa.aero/images/Wing-MX.jpg",
+        alt: "PPA technician inspecting business jet underside during maintenance",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Aircraft Maintenance Services — Hawker, Citation & Challenger",
+    description:
+      "Full-service aircraft maintenance for Hawker, Citation, and Challenger. Phase inspections, pre-purchase inspections, AOG response, structural repairs, avionics, and maintenance management.",
+    images: ["https://ppa.aero/images/Wing-MX.jpg"],
+  },
 };
 
 export default function ServicesPage() {

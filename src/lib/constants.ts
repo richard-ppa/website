@@ -67,9 +67,9 @@ export const COMPANY = {
     airframesFamilies: "3",
   },
   social: {
-    linkedin: "https://www.linkedin.com/company/plane-place-aviation",
-    facebook: "https://www.facebook.com/planeplaceaviation",
-    instagram: "https://www.instagram.com/planeplaceaviation",
+    linkedin: "https://www.linkedin.com/company/plane-place-aviation-llc",
+    facebook: "https://www.facebook.com/Planeplaceaviation",
+    instagram: "https://www.instagram.com/planeplaceaviationllc/",
   },
 } as const;
 

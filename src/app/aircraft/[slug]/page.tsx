@@ -8,6 +8,21 @@ type AirframeKey = keyof typeof AIRFRAMES;
 
 const AIRFRAME_KEYS = Object.keys(AIRFRAMES) as AirframeKey[];
 
+const AIRFRAME_OG_IMAGES: Record<string, { url: string; alt: string }> = {
+  hawker: {
+    url: "https://ppa.aero/images/hawker-mx.jpg",
+    alt: "Hawker aircraft maintenance at Plane Place Aviation",
+  },
+  citation: {
+    url: "https://ppa.aero/images/Citation-Hangar.jpg",
+    alt: "Citation aircraft maintenance at Plane Place Aviation",
+  },
+  challenger: {
+    url: "https://ppa.aero/images/Challenger-MX.jpg",
+    alt: "Challenger aircraft maintenance at Plane Place Aviation",
+  },
+};
+
 const AIRFRAME_HERO_IMAGES: Record<string, { src: string; alt: string; position?: string }> = {
   hawker: {
     src: "/images/hawker-mx.jpg",
@@ -86,11 +101,34 @@ export function generateMetadata({
   return params.then(({ slug }) => {
     const airframe = AIRFRAMES[slug as AirframeKey];
     if (!airframe) return {};
+    const title = `${airframe.name} Maintenance & Inspections — ${airframe.models.join(", ")}`;
+    const description = `FAA Part 145 specialist maintenance for ${airframe.name} ${airframe.models.join(", ")} aircraft. Phase inspections, pre-purchase inspections, AOG response, and more in Cleburne, Texas.`;
+    const ogImage = AIRFRAME_OG_IMAGES[slug];
     return {
-      title: `${airframe.name} Maintenance & Inspections — ${airframe.models.join(", ")}`,
-      description: `FAA Part 145 specialist maintenance for ${airframe.name} ${airframe.models.join(", ")} aircraft. Phase inspections, pre-purchase inspections, AOG response, and more in Cleburne, Texas.`,
+      title,
+      description,
       alternates: {
         canonical: `https://ppa.aero/aircraft/${slug}`,
+      },
+      openGraph: {
+        type: "website",
+        locale: "en_US",
+        url: `https://ppa.aero/aircraft/${slug}`,
+        siteName: "Plane Place Aviation",
+        title,
+        description,
+        images: [
+          {
+            url: ogImage.url,
+            alt: ogImage.alt,
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: [ogImage.url],
       },
     };
   });
@@ -175,6 +213,8 @@ export default async function AirframePage({
             : count === 5
               ? "lg:grid-cols-5"
               : "lg:grid-cols-6";
+        const lgTextSize = count >= 6 ? "lg:text-5xl" : "lg:text-6xl";
+        const lgPadding = count >= 6 ? "lg:px-3" : "lg:px-6";
         return (
           <section className="bg-ppa-light py-16 lg:py-20">
             <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
@@ -191,8 +231,8 @@ export default async function AirframePage({
                   </h2>
                 </div>
                 <p className="text-sm max-w-xs text-ppa-muted">
-                  Every model in the {airframe.name} family — type-rated technicians,
-                  the tooling, and the parts network to support each one.
+                  Every model in the {airframe.name} family — airframe-specialist
+                  technicians, the tooling, and the parts network to support each one.
                 </p>
               </div>
               <div className={`grid grid-cols-2 sm:grid-cols-3 ${lgCols} gap-y-6 sm:gap-y-8 lg:gap-y-0 lg:divide-x lg:divide-ppa-brass`}>
@@ -201,11 +241,11 @@ export default async function AirframePage({
                   const numberPart = parts?.[1] ?? model;
                   const suffixPart = parts?.[2] ?? "";
                   return (
-                    <div key={model} className="px-3 lg:px-6 text-center text-ppa-black">
-                      <p className="font-display text-3xl sm:text-4xl lg:text-6xl leading-[0.9]">
+                    <div key={model} className={`px-3 ${lgPadding} text-center text-ppa-black`}>
+                      <p className={`font-display text-3xl sm:text-4xl ${lgTextSize} leading-[0.9] whitespace-nowrap`}>
                         {numberPart}
                         {suffixPart && (
-                          <span className="font-normal text-[0.75em]">{suffixPart}</span>
+                          <span className={`font-normal tracking-tight ${suffixPart.length > 2 ? "text-[0.5em]" : "text-[0.75em]"}`}>{suffixPart}</span>
                         )}
                       </p>
                     </div>

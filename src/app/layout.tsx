@@ -53,6 +53,19 @@ export const metadata: Metadata = {
     title: "Plane Place Aviation | Hawker, Citation & Challenger MRO",
     description:
       "The specialist MRO for Hawker, Citation & Challenger — founder-led, fast turnaround, transparent pricing.",
+    images: [
+      {
+        url: "https://ppa.aero/images/tail-image.jpg",
+        alt: "Business jet tail section at Plane Place Aviation hangar in Cleburne, TX",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Plane Place Aviation | Hawker, Citation & Challenger MRO",
+    description:
+      "Specialist MRO for Hawker, Citation & Challenger. FAA Part 145, Cleburne, TX.",
+    images: ["https://ppa.aero/images/tail-image.jpg"],
   },
 };
 
@@ -82,9 +95,9 @@ const jsonLd = {
   logo: "https://ppa.aero/images/ppa-logo.png",
   image: "https://ppa.aero/images/PPA-Employees.jpg",
   sameAs: [
-    "https://www.linkedin.com/company/plane-place-aviation",
-    "https://www.facebook.com/planeplaceaviation",
-    "https://www.instagram.com/planeplaceaviation",
+    "https://www.linkedin.com/company/plane-place-aviation-llc",
+    "https://www.facebook.com/Planeplaceaviation",
+    "https://www.instagram.com/planeplaceaviationllc/",
   ],
   foundingDate: "2022",
   founders: [

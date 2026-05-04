@@ -9,6 +9,28 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://ppa.aero/contact",
   },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://ppa.aero/contact",
+    siteName: "Plane Place Aviation",
+    title: "Contact — AOG Hotline, Quote Requests & Location",
+    description:
+      "Contact Plane Place Aviation in Cleburne, Texas. AOG hotline: (817) 768-8884. Request a quote, schedule maintenance, or fly into KCPT — we operate out of three hangars on the field.",
+    images: [
+      {
+        url: "https://ppa.aero/images/about-us.jpg",
+        alt: "Plane Place Aviation team and Cleburne hangar facility",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Contact — AOG Hotline, Quote Requests & Location",
+    description:
+      "Contact Plane Place Aviation in Cleburne, Texas. AOG hotline: (817) 768-8884. Request a quote, schedule maintenance, or fly into KCPT — we operate out of three hangars on the field.",
+    images: ["https://ppa.aero/images/about-us.jpg"],
+  },
 };
 
 export default function ContactPage() {

@@ -3,18 +3,19 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "Privacy policy for Plane Place Aviation and its marketing integrations.",
+  alternates: { canonical: "https://ppa.aero/privacy" },
 };
 
 export default function PrivacyPage() {
   return (
     <main className="min-h-screen bg-ppa-white text-ppa-dark">
       <div className="max-w-3xl mx-auto px-6 py-24">
-        <h1 className="font-bebas text-5xl mb-2 tracking-wide">Privacy Policy</h1>
-        <p className="text-gray-400 mb-12">Last updated: March 31, 2026</p>
+        <h1 className="font-display text-5xl mb-2 tracking-wide">Privacy Policy</h1>
+        <p className="text-ppa-muted mb-12">Last updated: March 31, 2026</p>
 
-        <div className="space-y-10 text-gray-300 leading-relaxed">
+        <div className="space-y-10 text-ppa-gray leading-relaxed">
           <section>
-            <h2 className="font-bebas text-2xl text-white tracking-wide mb-3">1. Introduction</h2>
+            <h2 className="font-display text-2xl text-ppa-black tracking-wide mb-3">1. Introduction</h2>
             <p>
               Plane Place Aviation, LLC (&quot;PPA,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) operates the
               website ppa.aero and associated marketing tools. This Privacy Policy explains how we
@@ -24,24 +25,24 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="font-bebas text-2xl text-white tracking-wide mb-3">2. Information We Collect</h2>
+            <h2 className="font-display text-2xl text-ppa-black tracking-wide mb-3">2. Information We Collect</h2>
             <p className="mb-3">We may collect the following types of information:</p>
             <ul className="list-disc pl-6 space-y-2">
               <li>
-                <strong className="text-white">Contact Information:</strong> Name, email address, phone number,
+                <strong className="text-ppa-black">Contact Information:</strong> Name, email address, phone number,
                 and company name when you submit a quote request, contact form, or sign up for communications.
               </li>
               <li>
-                <strong className="text-white">Website Usage Data:</strong> Pages visited, time on site, referring
+                <strong className="text-ppa-black">Website Usage Data:</strong> Pages visited, time on site, referring
                 URLs, browser type, and device information collected through standard analytics tools.
               </li>
               <li>
-                <strong className="text-white">Social Media Data:</strong> When you interact with our social media
+                <strong className="text-ppa-black">Social Media Data:</strong> When you interact with our social media
                 pages (Facebook, Instagram, LinkedIn), we may access publicly available profile information
                 and engagement data through authorized platform APIs for marketing analytics purposes.
               </li>
               <li>
-                <strong className="text-white">CRM Data:</strong> Business contact information stored in our
+                <strong className="text-ppa-black">CRM Data:</strong> Business contact information stored in our
                 customer relationship management system (Salesforce) related to service inquiries,
                 maintenance records, and business communications.
               </li>
@@ -49,7 +50,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="font-bebas text-2xl text-white tracking-wide mb-3">3. How We Use Your Information</h2>
+            <h2 className="font-display text-2xl text-ppa-black tracking-wide mb-3">3. How We Use Your Information</h2>
             <ul className="list-disc pl-6 space-y-2">
               <li>To respond to service inquiries and provide maintenance quotes</li>
               <li>To communicate about scheduled maintenance, inspections, and service updates</li>
@@ -61,14 +62,14 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="font-bebas text-2xl text-white tracking-wide mb-3">4. Third-Party Services</h2>
+            <h2 className="font-display text-2xl text-ppa-black tracking-wide mb-3">4. Third-Party Services</h2>
             <p className="mb-3">We use the following third-party services that may process your data:</p>
             <ul className="list-disc pl-6 space-y-2">
-              <li><strong className="text-white">Meta (Facebook/Instagram):</strong> We use the Meta Graph API to manage our business pages, publish content, and analyze engagement metrics on our Facebook and Instagram accounts.</li>
-              <li><strong className="text-white">LinkedIn:</strong> We use the LinkedIn API to manage our company page, publish professional content, and analyze engagement with our business community.</li>
-              <li><strong className="text-white">Salesforce:</strong> Customer relationship management for service inquiries and business communications.</li>
-              <li><strong className="text-white">Cloudflare:</strong> Website hosting, security, and content delivery.</li>
-              <li><strong className="text-white">Google Analytics:</strong> Website traffic analysis and visitor behavior insights.</li>
+              <li><strong className="text-ppa-black">Meta (Facebook/Instagram):</strong> We use the Meta Graph API to manage our business pages, publish content, and analyze engagement metrics on our Facebook and Instagram accounts.</li>
+              <li><strong className="text-ppa-black">LinkedIn:</strong> We use the LinkedIn API to manage our company page, publish professional content, and analyze engagement with our business community.</li>
+              <li><strong className="text-ppa-black">Salesforce:</strong> Customer relationship management for service inquiries and business communications.</li>
+              <li><strong className="text-ppa-black">Cloudflare:</strong> Website hosting, security, and content delivery.</li>
+              <li><strong className="text-ppa-black">Google Analytics:</strong> Website traffic analysis and visitor behavior insights.</li>
             </ul>
             <p className="mt-3">
               Each third-party service operates under its own privacy policy. We encourage you to review
@@ -77,7 +78,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="font-bebas text-2xl text-white tracking-wide mb-3">5. Data Retention</h2>
+            <h2 className="font-display text-2xl text-ppa-black tracking-wide mb-3">5. Data Retention</h2>
             <p>
               We retain personal information for as long as necessary to fulfill the purposes outlined in
               this policy, comply with legal obligations (including FAA record-keeping requirements),
@@ -87,7 +88,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="font-bebas text-2xl text-white tracking-wide mb-3">6. Data Security</h2>
+            <h2 className="font-display text-2xl text-ppa-black tracking-wide mb-3">6. Data Security</h2>
             <p>
               We implement appropriate technical and organizational measures to protect your personal
               information. API access tokens and credentials are stored as encrypted environment secrets
@@ -97,7 +98,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="font-bebas text-2xl text-white tracking-wide mb-3">7. Your Rights</h2>
+            <h2 className="font-display text-2xl text-ppa-black tracking-wide mb-3">7. Your Rights</h2>
             <p className="mb-3">You have the right to:</p>
             <ul className="list-disc pl-6 space-y-2">
               <li>Request access to the personal information we hold about you</li>
@@ -109,7 +110,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="font-bebas text-2xl text-white tracking-wide mb-3">8. Cookies</h2>
+            <h2 className="font-display text-2xl text-ppa-black tracking-wide mb-3">8. Cookies</h2>
             <p>
               Our website may use cookies and similar tracking technologies to enhance your browsing
               experience and collect usage data. You can control cookie preferences through your browser
@@ -118,7 +119,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="font-bebas text-2xl text-white tracking-wide mb-3">9. Children&apos;s Privacy</h2>
+            <h2 className="font-display text-2xl text-ppa-black tracking-wide mb-3">9. Children&apos;s Privacy</h2>
             <p>
               Our services are not directed to individuals under the age of 18. We do not knowingly
               collect personal information from children.
@@ -126,7 +127,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="font-bebas text-2xl text-white tracking-wide mb-3">10. Changes to This Policy</h2>
+            <h2 className="font-display text-2xl text-ppa-black tracking-wide mb-3">10. Changes to This Policy</h2>
             <p>
               We may update this Privacy Policy from time to time. Changes will be posted on this page
               with an updated &quot;Last updated&quot; date. Your continued use of our services after any
@@ -135,12 +136,12 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="font-bebas text-2xl text-white tracking-wide mb-3">11. Contact Us</h2>
+            <h2 className="font-display text-2xl text-ppa-black tracking-wide mb-3">11. Contact Us</h2>
             <p>
               If you have questions about this Privacy Policy or our data practices, contact us at:
             </p>
-            <div className="mt-4 p-6 border border-gray-700 rounded-lg">
-              <p className="font-semibold text-white">Plane Place Aviation, LLC</p>
+            <div className="mt-4 p-6 border border-ppa-border rounded-lg">
+              <p className="font-semibold text-ppa-black">Plane Place Aviation, LLC</p>
               <p>1650 Airport Dr, Hangar 98</p>
               <p>Cleburne, TX 76033</p>
               <p className="mt-2">Phone: (817) 768-8884</p>

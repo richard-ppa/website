@@ -10,6 +10,28 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://ppa.aero/about",
   },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://ppa.aero/about",
+    siteName: "Plane Place Aviation",
+    title: "About — Founder-Led Aircraft MRO in Cleburne, TX",
+    description:
+      "Plane Place Aviation was founded by Tristan Noe and Travis Roberson — operators who built the MRO they wished existed. Precise. Professional. Attentive. FAA Part 145, Cleburne, Texas.",
+    images: [
+      {
+        url: "https://ppa.aero/images/tech-working-on-wing.jpg",
+        alt: "PPA technician working on aircraft wing in the Cleburne hangar",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About — Founder-Led Aircraft MRO in Cleburne, TX",
+    description:
+      "Plane Place Aviation was founded by Tristan Noe and Travis Roberson — operators who built the MRO they wished existed. Precise. Professional. Attentive. FAA Part 145, Cleburne, Texas.",
+    images: ["https://ppa.aero/images/tech-working-on-wing.jpg"],
+  },
 };
 
 export default function AboutPage() {

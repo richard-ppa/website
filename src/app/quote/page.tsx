@@ -13,6 +13,28 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://ppa.aero/quote",
   },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://ppa.aero/quote",
+    siteName: "Plane Place Aviation",
+    title: "Request a Quote — Hawker, Citation & Challenger Maintenance",
+    description:
+      "Get a maintenance quote from Plane Place Aviation. Transparent pricing for Hawker, Citation, and Challenger inspections, repairs, and pre-purchase evaluations.",
+    images: [
+      {
+        url: "https://ppa.aero/images/hangar-work.jpg",
+        alt: "Plane Place Aviation hangar operations",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Request a Quote — Hawker, Citation & Challenger Maintenance",
+    description:
+      "Get a maintenance quote from Plane Place Aviation. Transparent pricing for Hawker, Citation, and Challenger inspections, repairs, and pre-purchase evaluations.",
+    images: ["https://ppa.aero/images/hangar-work.jpg"],
+  },
 };
 
 export default function QuotePage() {
