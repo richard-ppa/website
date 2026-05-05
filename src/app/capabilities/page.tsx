@@ -84,8 +84,8 @@ export default function CapabilitiesPage() {
       <section className="relative h-[80vh] min-h-[600px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/tail-image.jpg"
-            alt="Business jet tail at Plane Place Aviation hangar in Cleburne, Texas"
+            src="/images/about-us.jpg"
+            alt="Plane Place Aviation team and facility in Cleburne, Texas"
             fill
             className="object-cover"
             priority
