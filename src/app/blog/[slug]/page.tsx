@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getAllPosts, getPostBySlug, type BlogSection } from "@/lib/blog-posts";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -130,25 +131,11 @@ export default async function BlogPostPage({ params }: PageProps) {
     articleSection: post.category,
   };
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://ppa.aero" },
-      { "@type": "ListItem", position: 2, name: "Blog", item: "https://ppa.aero/blog" },
-      { "@type": "ListItem", position: 3, name: post.title, item: `https://ppa.aero/blog/${post.slug}` },
-    ],
-  };
-
   return (
     <article>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       {/* Hero */}
       <section className="relative h-[70vh] min-h-[500px] flex items-end overflow-hidden">
@@ -164,6 +151,14 @@ export default async function BlogPostPage({ params }: PageProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-ppa-black via-ppa-black/60 to-ppa-black/10" />
         </div>
         <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16 lg:pb-20">
+          <Breadcrumb
+            crumbs={[
+              { label: "Blog", href: "/blog" },
+              { label: post.title, href: `/blog/${post.slug}` },
+            ]}
+            variant="dark"
+          />
+
           <div className="flex items-center gap-3 mb-6 text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass-bright">
             <span>{post.category}</span>
             <span className="h-px w-6 bg-ppa-brass-bright/50" />

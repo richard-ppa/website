@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { AIRFRAMES } from "@/lib/constants";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export const metadata: Metadata = {
   title: "Aircraft Maintenance Capabilities — Hawker, Citation & Challenger",
@@ -88,15 +89,6 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
   },
 ];
 
-const breadcrumbJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: "https://ppa.aero" },
-    { "@type": "ListItem", position: 2, name: "Capabilities", item: "https://ppa.aero/capabilities" },
-  ],
-};
-
 const serviceJsonLd = {
   "@context": "https://schema.org",
   "@type": "Service",
@@ -155,10 +147,6 @@ export default function CapabilitiesPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
       />
       <script
@@ -180,25 +168,7 @@ export default function CapabilitiesPage() {
         </div>
 
         <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16 lg:pb-20">
-          {/* Visible breadcrumb */}
-          <nav aria-label="Breadcrumb" className="mb-6">
-            <ol className="flex items-center gap-2 text-[11px] tracking-[0.15em] uppercase text-ppa-light/60">
-              <li>
-                <Link
-                  href="/"
-                  className="hover:text-ppa-brass-bright transition-colors"
-                >
-                  Home
-                </Link>
-              </li>
-              <li aria-hidden="true" className="text-ppa-light/30">
-                /
-              </li>
-              <li className="text-ppa-light/85" aria-current="page">
-                Capabilities
-              </li>
-            </ol>
-          </nav>
+          <Breadcrumb crumbs={[{ label: "Capabilities", href: "/capabilities" }]} variant="dark" />
 
           <div className="flex items-center gap-3 mb-4">
             <span className="h-px w-8 bg-ppa-brass" />

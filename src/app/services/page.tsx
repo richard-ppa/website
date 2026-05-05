@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { COMPANY, SERVICES } from "@/lib/constants";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 const SERVICE_IMAGES: Record<string, string> = {
   "scheduled-maintenance": "/images/Engine-MX.jpg",
   "pre-purchase-inspections": "/images/pp-inspection.jpg",
   "aog-response": "/images/aog.jpg",
   "structural-repairs": "/images/structural-repairs.jpg",
-  avionics: "/images/avionics2.jpg",
+  avionics: "/images/avionics.jpg",
   "maintenance-management": "/images/pre-purchase.png",
 };
 
@@ -142,6 +143,8 @@ export default function ServicesPage() {
         </div>
 
         <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16">
+          <Breadcrumb crumbs={[{ label: "Services", href: "/services" }]} variant="dark" />
+
           <div className="flex items-center gap-3 mb-4">
             <span className="h-px w-8 bg-ppa-brass" />
             <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">

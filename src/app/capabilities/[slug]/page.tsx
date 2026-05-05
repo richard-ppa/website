@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { AIRFRAMES, COMPANY } from "@/lib/constants";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 type AirframeKey = keyof typeof AIRFRAMES;
 
@@ -146,15 +147,6 @@ export default async function AirframePage({
     notFound();
   }
 
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://ppa.aero" },
-      { "@type": "ListItem", position: 2, name: airframe.name, item: `https://ppa.aero/capabilities/${slug}` },
-    ],
-  };
-
   const heroImg = AIRFRAME_HERO_IMAGES[slug];
   const serviceImg = AIRFRAME_SERVICE_IMAGES[slug];
   const fleetBg = AIRFRAME_FLEET_BACKGROUND[slug];
@@ -165,10 +157,6 @@ export default async function AirframePage({
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
       {/* Hero */}
       <section className="relative h-screen min-h-[700px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
@@ -184,6 +172,14 @@ export default async function AirframePage({
         </div>
 
         <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16">
+          <Breadcrumb
+            crumbs={[
+              { label: "Capabilities", href: "/capabilities" },
+              { label: airframe.name, href: `/capabilities/${slug}` },
+            ]}
+            variant="dark"
+          />
+
           <div className="flex items-center gap-3 mb-4">
             <span className="h-px w-8 bg-ppa-brass-bright" />
             <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass-bright drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { COMPANY } from "@/lib/constants";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export const metadata: Metadata = {
   title: "About — Founder-Led Aircraft MRO in Cleburne, TX",
@@ -50,6 +51,8 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-ppa-black via-ppa-black/50 to-ppa-black/10" />
         </div>
         <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-20 lg:pb-24">
+          <Breadcrumb crumbs={[{ label: "About", href: "/about" }]} variant="dark" />
+
           <div className="flex items-center gap-3 mb-6">
             <span className="h-px w-8 bg-ppa-brass-bright" />
             <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass-bright">

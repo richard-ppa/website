@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { COMPANY, AIRFRAMES } from "@/lib/constants";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 const ALL_MODELS = Object.values(AIRFRAMES).flatMap((airframe) =>
   airframe.models.map((model) => `${airframe.name} ${model}`)
@@ -53,6 +54,8 @@ export default function QuotePage() {
           <div className="absolute inset-0 bg-gradient-to-t from-ppa-black via-ppa-black/50 to-ppa-black/20" />
         </div>
         <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16">
+          <Breadcrumb crumbs={[{ label: "Request a Quote", href: "/quote" }]} variant="dark" />
+
           <div className="flex items-center gap-3 mb-4">
             <span className="h-px w-8 bg-ppa-brass" />
             <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">

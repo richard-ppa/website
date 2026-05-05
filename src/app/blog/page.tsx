@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { getAllPosts } from "@/lib/blog-posts";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export const metadata: Metadata = {
   title: "Field Insights — Plane Place Aviation Blog",
@@ -32,6 +33,8 @@ export default function BlogIndexPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-ppa-black via-ppa-black/55 to-ppa-black/10" />
         </div>
         <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16 lg:pb-20">
+          <Breadcrumb crumbs={[{ label: "Blog", href: "/blog" }]} variant="dark" />
+
           <div className="flex items-center gap-3 mb-6">
             <span className="h-px w-8 bg-ppa-brass-bright" />
             <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass-bright">

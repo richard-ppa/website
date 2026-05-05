@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { COMPANY } from "@/lib/constants";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export const metadata: Metadata = {
   title: "Contact — AOG Hotline, Quote Requests & Location",
@@ -49,6 +50,8 @@ export default function ContactPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-ppa-black via-ppa-black/40 to-ppa-black/10" />
         </div>
         <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16">
+          <Breadcrumb crumbs={[{ label: "Contact", href: "/contact" }]} variant="dark" />
+
           <div className="flex items-center gap-3 mb-4">
             <span className="h-px w-8 bg-ppa-brass" />
             <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
