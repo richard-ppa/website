@@ -221,12 +221,12 @@ export type NavLink = {
 export const NAV_LINKS: NavLink[] = [
   { label: "Services", href: "/services" },
   {
-    label: "Aircraft",
-    href: "/aircraft",
+    label: "Capabilities",
+    href: "/capabilities",
     children: [
-      { label: "Hawker", href: "/aircraft/hawker" },
-      { label: "Citation", href: "/aircraft/citation" },
-      { label: "Challenger", href: "/aircraft/challenger" },
+      { label: "Hawker", href: "/capabilities/hawker" },
+      { label: "Citation", href: "/capabilities/citation" },
+      { label: "Challenger", href: "/capabilities/challenger" },
     ],
   },
   { label: "About", href: "/about" },

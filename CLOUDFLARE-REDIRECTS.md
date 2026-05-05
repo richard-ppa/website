@@ -23,10 +23,20 @@
 | `/about/` | `/about` | 301 |
 | `/contact/` | `/contact` | 301 |
 
-### 3. Capabilities → /aircraft index
+### 3. Capabilities — direct 1:1 URL match
 | Source | Target | Status | Notes |
 |---|---|---|---|
-| `/capabilities/` | `/aircraft` | 301 | Old `/capabilities/` page is family-level ("First-class Maintenance on Hawker, Citation & Challenger") and ranks for cross-airframe queries (e.g. "citation 650 aircraft maintenance" #4). New `/aircraft` index page replicates that scope: H1 "First-class maintenance on Hawker, Citation & Challenger", body prose mentioning all three families + parts inventory + factory-trained technicians, plus links to each `/aircraft/[slug]` family page. Topical match preserves the cross-family rank value. |
+| `/capabilities/` | `/capabilities` | 301 | Direct URL match (just the trailing-slash normalization). New `/capabilities` page is family-level ("Capabilities — Hawker, Citation & Challenger Maintenance") and ranks for cross-airframe queries (e.g. "citation 650 aircraft maintenance" #4). H1 "First-Class Maintenance. Three Airframe Families." mirrors old page positioning. Body prose preserves "factory-trained Challenger 300/350 technicians" and "extensive Hawker parts inventory" — the phrases driving current cross-airframe rankings. Links to `/capabilities/{hawker,citation,challenger}` family pages for drill-down. |
+
+### 3a. Internal /aircraft → /capabilities (ppa.aero zone — short-lived)
+The new site briefly used `/aircraft` as the airframe-index URL before being renamed to `/capabilities` to match the old site's URL structure. Add these on the `ppa.aero` zone (not `planeplaceaviation.com`) for ~30 days then remove.
+
+| Source | Target | Status | Notes |
+|---|---|---|---|
+| `https://ppa.aero/aircraft` | `https://ppa.aero/capabilities` | 301 | Index |
+| `https://ppa.aero/aircraft/hawker` | `https://ppa.aero/capabilities/hawker` | 301 | |
+| `https://ppa.aero/aircraft/citation` | `https://ppa.aero/capabilities/citation` | 301 | |
+| `https://ppa.aero/aircraft/challenger` | `https://ppa.aero/capabilities/challenger` | 301 | |
 
 ### 4. Gallery — no equivalent
 | Source | Target | Status | Notes |

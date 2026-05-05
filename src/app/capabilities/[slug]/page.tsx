@@ -108,12 +108,12 @@ export function generateMetadata({
       title,
       description,
       alternates: {
-        canonical: `https://ppa.aero/aircraft/${slug}`,
+        canonical: `https://ppa.aero/capabilities/${slug}`,
       },
       openGraph: {
         type: "website",
         locale: "en_US",
-        url: `https://ppa.aero/aircraft/${slug}`,
+        url: `https://ppa.aero/capabilities/${slug}`,
         siteName: "Plane Place Aviation",
         title,
         description,
@@ -151,7 +151,7 @@ export default async function AirframePage({
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: "https://ppa.aero" },
-      { "@type": "ListItem", position: 2, name: airframe.name, item: `https://ppa.aero/aircraft/${slug}` },
+      { "@type": "ListItem", position: 2, name: airframe.name, item: `https://ppa.aero/capabilities/${slug}` },
     ],
   };
 
@@ -372,7 +372,7 @@ export default async function AirframePage({
               return (
                 <Link
                   key={other.slug}
-                  href={`/aircraft/${other.slug}`}
+                  href={`/capabilities/${other.slug}`}
                   className="group relative aspect-[2/1] overflow-hidden"
                 >
                   <Image

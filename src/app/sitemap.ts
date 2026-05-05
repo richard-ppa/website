@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/`, lastModified: TODAY, changeFrequency: "weekly", priority: 1.0 },
     { url: `${BASE}/about`, lastModified: TODAY, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/services`, lastModified: TODAY, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${BASE}/capabilities`, lastModified: TODAY, changeFrequency: "monthly", priority: 0.9 },
     { url: `${BASE}/blog`, lastModified: TODAY, changeFrequency: "weekly", priority: 0.7 },
     { url: `${BASE}/contact`, lastModified: TODAY, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/quote`, lastModified: TODAY, changeFrequency: "monthly", priority: 0.7 },
@@ -19,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   const aircraftPages: MetadataRoute.Sitemap = Object.values(AIRFRAMES).map((airframe) => ({
-    url: `${BASE}/aircraft/${airframe.slug}`,
+    url: `${BASE}/capabilities/${airframe.slug}`,
     lastModified: TODAY,
     changeFrequency: "monthly" as const,
     priority: 0.9,

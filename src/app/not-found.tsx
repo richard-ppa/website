@@ -37,8 +37,8 @@ export default function NotFound() {
             <p className="text-ppa-brass text-[11px] font-semibold uppercase tracking-[0.2em] mb-2">Services</p>
             <p className="text-sm text-ppa-gray group-hover:text-ppa-dark transition-colors">Maintenance, inspections, AOG response</p>
           </Link>
-          <Link href="/aircraft/hawker" className="group p-5 border border-ppa-border hover:border-ppa-brass/30 transition-colors">
-            <p className="text-ppa-brass text-[11px] font-semibold uppercase tracking-[0.2em] mb-2">Aircraft</p>
+          <Link href="/capabilities" className="group p-5 border border-ppa-border hover:border-ppa-brass/30 transition-colors">
+            <p className="text-ppa-brass text-[11px] font-semibold uppercase tracking-[0.2em] mb-2">Capabilities</p>
             <p className="text-sm text-ppa-gray group-hover:text-ppa-dark transition-colors">Hawker, Citation, Challenger</p>
           </Link>
           <Link href="/quote" className="group p-5 border border-ppa-border hover:border-ppa-brass/30 transition-colors">

@@ -12,3 +12,4 @@ next-env.d.ts
 
 # Source documents should not ship in public/
 public/blog/**/*.docx
+GSC Results.xlsx

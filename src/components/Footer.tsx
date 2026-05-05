@@ -79,16 +79,16 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Aircraft */}
+          {/* Capabilities */}
           <div>
             <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-muted mb-5">
-              Aircraft
+              Capabilities
             </h3>
             <ul className="space-y-2.5">
               {Object.values(AIRFRAMES).map((airframe) => (
                 <li key={airframe.slug}>
                   <Link
-                    href={`/aircraft/${airframe.slug}`}
+                    href={`/capabilities/${airframe.slug}`}
                     className="text-sm text-ppa-gray hover:text-ppa-brass transition-colors"
                   >
                     {airframe.name}{" "}

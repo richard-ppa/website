@@ -93,7 +93,7 @@ export default function HomePage() {
               return (
                 <AnimatedSection key={airframe.slug} delay={i * 0.12}>
                   <Link
-                    href={`/aircraft/${airframe.slug}`}
+                    href={`/capabilities/${airframe.slug}`}
                     className="group block relative overflow-hidden aspect-[1500/1627]"
                   >
                     <Image
