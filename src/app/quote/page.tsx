@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { COMPANY, AIRFRAMES } from "@/lib/constants";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { QuoteErrorBanner } from "@/components/QuoteErrorBanner";
 
 const ALL_MODELS = Object.values(AIRFRAMES).flatMap((airframe) =>
   airframe.models.map((model) => `${airframe.name} ${model}`)
@@ -75,7 +76,23 @@ export default function QuotePage() {
       {/* Form */}
       <section className="py-16 lg:py-24">
         <div className="max-w-3xl mx-auto px-6 lg:px-10">
-          <form className="space-y-8" encType="multipart/form-data">
+          <QuoteErrorBanner />
+          <form
+            action="/quote"
+            method="POST"
+            encType="multipart/form-data"
+            className="space-y-8"
+          >
+            {/* Honeypot — hidden from real users, bots fill it in */}
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="absolute left-[-9999px] w-px h-px opacity-0"
+            />
+
             {/* Contact info */}
             <div>
               <h2 className="font-display text-2xl text-ppa-black mb-6">
