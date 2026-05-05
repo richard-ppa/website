@@ -185,15 +185,15 @@ export default async function AirframePage({
 
         <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16">
           <div className="flex items-center gap-3 mb-4">
-            <span className="h-px w-8 bg-ppa-brass" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
+            <span className="h-px w-8 bg-ppa-brass-bright" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass-bright drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]">
               {airframe.manufacturer}
             </span>
           </div>
           <h1 className="font-display text-6xl sm:text-7xl lg:text-8xl text-ppa-white leading-[0.85]">
             {airframe.name}
           </h1>
-          <p className="mt-4 font-display text-2xl text-ppa-brass">
+          <p className="mt-4 font-display text-2xl text-ppa-brass-bright">
             {airframe.models.join(" / ")}
           </p>
 
