@@ -33,36 +33,31 @@ export const metadata: Metadata = {
   },
 };
 
-type Photo = {
-  src: string;
-  alt: string;
-  /** Tailwind classes for grid spans — used to create visual rhythm */
-  span?: string;
-};
+type Photo = { src: string; alt: string };
 
 const PHOTOS: Photo[] = [
-  { src: "/images/Gallery/Hangar-Hawkers.jpg", alt: "Hawker aircraft in the Plane Place Aviation hangar in Cleburne, Texas", span: "lg:col-span-2 lg:row-span-2" },
+  { src: "/images/Gallery/Hangar-Hawkers.jpg", alt: "Hawker aircraft in the Plane Place Aviation hangar in Cleburne, Texas" },
   { src: "/images/Gallery/Challenger-MX.jpg", alt: "Bombardier Challenger maintenance at Plane Place Aviation" },
   { src: "/images/Gallery/Citation-Hangar.jpg", alt: "Cessna Citation aircraft in the Plane Place Aviation hangar" },
   { src: "/images/Gallery/Wing-MX---Travis-Angel.jpg", alt: "Travis and Angel performing wing maintenance" },
   { src: "/images/Gallery/Winglet-Install-02.jpg", alt: "Winglet installation in progress at Plane Place Aviation" },
-  { src: "/images/Gallery/PPA-HGR-98.jpg", alt: "Plane Place Aviation Hangar 98 at Cleburne Regional Airport", span: "lg:col-span-2" },
+  { src: "/images/Gallery/PPA-HGR-98.jpg", alt: "Plane Place Aviation Hangar 98 at Cleburne Regional Airport" },
   { src: "/images/Gallery/Tech-at-Station.jpg", alt: "Plane Place Aviation technician at workstation reviewing maintenance records" },
   { src: "/images/Gallery/avionics.jpg", alt: "Avionics maintenance at Plane Place Aviation" },
   { src: "/images/Gallery/Engine-MX.jpg", alt: "Business jet engine maintenance at Plane Place Aviation" },
   { src: "/images/Gallery/landing-gear-work.jpg", alt: "Landing gear maintenance at Plane Place Aviation" },
-  { src: "/images/Gallery/hawker-mx.jpg", alt: "Hawker maintenance at Plane Place Aviation", span: "lg:row-span-2" },
+  { src: "/images/Gallery/hawker-mx.jpg", alt: "Hawker maintenance at Plane Place Aviation" },
   { src: "/images/Gallery/Winglet-Install---James.jpg", alt: "Technician James performing winglet installation" },
   { src: "/images/Gallery/Citation-Engine-Work-on-ladder.jpg", alt: "Technician on a ladder performing Citation engine work" },
   { src: "/images/Gallery/Wing-MX-2.jpg", alt: "Aircraft wing maintenance at Plane Place Aviation" },
-  { src: "/images/Gallery/Aircraft-in-Hangar---BW.jpg", alt: "Aircraft in the Plane Place Aviation hangar — black and white", span: "lg:col-span-2" },
+  { src: "/images/Gallery/Aircraft-in-Hangar---BW.jpg", alt: "Aircraft in the Plane Place Aviation hangar — black and white" },
   { src: "/images/Gallery/Citation-mx-3.jpg", alt: "Cessna Citation maintenance at Plane Place Aviation" },
   { src: "/images/Gallery/Dalton-on-workstation.jpg", alt: "Challenger Lead Dalton Friesenhahn at workstation" },
   { src: "/images/Gallery/avionics2.jpg", alt: "Avionics troubleshooting and repair work" },
   { src: "/images/Gallery/Tail-Work-3.jpg", alt: "Technician performing aircraft tail section maintenance" },
   { src: "/images/Gallery/Wing-Work-4.jpg", alt: "Wing structural work at Plane Place Aviation" },
   { src: "/images/Gallery/tech-on-lift.jpg", alt: "Technician on lift performing aircraft maintenance" },
-  { src: "/images/Gallery/PPA-Employees.jpg", alt: "Plane Place Aviation team in front of an aircraft", span: "lg:col-span-2 lg:row-span-2" },
+  { src: "/images/Gallery/PPA-Employees.jpg", alt: "Plane Place Aviation team in front of an aircraft" },
   { src: "/images/Gallery/Winglet-MX---James02.jpg", alt: "James performing winglet maintenance" },
   { src: "/images/Gallery/Winglet-Install-03.jpg", alt: "Winglet installation in progress" },
   { src: "/images/Gallery/aog.jpg", alt: "AOG response — Aircraft on Ground service in Texas and Oklahoma" },
@@ -135,22 +130,22 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* Gallery grid */}
+      {/* Gallery — CSS-columns mosaic, photos flow at natural aspect ratio */}
       <section className="bg-ppa-light py-16 lg:py-20 border-t border-ppa-border">
         <div className="max-w-[1500px] mx-auto px-4 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 auto-rows-[180px] sm:auto-rows-[220px] lg:auto-rows-[240px] gap-2 lg:gap-3">
+          <div className="columns-2 sm:columns-3 lg:columns-4 gap-2 lg:gap-3 [column-fill:_balance]">
             {PHOTOS.map((photo, i) => (
               <figure
                 key={photo.src}
-                className={`relative overflow-hidden bg-ppa-black/5 img-zoom ${photo.span ?? ""}`}
+                className="mb-2 lg:mb-3 break-inside-avoid overflow-hidden bg-ppa-black/5 img-zoom"
               >
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={photo.src}
                   alt={photo.alt}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  loading={i < 8 ? "eager" : "lazy"}
+                  loading={i < 6 ? "eager" : "lazy"}
+                  decoding="async"
+                  className="w-full h-auto block"
                 />
               </figure>
             ))}
