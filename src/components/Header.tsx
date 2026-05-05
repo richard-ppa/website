@@ -62,9 +62,10 @@ export function Header() {
                   onMouseEnter={() => setAircraftOpen(true)}
                   onMouseLeave={() => setAircraftOpen(false)}
                 >
-                  <button
+                  <Link
+                    href={link.href}
                     style={{ fontFamily: "var(--font-inter)" }}
-                    className={`px-4 py-2 text-[13px] tracking-[1px] transition-colors ${
+                    className={`inline-block px-4 py-2 text-[13px] tracking-[1px] transition-colors ${
                       isActive(link.href) ? "font-semibold" : "font-normal"
                     } ${
                       scrolled
@@ -79,7 +80,7 @@ export function Header() {
                     }`}
                   >
                     {link.label}
-                  </button>
+                  </Link>
                   <AnimatePresence>
                     {aircraftOpen && (
                       <motion.div
@@ -193,15 +194,19 @@ export function Header() {
               {NAV_LINKS.map((link) =>
                 link.children ? (
                   <div key={link.label}>
-                    <div className="px-0 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-muted">
+                    <Link
+                      href={link.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="block py-3 text-sm font-normal text-ppa-dark hover:text-ppa-brass transition-colors"
+                    >
                       {link.label}
-                    </div>
+                    </Link>
                     {link.children.map((child) => (
                       <Link
                         key={child.href}
                         href={child.href}
                         onClick={() => setMobileOpen(false)}
-                        className="block px-4 py-2.5 text-sm text-ppa-dark hover:text-ppa-brass transition-colors"
+                        className="block pl-4 py-2 text-[13px] text-ppa-muted hover:text-ppa-brass transition-colors"
                       >
                         {child.label}
                       </Link>

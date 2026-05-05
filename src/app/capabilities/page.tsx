@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   },
 };
 
-const AIRFRAME_HERO_IMAGES: Record<string, { src: string; alt: string; position?: string }> = {
+const AIRFRAME_CARD_IMAGES: Record<string, { src: string; alt: string; position?: string }> = {
   hawker: {
     src: "/images/Hawker-850-wide.jpg",
     alt: "Hawker on the ramp at Plane Place Aviation",
@@ -52,13 +52,13 @@ const AIRFRAME_HERO_IMAGES: Record<string, { src: string; alt: string; position?
   },
 };
 
-const AIRFRAME_LONG_DESCRIPTIONS: Record<string, string> = {
+const AIRFRAME_CARD_DESCRIPTIONS: Record<string, string> = {
   hawker:
-    "Plane Place Aviation has extensive experience with all Hawker airframes — from the classic 800 through the 900XP and 1000. Our shop is set up around this airframe family, with type-specific tooling, dedicated procedures, and access to extensive Hawker parts inventory through a parts-out partner on the field. When parts availability has become an industry-wide pain point, that access keeps your maintenance event moving instead of stalling on a back-ordered component. We perform 8-year major inspections, B/C/D/E/F/G phase inspections, 4-year inspections, landing gear overhauls, structural repairs, and avionics upgrades.",
+    "Extensive experience across the entire Hawker 800 series — from the classic 800 through the 900XP and 1000. Type-specific tooling, dedicated procedures, and access to extensive Hawker parts inventory through a parts-out partner on the field. 8-year major inspections, B/C/D/E/F/G phase inspections, landing gear overhauls, and avionics upgrades.",
   citation:
-    "Full-service Citation maintenance from the 550 series through the 680 Sovereign — including the Citation 560XL/XLS and Citation 650. Phase 1 through Phase 5 inspections, annual inspections, structural repairs, landing gear service, and avionics troubleshooting are all handled in-house at our Cleburne, Texas facility. Our Citation team has the type-specific tooling, parts access, and OEM documentation to turn your aircraft on schedule, with the audit-ready documentation that protects your aircraft's resale value.",
+    "Full-service Citation maintenance from the 550 series through the 680 Sovereign — including the Citation 560XL/XLS and Citation 650. Phase 1–5 inspections, annual inspections, structural repairs, landing gear service, avionics troubleshooting, all in-house at our Cleburne, Texas hangar.",
   challenger:
-    "Specialist Challenger maintenance with factory-trained Challenger 300/350 technicians on staff to support 96- and 192-month inspection events. Plane Place Aviation has completed several major Challenger 300/350 inspections and landing gear removals — we have the tooling, knowledge, and attention to detail this maintenance requires, including known structural findings in the main entry area that often surface during the 192-month event. We also support Challenger 604, 605, and 650 maintenance, with 24/7 AOG response across Texas and Oklahoma.",
+    "Specialist Challenger maintenance with factory-trained Challenger 300/350 technicians on staff for 96- and 192-month inspection events. Plane Place Aviation has completed several major Challenger 300/350 inspections and landing gear removals — and supports Challenger 604, 605, and 650 with 24/7 AOG response across Texas and Oklahoma.",
 };
 
 const breadcrumbJsonLd = {
@@ -80,8 +80,8 @@ export default function CapabilitiesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      {/* Hero — Full bleed image */}
-      <section className="relative h-screen min-h-[700px] flex items-end overflow-hidden">
+      {/* Hero */}
+      <section className="relative h-[80vh] min-h-[600px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <Image
             src="/images/tail-image.jpg"
@@ -93,129 +93,168 @@ export default function CapabilitiesPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-ppa-black via-ppa-black/60 to-ppa-black/30" />
         </div>
 
-        <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16">
+        <div className="relative w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16 lg:pb-20">
           <div className="flex items-center gap-3 mb-4">
             <span className="h-px w-8 bg-ppa-brass" />
             <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
               Capabilities
             </span>
           </div>
-          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-ppa-white leading-[0.9] mb-6">
+          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-ppa-white leading-[0.9] mb-6 max-w-4xl">
             First-Class Maintenance.
             <br />
             <span className="text-ppa-muted">Three Airframe Families.</span>
           </h1>
-          <p className="text-lg text-ppa-light/70 max-w-2xl font-light mb-8">
+          <p className="text-lg text-ppa-light/80 max-w-2xl font-light">
             Plane Place Aviation is an FAA Part 145 repair station that
             specializes exclusively in Hawker, Citation, and Challenger
-            aircraft. Every tool, every procedure, every type-specific
-            training hour is dedicated to the airframes our customers fly.
+            aircraft. Choose your airframe to explore our full capabilities.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link
-              href="/quote"
-              className="inline-flex items-center justify-center px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-black bg-ppa-brass hover:bg-ppa-brass-light transition-all"
-            >
-              Request a Quote
-            </Link>
-            <a
-              href={`tel:${COMPANY.phoneRaw}`}
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-brass border border-ppa-brass/40 hover:bg-ppa-brass/10 transition-all"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-ppa-gold animate-pulse" />
-              AOG? Call Now
-            </a>
+        </div>
+      </section>
+
+      {/* SEO body intro — preserves ranking phrases */}
+      <section className="bg-ppa-white py-20 lg:py-24 border-t border-ppa-border">
+        <div className="max-w-[1100px] mx-auto px-6 lg:px-10">
+          <div className="flex items-center gap-3 mb-5">
+            <span className="h-px w-8 bg-ppa-brass" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
+              Specialist MRO
+            </span>
+          </div>
+          <h2 className="font-display text-4xl sm:text-5xl text-ppa-black leading-[0.95] mb-10 max-w-3xl">
+            Three airframe families. Done better than anyone.
+          </h2>
+          <div className="space-y-6 max-w-3xl text-lg leading-[1.75] font-light text-ppa-dark">
+            <p>
+              We are a one-stop shop for any and all maintenance, inspection,
+              repair, and avionics needs across Hawker, Citation, and
+              Challenger aircraft. Our certified Part 145 repair station in
+              Cleburne, Texas is staffed with technicians who have spent
+              their careers on these specific airframes — including factory-trained
+              Challenger 300/350 technicians on staff to support 96- and
+              192-month inspection events.
+            </p>
+            <p>
+              Hawker parts availability has become an industry-wide pain
+              point. Plane Place Aviation has access to extensive Hawker
+              parts inventory and a parts-out partner on the field, so your
+              maintenance event keeps moving instead of waiting weeks on a
+              back-ordered component. We support the full Hawker 800 series,
+              the Citation 550 through 680 Sovereign (including the Citation
+              650), and the Challenger 300, 350, 604, 605, and 650.
+            </p>
+            <p>
+              Whether you operate a single aircraft or manage a charter
+              fleet, our team delivers the audit-ready documentation that
+              protects your aircraft's resale value, the turnaround
+              reliability that keeps your operation flying, and the
+              transparent pricing that prevents invoice surprises. AOG
+              response is available 24/7 across Texas and Oklahoma — when
+              your aircraft is down, we come to you.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Airframe sections — cinematic full-bleed, alternating text side */}
-      {airframes.map((airframe, i) => {
-        const number = `0${i + 1}`;
-        const heroImg = AIRFRAME_HERO_IMAGES[airframe.slug];
-        const longDesc = AIRFRAME_LONG_DESCRIPTIONS[airframe.slug];
-        const textRight = i % 2 === 1;
-
-        return (
-          <section
-            key={airframe.slug}
-            id={airframe.slug}
-            className="relative h-[85vh] min-h-[640px] overflow-hidden border-t border-ppa-white/20"
-          >
-            <Image
-              src={heroImg.src}
-              alt={heroImg.alt}
-              fill
-              className="object-cover"
-              style={heroImg.position ? { objectPosition: heroImg.position } : undefined}
-              sizes="100vw"
-            />
-            <div
-              className={`absolute inset-0 ${
-                textRight
-                  ? "bg-gradient-to-l from-ppa-black via-ppa-black/70 to-ppa-black/10"
-                  : "bg-gradient-to-r from-ppa-black via-ppa-black/70 to-ppa-black/10"
-              }`}
-            />
-            <div className="absolute inset-0 flex items-end">
-              <div className="w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16 lg:pb-24">
-                <div className={`max-w-2xl ${textRight ? "ml-auto" : ""}`}>
-                  <div className="relative inline-block mb-3">
-                    <div
-                      aria-hidden
-                      className="absolute inset-0 blur-xl opacity-60 pointer-events-none"
-                      style={{
-                        background:
-                          "conic-gradient(from 210deg at 50% 50%, #00eaff 0deg, #00aeef 90deg, #3b82f6 180deg, #1e3a8a 270deg, #00eaff 360deg)",
-                      }}
-                    />
-                    <span className="relative font-display text-7xl lg:text-[9rem] text-[#00aeef]/40 leading-none block">
-                      {number}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 mb-3">
-                    <span className="h-px w-8 bg-ppa-brass-bright" />
-                    <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass-bright">
-                      {airframe.manufacturer}
-                    </span>
-                  </div>
-                  <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-white leading-[0.95] mb-3">
-                    {airframe.name}
-                  </h2>
-                  <p className="font-display text-lg lg:text-xl text-ppa-brass-bright mb-6">
-                    {airframe.models.join(" / ")}
-                  </p>
-                  <p className="text-lg text-ppa-light/85 font-light leading-relaxed mb-8 max-w-xl">
-                    {longDesc}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-10 max-w-xl">
-                    {airframe.services.slice(0, 5).map((service) => (
-                      <span
-                        key={service}
-                        className="text-xs text-ppa-white border border-ppa-white/30 px-3 py-1.5 backdrop-blur-sm"
-                      >
-                        {service}
-                      </span>
-                    ))}
-                  </div>
-                  <Link
-                    href={`/capabilities/${airframe.slug}`}
-                    className="inline-flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.15em] text-ppa-brass-bright hover:text-ppa-white transition-colors"
-                  >
-                    Explore {airframe.name} Capabilities
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </Link>
-                </div>
+      {/* Airframe family cards — primary navigation */}
+      <section className="bg-ppa-light py-20 lg:py-28 border-t border-ppa-border">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
+          <div className="flex items-end justify-between gap-8 mb-12 lg:mb-16 flex-wrap">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="h-px w-8 bg-ppa-brass" />
+                <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
+                  Choose Your Airframe
+                </span>
               </div>
+              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-black leading-[0.95]">
+                Pick your airframe family.
+              </h2>
             </div>
-          </section>
-        );
-      })}
+            <p className="text-sm max-w-sm text-ppa-muted">
+              Each family has its own dedicated team, tooling, and parts
+              network. Click through for the full capability set, model
+              specs, and inspection schedule.
+            </p>
+          </div>
+
+          <div className="space-y-6 lg:space-y-8">
+            {airframes.map((airframe, i) => {
+              const number = `0${i + 1}`;
+              const img = AIRFRAME_CARD_IMAGES[airframe.slug];
+              const desc = AIRFRAME_CARD_DESCRIPTIONS[airframe.slug];
+              return (
+                <Link
+                  key={airframe.slug}
+                  href={`/capabilities/${airframe.slug}`}
+                  className="group block bg-ppa-white border border-ppa-border hover:border-ppa-brass/50 transition-all duration-300 overflow-hidden"
+                >
+                  <article className="grid lg:grid-cols-[1.1fr_1fr] gap-0 items-stretch">
+                    <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[420px] overflow-hidden">
+                      <Image
+                        src={img.src}
+                        alt={img.alt}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                        style={img.position ? { objectPosition: img.position } : undefined}
+                        sizes="(max-width: 1024px) 100vw, 55vw"
+                      />
+                      <div className="absolute top-6 left-6">
+                        <span className="font-display text-5xl text-ppa-white drop-shadow-lg">
+                          {number}
+                        </span>
+                      </div>
+                      <div className="absolute bottom-6 left-6">
+                        <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-white drop-shadow-lg">
+                          {airframe.manufacturer}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col justify-center p-8 lg:p-12">
+                      <h3 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-black leading-[0.9] mb-3 group-hover:text-ppa-brass-dark transition-colors">
+                        {airframe.name}
+                      </h3>
+                      <p className="font-display text-lg text-ppa-brass mb-6">
+                        {airframe.models.join(" / ")}
+                      </p>
+                      <p className="text-ppa-dark text-base leading-[1.7] font-light mb-6">
+                        {desc}
+                      </p>
+                      <div className="flex flex-wrap gap-1.5 mb-8">
+                        {airframe.services.slice(0, 4).map((service) => (
+                          <span
+                            key={service}
+                            className="text-[11px] text-ppa-muted border border-ppa-border px-2.5 py-1"
+                          >
+                            {service}
+                          </span>
+                        ))}
+                      </div>
+                      <span className="inline-flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.15em] text-ppa-brass group-hover:text-ppa-brass-dark transition-colors self-start">
+                        Explore {airframe.name} Capabilities
+                        <svg
+                          className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                      </span>
+                    </div>
+                  </article>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
       {/* CTA */}
-      <section className="bg-ppa-black py-20 lg:py-24 border-t border-ppa-white/20">
+      <section className="bg-ppa-black py-20 lg:py-24">
         <div className="max-w-[1100px] mx-auto px-6 lg:px-10 text-center">
           <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-white leading-[0.95] mb-6">
             Ready to schedule your aircraft?
