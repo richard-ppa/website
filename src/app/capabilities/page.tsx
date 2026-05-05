@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { AIRFRAMES, COMPANY } from "@/lib/constants";
+import { AIRFRAMES } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Capabilities — Hawker, Citation & Challenger Maintenance",
@@ -253,32 +253,6 @@ export default function CapabilitiesPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-ppa-black py-20 lg:py-24">
-        <div className="max-w-[1100px] mx-auto px-6 lg:px-10 text-center">
-          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-white leading-[0.95] mb-6">
-            Ready to schedule your aircraft?
-          </h2>
-          <p className="text-ppa-light/80 text-lg font-light leading-relaxed max-w-2xl mx-auto mb-10">
-            Request a quote, schedule a phase inspection, or call us
-            directly for AOG support across Texas and Oklahoma.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/quote"
-              className="inline-flex items-center justify-center px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark transition-all"
-            >
-              Request a Quote
-            </Link>
-            <a
-              href={`tel:${COMPANY.phoneRaw}`}
-              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-white border border-ppa-white/40 hover:bg-ppa-white/10 transition-all"
-            >
-              Call {COMPANY.phone}
-            </a>
-          </div>
-        </div>
-      </section>
     </>
   );
 }
