@@ -76,7 +76,7 @@ const AIRFRAME_GALLERY: Record<string, { src: string; alt: string }[]> = {
   hawker: [
     { src: "/images/hawker-mx.jpg", alt: "Hawker maintenance operations" },
     { src: "/images/Engine-MX.jpg", alt: "Hawker engine work" },
-    { src: "/images/Hawker-XP.jpg", alt: "Hawker 800XP in hangar" },
+    { src: "/images/tail-work.jpg", alt: "Technician performing Hawker tail section maintenance" },
   ],
   citation: [
     { src: "/images/Citation-MX-1.jpg", alt: "Citation maintenance — exterior inspection" },
