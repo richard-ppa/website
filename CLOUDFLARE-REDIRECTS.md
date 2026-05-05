@@ -4,7 +4,11 @@
 
 **Where to configure:** Cloudflare dashboard → planeplaceaviation.com zone → Rules → Redirect Rules (or Bulk Redirects).
 
-**When to enable:** AFTER the noindex is removed from ppa.aero AND after `https://ppa.aero/` is verified working with all the migration content. Before flipping these on, the new site must be live and indexable.
+**When to enable:** Site is now indexable (`noindex` removed in `e4e052d`). Redirects can be enabled at Cloudflare immediately. Recommended order:
+1. Configure rules in Cloudflare zone (planeplaceaviation.com) — staged
+2. Test with curl (see Verification section)
+3. Submit ppa.aero sitemap in Google Search Console
+4. After 48h of stable redirects, submit GSC Change of Address from planeplaceaviation.com → ppa.aero
 
 ---
 
@@ -26,7 +30,7 @@
 ### 3. Capabilities — direct 1:1 URL match
 | Source | Target | Status | Notes |
 |---|---|---|---|
-| `/capabilities/` | `/capabilities` | 301 | Direct URL match (just the trailing-slash normalization). New `/capabilities` page is family-level ("Capabilities — Hawker, Citation & Challenger Maintenance") and ranks for cross-airframe queries (e.g. "citation 650 aircraft maintenance" #4). H1 "First-Class Maintenance. Three Airframe Families." mirrors old page positioning. Body prose preserves "factory-trained Challenger 300/350 technicians" and "extensive Hawker parts inventory" — the phrases driving current cross-airframe rankings. Links to `/capabilities/{hawker,citation,challenger}` family pages for drill-down. |
+| `/capabilities/` | `/capabilities` | 301 | Direct URL match (just the trailing-slash normalization). New `/capabilities` page is family-level and ranks for cross-airframe queries (e.g. "citation 650 aircraft maintenance" #4). H1 "Aircraft Maintenance Capabilities · Hawker · Citation · Challenger" puts the keywords in the strongest on-page signal. H2 "Maintenance Built Around Your Fleet." Body prose preserves "factory-trained Challenger 300/350 technicians" and "extensive Hawker parts inventory" — the phrases driving current cross-airframe rankings. Links to `/capabilities/{hawker,citation,challenger}` family pages for drill-down. FAQ section + FAQPage schema for rich SERP features. |
 
 ### 3a. Internal /aircraft → /capabilities (ppa.aero zone — short-lived)
 The new site briefly used `/aircraft` as the airframe-index URL before being renamed to `/capabilities` to match the old site's URL structure. Add these on the `ppa.aero` zone (not `planeplaceaviation.com`) for ~30 days then remove.
@@ -66,9 +70,9 @@ These were recreated as `/blog/[slug]` posts in commit `5190877`. Slugs match wh
 | Source | Target | Status | Notes |
 |---|---|---|---|
 | `/wp-content/uploads/2025/05/PP-Capabilities-Sell-Sheet-R3-LR.pdf` | `/about` | 301 OR 410 | Decision needed. Default: 301 to /about. If sell sheets are stale, return 410 Gone. |
-| `/wp-content/uploads/2025/05/PP-Hawker-Sell-Sheet-R3-LR.pdf` | `/aircraft/hawker` | 301 OR 410 | Same |
-| `/wp-content/uploads/2025/05/PP-Citation-Sell-Sheet-R4-LR.pdf` | `/aircraft/citation` | 301 OR 410 | Same |
-| `/wp-content/uploads/2025/05/PP-Challenger-Sell-Sheet-R3-LR.pdf` | `/aircraft/challenger` | 301 OR 410 | Same |
+| `/wp-content/uploads/2025/05/PP-Hawker-Sell-Sheet-R3-LR.pdf` | `/capabilities/hawker` | 301 OR 410 | Same |
+| `/wp-content/uploads/2025/05/PP-Citation-Sell-Sheet-R4-LR.pdf` | `/capabilities/citation` | 301 OR 410 | Same |
+| `/wp-content/uploads/2025/05/PP-Challenger-Sell-Sheet-R3-LR.pdf` | `/capabilities/challenger` | 301 OR 410 | Same |
 | `/wp-content/uploads/2023/08/PP-Capabilities-*.pdf` | `/about` | 301 OR 410 | Older variant |
 
 ### 8. WordPress junk — return 404 (do NOT redirect)
@@ -118,18 +122,18 @@ curl -sI https://planeplaceaviation.com/plane-place-aviation-taps-into-surging-d
 
 ## Pre-cutover checklist
 
-Before enabling the redirects above, verify in this order:
+Status as of 2026-05-05:
 
-1. [ ] `ppa.aero` is fully built and deployed with all migration SEO content
-2. [ ] `noindex` meta has been REMOVED from `src/app/layout.tsx` and redeployed
-3. [ ] `curl -s https://ppa.aero/ | grep robots` returns nothing (or only structured data references)
-4. [ ] `https://ppa.aero/sitemap.xml` returns the full sitemap including all `/blog/` slugs
-5. [ ] All recreated blog posts return 200 OK (test the 6 slugs in section 6)
-6. [ ] Submit `https://ppa.aero/sitemap.xml` in Google Search Console (ppa.aero property)
-7. [ ] Stage redirect rules in Cloudflare DRAFT mode if available
-8. [ ] Apply rules and run verification curls above
-9. [ ] In GSC: cancel any active "URL removal" requests on ppa.aero
-10. [ ] In GSC: submit Change of Address from planeplaceaviation.com → ppa.aero (after redirects stable for 48h)
+1. [x] `ppa.aero` is fully built and deployed with all migration SEO content
+2. [x] `noindex` meta has been REMOVED from `src/app/layout.tsx` and redeployed (`e4e052d`)
+3. [x] `curl -s https://ppa.aero/ | grep robots` returns nothing — verified
+4. [x] `https://ppa.aero/sitemap.xml` returns the full sitemap including all `/blog/` slugs
+5. [x] All recreated blog posts return 200 OK (FAA cert, AIN, Mexico AFAC, hangar expansion, careers, Challenger 604/605/650)
+6. [ ] **TODO:** Submit `https://ppa.aero/sitemap.xml` in Google Search Console (ppa.aero property)
+7. [ ] **TODO:** Stage redirect rules in Cloudflare (use companion `CLOUDFLARE-REDIRECTS.xlsx` file for the full rule set)
+8. [ ] **TODO:** Apply rules and run verification curls above
+9. [ ] **TODO:** In GSC: cancel any active "URL removal" requests on ppa.aero
+10. [ ] **TODO:** In GSC: submit Change of Address from planeplaceaviation.com → ppa.aero (after redirects stable for 48h)
 
 ---
 
@@ -146,6 +150,8 @@ Before enabling the redirects above, verify in this order:
 
 **Accepted as loss:**
 - `/aog-mrt/` and `/boosts-mx-offering` standalone pages (folded into /services#aog-response)
-- /gallery/ image-search visibility (~4,422 imp at pos 4.4) — gallery photos on /about don't have same indexability
 - Citation 525 + Citation 680A coverage (off CLAUDE.md airframe list, deliberately removed)
 - Sell sheet PDFs (decision pending)
+
+**Recovered after audit (originally listed as loss):**
+- /gallery image-search visibility (~4,422 imp at pos 4.4) — new /gallery page built with 36 photos, ImageGallery JSON-LD schema, and descriptive alt text. 1:1 URL match preserves image equity.
