@@ -45,11 +45,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://ppa.aero",
   },
-  // TEMPORARY: noindex during pre-cutover content audit. Remove before launch.
-  robots: {
-    index: false,
-    follow: false,
-  },
   openGraph: {
     type: "website",
     locale: "en_US",
