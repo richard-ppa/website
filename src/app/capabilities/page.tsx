@@ -36,12 +36,12 @@ export const metadata: Metadata = {
 
 const AIRFRAME_CARD_IMAGES: Record<string, { src: string; alt: string; position?: string }> = {
   hawker: {
-    src: "/images/Hawker-850-wide.jpg",
-    alt: "Hawker on the ramp at Plane Place Aviation",
+    src: "/images/Hangar-Hawkers.jpg",
+    alt: "Hawker aircraft in the Plane Place Aviation hangar",
     position: "center 50%",
   },
   citation: {
-    src: "/images/Citation-Hangar.jpg",
+    src: "/images/Citation-Hangar-2.jpg",
     alt: "Citation aircraft in the Plane Place Aviation hangar",
     position: "center 35%",
   },
