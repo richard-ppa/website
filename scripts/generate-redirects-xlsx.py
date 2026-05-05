@@ -221,8 +221,68 @@ def main():
     ws3.column_dimensions["C"].width = 60
     ws3.freeze_panes = "A2"
 
-    wb.save("CLOUDFLARE-REDIRECTS.xlsx")
-    print(f"Created CLOUDFLARE-REDIRECTS.xlsx with {len(RULES)} redirect rules across 3 sheets")
+    try:
+        wb.save("CLOUDFLARE-REDIRECTS.xlsx")
+        print(f"Created CLOUDFLARE-REDIRECTS.xlsx with {len(RULES)} redirect rules across 3 sheets")
+    except PermissionError:
+        print("Skipped CLOUDFLARE-REDIRECTS.xlsx (file is open in Excel — close it to regenerate)")
+
+    # WordPress import CSV — Redirection plugin format
+    # Columns: source, target, regex, code
+    # Source = path only (no domain), since WordPress IS planeplaceaviation.com
+    #
+    # SAFETY: the catchall /(.*) and /wp-admin/, /wp-login.php, /wp-includes/, /wp-content/*
+    # rules are EXCLUDED from the WordPress CSV. Reasons:
+    #   - /wp-admin/ → 404 would lock you out of WP admin
+    #   - /wp-login.php → 404 same
+    #   - /wp-includes/ → 404 breaks WP core file loading
+    #   - Apex /(.*) catchall would match /wp-admin/ too, redirecting admin to ppa.aero
+    # These rules are appropriate at the Cloudflare level AFTER WordPress is decommissioned,
+    # but dangerous while WP is still serving the site.
+    #
+    # URLs not in the explicit list will continue to render WordPress's normal response
+    # (typically 404 for unknown paths, which is fine during migration).
+    SKIP_FOR_WORDPRESS = {
+        "/wp-admin/(.*)",
+        "/wp-login.php",
+        "/wp-includes/(.*)",
+        "/(.*)",  # apex catchall
+    }
+
+    import csv
+    seen_sources = set()
+    specific = []
+    for section, src, tgt, status, match, _notes in RULES:
+        # Skip internal ppa.aero zone rules (Cloudflare for new domain handles those)
+        if "ppa.aero/aircraft" in src:
+            continue
+        # Convert source from full URL to path
+        if src.startswith(OLD):
+            src_path = src[len(OLD):]
+        elif src.startswith("https://www.planeplaceaviation.com"):
+            # Skip WWW catchall — WordPress canonicalizes www to apex anyway
+            continue
+        else:
+            continue
+        tgt_clean = tgt if tgt.startswith("http") else ""
+        is_regex = "1" if match == "Wildcard" else "0"
+        if is_regex == "1":
+            src_path = src_path.replace("/*", "/(.*)")
+        # Skip dangerous rules for WordPress context
+        if src_path in SKIP_FOR_WORDPRESS:
+            continue
+        key = (src_path, tgt_clean, is_regex, status)
+        if key in seen_sources:
+            continue
+        seen_sources.add(key)
+        specific.append([src_path, tgt_clean, is_regex, status])
+
+    with open("wordpress-redirects.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["source", "target", "regex", "code"])
+        for row in specific:
+            w.writerow(row)
+    print(f"Created wordpress-redirects.csv ({len(specific)} rules — WordPress-safe, no catchall/wp-admin)")
 
 
 if __name__ == "__main__":
