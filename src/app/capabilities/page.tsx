@@ -206,10 +206,13 @@ export default function CapabilitiesPage() {
               Capabilities
             </span>
           </div>
-          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-ppa-white leading-[0.9] mb-6 max-w-4xl">
-            Aircraft Maintenance Capabilities
-            <br />
-            <span className="text-ppa-muted">Hawker · Citation · Challenger</span>
+          <h1 className="font-display text-ppa-white leading-[0.95] mb-6">
+            <span className="block text-4xl sm:text-5xl lg:text-6xl xl:text-7xl">
+              Aircraft Maintenance Capabilities
+            </span>
+            <span className="block mt-3 text-xl sm:text-2xl lg:text-3xl text-ppa-brass-bright/90 font-light tracking-tight">
+              Hawker · Citation · Challenger
+            </span>
           </h1>
           <p className="text-lg text-ppa-light/80 max-w-2xl font-light">
             Plane Place Aviation is an{" "}
@@ -225,91 +228,59 @@ export default function CapabilitiesPage() {
         </div>
       </section>
 
-      {/* SEO body intro — preserves ranking phrases */}
-      <section className="bg-ppa-white py-20 lg:py-24 border-t border-ppa-border">
-        <div className="max-w-[1100px] mx-auto px-6 lg:px-10">
-          <div className="flex items-center gap-3 mb-5">
-            <span className="h-px w-8 bg-ppa-brass" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
-              Specialist MRO
-            </span>
-          </div>
-          <h2 className="font-display text-4xl sm:text-5xl text-ppa-black leading-[0.95] mb-10 max-w-3xl">
-            Three airframe families. Done better than anyone.
-          </h2>
-          <div className="space-y-6 max-w-3xl text-lg leading-[1.75] font-light text-ppa-dark">
-            <p>
-              We are a one-stop shop for any and all maintenance, inspection,
-              repair, and{" "}
-              <Link
-                href="/services"
-                className="text-ppa-brass-dark underline decoration-ppa-brass/40 underline-offset-4 hover:decoration-ppa-brass-dark transition-colors"
-              >
-                avionics
-              </Link>{" "}
-              needs across Hawker, Citation, and Challenger aircraft. Our
-              certified Part 145 repair station in Cleburne, Texas is staffed
-              with technicians who have spent their careers on these specific
-              airframes — including factory-trained Challenger 300/350
-              technicians on staff to support 96- and 192-month inspection
-              events.
-            </p>
-            <p>
-              Hawker parts availability has become an industry-wide pain point.
-              Plane Place Aviation has access to extensive Hawker parts
-              inventory and a parts-out partner on the field, so your
-              maintenance event keeps moving instead of waiting weeks on a
-              back-ordered component. We support the full Hawker 800 series,
-              the Citation 550 through 680 Sovereign (including the Citation
-              650), and the Challenger 300, 350, 604, 605, and 650.
-            </p>
-            <p>
-              Whether you operate a single aircraft or manage a charter fleet,
-              our team delivers the audit-ready documentation that protects
-              your aircraft's resale value, the turnaround reliability that
-              keeps your operation flying, and the transparent pricing that
-              prevents invoice surprises.{" "}
-              <Link
-                href="/services"
-                className="text-ppa-brass-dark underline decoration-ppa-brass/40 underline-offset-4 hover:decoration-ppa-brass-dark transition-colors"
-              >
-                AOG response
-              </Link>{" "}
-              is available 24/7 across Texas and Oklahoma — when your aircraft
-              is down, we come to you. Ready to schedule?{" "}
-              <Link
-                href="/quote"
-                className="text-ppa-brass-dark underline decoration-ppa-brass/40 underline-offset-4 hover:decoration-ppa-brass-dark transition-colors"
-              >
-                Request a quote
-              </Link>
-              .
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Airframe family cards — primary navigation */}
+      {/* Combined: SEO body intro + airframe family cards */}
       <section className="bg-ppa-light py-20 lg:py-28 border-t border-ppa-border">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <div className="flex items-end justify-between gap-8 mb-12 lg:mb-16 flex-wrap">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="h-px w-8 bg-ppa-brass" />
-                <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
-                  Choose Your Airframe
-                </span>
-              </div>
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-black leading-[0.95]">
-                Pick your airframe family.
-              </h2>
+          <header className="mb-14 lg:mb-20 max-w-3xl">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="h-px w-8 bg-ppa-brass" />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
+                Specialist MRO
+              </span>
             </div>
-            <p className="text-sm max-w-sm text-ppa-muted">
-              Each family has its own dedicated team, tooling, and parts
-              network. Click through for the full capability set, model
-              specs, and inspection schedule.
-            </p>
-          </div>
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-black leading-[0.95] mb-8">
+              Pick your airframe family.
+            </h2>
+            <div className="space-y-5 text-lg leading-[1.75] font-light text-ppa-dark">
+              <p>
+                Plane Place Aviation is a certified Part 145 repair station in
+                Cleburne, Texas that specializes exclusively in Hawker,
+                Citation, and Challenger aircraft. We're a one-stop shop for
+                maintenance, inspection, repair, and{" "}
+                <Link
+                  href="/services"
+                  className="text-ppa-brass-dark underline decoration-ppa-brass/40 underline-offset-4 hover:decoration-ppa-brass-dark transition-colors"
+                >
+                  avionics
+                </Link>{" "}
+                — staffed with technicians who have spent their careers on
+                these specific airframes, including factory-trained
+                Challenger 300/350 technicians for 96- and 192-month
+                inspection events.
+              </p>
+              <p>
+                We support the full Hawker 800 series, the Citation 550
+                through 680 Sovereign (including the Citation 650), and the
+                Challenger 300, 350, 604, 605, and 650 — with extensive
+                Hawker parts inventory, audit-ready documentation that
+                protects resale value, and 24/7{" "}
+                <Link
+                  href="/services"
+                  className="text-ppa-brass-dark underline decoration-ppa-brass/40 underline-offset-4 hover:decoration-ppa-brass-dark transition-colors"
+                >
+                  AOG response
+                </Link>{" "}
+                across Texas and Oklahoma. Ready to schedule?{" "}
+                <Link
+                  href="/quote"
+                  className="text-ppa-brass-dark underline decoration-ppa-brass/40 underline-offset-4 hover:decoration-ppa-brass-dark transition-colors"
+                >
+                  Request a quote
+                </Link>
+                .
+              </p>
+            </div>
+          </header>
 
           <div className="space-y-6 lg:space-y-8">
             {airframes.map((airframe, i) => {
