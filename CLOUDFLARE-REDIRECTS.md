@@ -23,10 +23,10 @@
 | `/about/` | `/about` | 301 |
 | `/contact/` | `/contact` | 301 |
 
-### 3. Capabilities — split, redirect to airframe index
+### 3. Capabilities → /aircraft index
 | Source | Target | Status | Notes |
 |---|---|---|---|
-| `/capabilities/` | `/services` | 301 | Old page mixed services + family overview. `/services` covers more keyword breadth than any single `/aircraft/[slug]` page. |
+| `/capabilities/` | `/aircraft` | 301 | Old `/capabilities/` page is family-level ("First-class Maintenance on Hawker, Citation & Challenger") and ranks for cross-airframe queries (e.g. "citation 650 aircraft maintenance" #4). New `/aircraft` index page replicates that scope: H1 "First-class maintenance on Hawker, Citation & Challenger", body prose mentioning all three families + parts inventory + factory-trained technicians, plus links to each `/aircraft/[slug]` family page. Topical match preserves the cross-family rank value. |
 
 ### 4. Gallery — no equivalent
 | Source | Target | Status | Notes |
