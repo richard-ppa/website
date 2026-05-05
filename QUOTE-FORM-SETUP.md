@@ -11,13 +11,13 @@ Cloudflare Pages Function (functions/quote.ts)
         ↓
 Resend API (sends FROM noreply@estimates.ppa.aero)
         ↓
-quotes@aerobase.ppa.aero
+quotes@ppa.aero
         ↓
 Cloudflare Email Routing forwards to your real inbox
 ```
 
 - **Sending domain**: `estimates.ppa.aero` (verified in Resend)
-- **Receiving address**: `quotes@aerobase.ppa.aero` (Cloudflare Email Routing → your real inbox)
+- **Receiving address**: `quotes@ppa.aero` (Cloudflare Email Routing → your real inbox)
 - **Reply-To**: customer's email (so you can reply directly to the requester)
 
 ## One-time setup steps
@@ -36,12 +36,12 @@ The Pages Function reads `env.RESEND_API_KEY`. You need to set it on your Cloudf
 
 After saving, redeploy. New deploys will have access to `env.RESEND_API_KEY`.
 
-### 2. Verify Cloudflare Email Routing has `quotes@aerobase.ppa.aero` configured
+### 2. Verify Cloudflare Email Routing has `quotes@ppa.aero` configured
 
 This should already be done based on your earlier screenshot. To confirm:
 
 1. Cloudflare Dashboard → ppa.aero → Email → Email Routing → Routes
-2. Confirm `quotes@aerobase.ppa.aero` exists with a destination address that forwards to your real inbox
+2. Confirm `quotes@ppa.aero` exists with a destination address that forwards to your real inbox
 3. Send a test email to that address — confirm you receive it in your real inbox
 
 ### 3. Test the live form
@@ -93,7 +93,7 @@ To change the recipient or sender, edit the constants at the top of `functions/q
 
 ```ts
 const FROM_ADDRESS = "Plane Place Aviation Quotes <noreply@estimates.ppa.aero>";
-const TO_ADDRESS = "quotes@aerobase.ppa.aero";
+const TO_ADDRESS = "quotes@ppa.aero";
 ```
 
 Then `npm run build && wrangler pages deploy out`.
