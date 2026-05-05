@@ -10,7 +10,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   "send-failed": "We couldn't deliver your request. Please try again, or call us directly at (817) 768-8884.",
 };
 
-export function QuoteErrorBanner() {
+export function FormErrorBanner() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { COMPANY } from "@/lib/constants";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { FormErrorBanner } from "@/components/FormErrorBanner";
 
 export const metadata: Metadata = {
   title: "Contact — AOG Hotline, Quote Requests & Location",
@@ -134,7 +135,17 @@ export default function ContactPage() {
               <h2 className="font-display text-3xl sm:text-4xl text-ppa-black leading-none mb-8">
                 Send Us a Message
               </h2>
-              <form className="space-y-5">
+              <FormErrorBanner />
+              <form action="/contact" method="POST" className="space-y-5">
+                {/* Honeypot — hidden from real users, bots fill it in */}
+                <input
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="absolute left-[-9999px] w-px h-px opacity-0"
+                />
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <label htmlFor="name" className="form-label">

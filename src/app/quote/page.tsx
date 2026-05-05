@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { COMPANY, AIRFRAMES } from "@/lib/constants";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { QuoteErrorBanner } from "@/components/QuoteErrorBanner";
+import { FormErrorBanner } from "@/components/FormErrorBanner";
 
 const ALL_MODELS = Object.values(AIRFRAMES).flatMap((airframe) =>
   airframe.models.map((model) => `${airframe.name} ${model}`)
@@ -76,7 +76,7 @@ export default function QuotePage() {
       {/* Form */}
       <section className="py-16 lg:py-24">
         <div className="max-w-3xl mx-auto px-6 lg:px-10">
-          <QuoteErrorBanner />
+          <FormErrorBanner />
           <form
             action="/quote"
             method="POST"
