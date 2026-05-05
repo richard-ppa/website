@@ -209,7 +209,7 @@ export default function CapabilitiesPage() {
               </span>
             </div>
             <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-black leading-[0.95] mb-8">
-              Hawker, Citation, Challenger Maintenance Built Around Your Fleet.
+              Maintenance Built Around Your Fleet.
             </h2>
             <div className="space-y-5 text-lg leading-[1.75] font-light text-ppa-dark">
               <p>
