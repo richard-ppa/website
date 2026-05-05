@@ -73,7 +73,7 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "Where is Plane Place Aviation located?",
-    a: "We're based at Cleburne Regional Airport (KCPT) in Cleburne, Texas — about 30 minutes south of DFW, with significantly lower operating costs than Dallas Love Field or Addison. Our facility includes 40,000 sq ft of hangar space across three hangars, plus a comfortable lounge and office area for visiting crews.",
+    a: "We're based at Cleburne Regional Airport (KCPT) in Cleburne, Texas — about 30 minutes south of DFW. Our facility spans 40,000 sq ft of hangar space across three hangars with a comfortable lounge and office area for visiting crews, plus quick ramp access and minimal taxi delays compared to busier metro airports.",
   },
   {
     q: "Do you offer AOG (Aircraft on Ground) response?",
