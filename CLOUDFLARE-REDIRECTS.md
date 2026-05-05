@@ -38,10 +38,10 @@ The new site briefly used `/aircraft` as the airframe-index URL before being ren
 | `https://ppa.aero/aircraft/citation` | `https://ppa.aero/capabilities/citation` | 301 | |
 | `https://ppa.aero/aircraft/challenger` | `https://ppa.aero/capabilities/challenger` | 301 | |
 
-### 4. Gallery — no equivalent
+### 4. Gallery — direct 1:1 URL match
 | Source | Target | Status | Notes |
 |---|---|---|---|
-| `/gallery/` | `/about` | 301 | New site has no gallery route. About page has photo strip. Watch GSC for soft-404 reports. |
+| `/gallery/` | `/gallery` | 301 | Direct URL match (trailing-slash normalization). New site now has a /gallery page with 36 photos and ImageGallery JSON-LD. Old /gallery had 4,422 imp at pos 4.4 (mostly image-search rankings) — direct match should preserve image equity. |
 
 ### 5. News index → blog index
 | Source | Target | Status |
