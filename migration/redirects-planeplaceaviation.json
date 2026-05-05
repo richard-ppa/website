@@ -1,0 +1,483 @@
+{
+  "version": 4,
+  "groups": [
+    {
+      "id": 1,
+      "name": "PPA.aero Migration",
+      "module_id": 1,
+      "status": "enabled",
+      "position": 0,
+      "enabled": true
+    }
+  ],
+  "items": [
+    {
+      "id": 1,
+      "url": "/",
+      "match_url": "/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "Homepage",
+      "group_id": 1,
+      "position": 0,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 2,
+      "url": "/about/",
+      "match_url": "/about/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/about" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "About",
+      "group_id": 1,
+      "position": 1,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 3,
+      "url": "/services/",
+      "match_url": "/services/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/services" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "Services",
+      "group_id": 1,
+      "position": 2,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 4,
+      "url": "/contact/",
+      "match_url": "/contact/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/contact" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "Contact",
+      "group_id": 1,
+      "position": 3,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 5,
+      "url": "/news/",
+      "match_url": "/news/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/blog" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "News → Blog",
+      "group_id": 1,
+      "position": 4,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 6,
+      "url": "/capabilities/",
+      "match_url": "/capabilities/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/services" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "Capabilities → Services",
+      "group_id": 1,
+      "position": 5,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 7,
+      "url": "/aog-mrt/",
+      "match_url": "/aog-mrt/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/services/aog-response" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "AOG/MRT → AOG Response",
+      "group_id": 1,
+      "position": 6,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 8,
+      "url": "/gallery/",
+      "match_url": "/gallery/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "Gallery → Homepage",
+      "group_id": 1,
+      "position": 7,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 9,
+      "url": "/test-page/",
+      "match_url": "/test-page/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "Test Page → Homepage",
+      "group_id": 1,
+      "position": 8,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 10,
+      "url": "/category/uncategorized/",
+      "match_url": "/category/uncategorized/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/blog" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "Category Archive → Blog",
+      "group_id": 1,
+      "position": 9,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 11,
+      "url": "/author/adecce15_admin/",
+      "match_url": "/author/adecce15_admin/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/blog" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "Author Archive → Blog",
+      "group_id": 1,
+      "position": 10,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 12,
+      "url": "/plane-place-aviation-receives-mexico-afac-repair-station-certification/",
+      "match_url": "/plane-place-aviation-receives-mexico-afac-repair-station-certification/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/blog/plane-place-aviation-receives-mexico-afac-repair-station-certification" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "Mexico AFAC Certification post",
+      "group_id": 1,
+      "position": 11,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 13,
+      "url": "/plane-place-aviation-expands-operations-with-move-to-larger-hangar-space/",
+      "match_url": "/plane-place-aviation-expands-operations-with-move-to-larger-hangar-space/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/blog/plane-place-aviation-expands-operations-with-move-to-larger-hangar-space" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "Hangar Expansion post",
+      "group_id": 1,
+      "position": 12,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 14,
+      "url": "/now-hiring-ap-mechanic-avionics-technician/",
+      "match_url": "/now-hiring-ap-mechanic-avionics-technician/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/blog/now-hiring-ap-mechanic-avionics-technician" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "Now Hiring post",
+      "group_id": 1,
+      "position": 13,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 15,
+      "url": "/receives-faa-certification-as-a-part-145-repair-station/",
+      "match_url": "/receives-faa-certification-as-a-part-145-repair-station/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/blog/receives-faa-certification-as-a-part-145-repair-station" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "FAA Part 145 Certification post",
+      "group_id": 1,
+      "position": 14,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 16,
+      "url": "/plane-place-aviation-adds-new-challenger-604-605-and-650-capabilities/",
+      "match_url": "/plane-place-aviation-adds-new-challenger-604-605-and-650-capabilities/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/blog/plane-place-aviation-adds-new-challenger-604-605-and-650-capabilities" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "Challenger 604/605/650 Capabilities post",
+      "group_id": 1,
+      "position": 15,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 17,
+      "url": "/plane-place-aviation-taps-into-surging-demand-for-airframe-mro/",
+      "match_url": "/plane-place-aviation-taps-into-surging-demand-for-airframe-mro/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/blog/plane-place-aviation-taps-into-surging-demand-for-airframe-mro" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "AIN Profile post",
+      "group_id": 1,
+      "position": 16,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    },
+    {
+      "id": 18,
+      "url": "/plane-place-aviation-boosts-mx-offering-in-texas-oklahoma/",
+      "match_url": "/plane-place-aviation-boosts-mx-offering-in-texas-oklahoma/",
+      "regex": false,
+      "match_type": "url",
+      "action_type": "url",
+      "action_code": 301,
+      "action_data": { "url": "https://ppa.aero/blog" },
+      "match_data": {
+        "source": {
+          "flag_query": "exact",
+          "flag_case": false,
+          "flag_trailing": false,
+          "flag_regex": false
+        }
+      },
+      "title": "MX TX/OK Offering (no mirror) → Blog",
+      "group_id": 1,
+      "position": 17,
+      "status": "enabled",
+      "last_count": 0,
+      "last_access": "0",
+      "tracking": 1,
+      "enabled": true
+    }
+  ]
+}

@@ -108,8 +108,48 @@ export default async function BlogPostPage({ params }: PageProps) {
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": post.category === "Field Insights" ? "TechArticle" : "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    image: `https://ppa.aero${post.hero.src}`,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: { "@type": "Organization", name: post.author },
+    publisher: {
+      "@type": "Organization",
+      name: "Plane Place Aviation",
+      logo: { "@type": "ImageObject", url: "https://ppa.aero/images/ppa-logo.png" },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://ppa.aero/blog/${post.slug}`,
+    },
+    keywords: post.tags.join(", "),
+    articleSection: post.category,
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://ppa.aero" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://ppa.aero/blog" },
+      { "@type": "ListItem", position: 3, name: post.title, item: `https://ppa.aero/blog/${post.slug}` },
+    ],
+  };
+
   return (
     <article>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Hero */}
       <section className="relative h-[70vh] min-h-[500px] flex items-end overflow-hidden">
         <div className="absolute inset-0">

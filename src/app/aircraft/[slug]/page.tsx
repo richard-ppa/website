@@ -146,6 +146,15 @@ export default async function AirframePage({
     notFound();
   }
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://ppa.aero" },
+      { "@type": "ListItem", position: 2, name: airframe.name, item: `https://ppa.aero/aircraft/${slug}` },
+    ],
+  };
+
   const heroImg = AIRFRAME_HERO_IMAGES[slug];
   const serviceImg = AIRFRAME_SERVICE_IMAGES[slug];
   const fleetBg = AIRFRAME_FLEET_BACKGROUND[slug];
@@ -156,6 +165,10 @@ export default async function AirframePage({
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Hero */}
       <section className="relative h-screen min-h-[700px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
