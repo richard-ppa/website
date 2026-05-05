@@ -31,7 +31,7 @@ const AIRFRAME_HERO_IMAGES: Record<string, { src: string; alt: string; position?
   },
   citation: {
     src: "/images/Citation-Hangar.jpg",
-    alt: "Citation aircraft in the PPA hangar",
+    alt: "Citation aircraft in the Plane Place Aviation hangar",
     position: "center 35%",
   },
   challenger: {
@@ -44,15 +44,15 @@ const AIRFRAME_HERO_IMAGES: Record<string, { src: string; alt: string; position?
 const AIRFRAME_SERVICE_IMAGES: Record<string, { src: string; alt: string }> = {
   hawker: {
     src: "/images/Tech-at-Station.jpg",
-    alt: "PPA technician at workstation reviewing Hawker maintenance records",
+    alt: "Plane Place Aviation technician at workstation reviewing Hawker maintenance records",
   },
   citation: {
     src: "/images/Citation-Engine-Work-on-ladder.jpg",
-    alt: "PPA technician on a ladder performing Citation engine work",
+    alt: "Plane Place Aviation technician on a ladder performing Citation engine work",
   },
   challenger: {
     src: "/images/challenger-in-shop.jpg",
-    alt: "Challenger aircraft in the PPA shop undergoing maintenance",
+    alt: "Challenger aircraft in the Plane Place Aviation shop undergoing maintenance",
   },
 };
 
@@ -80,10 +80,10 @@ const AIRFRAME_GALLERY: Record<string, { src: string; alt: string }[]> = {
   citation: [
     { src: "/images/Citation-MX-1.jpg", alt: "Citation maintenance — exterior inspection" },
     { src: "/images/Citation-mx-2.jpg", alt: "Citation maintenance — underside work" },
-    { src: "/images/Citation-Hangar-2.jpg", alt: "Citation interior structural work in PPA hangar" },
+    { src: "/images/Citation-Hangar-2.jpg", alt: "Citation interior structural work in Plane Place Aviation hangar" },
   ],
   challenger: [
-    { src: "/images/challenger.jpg", alt: "Challenger aircraft at PPA" },
+    { src: "/images/challenger.jpg", alt: "Challenger aircraft at Plane Place Aviation" },
     { src: "/images/Winglet-Install-04.jpg", alt: "Challenger winglet structural work" },
     { src: "/images/Dalton-on-workstation.jpg", alt: "Technician performing Challenger maintenance" },
   ],
@@ -269,6 +269,31 @@ export default async function AirframePage({
           </section>
         );
       })()}
+
+      {/* Major maintenance events — body prose for SEO depth */}
+      <section className="bg-ppa-white py-20 lg:py-28 border-t border-ppa-border">
+        <div className="max-w-[1100px] mx-auto px-6 lg:px-10">
+          <div className="flex items-center gap-3 mb-5">
+            <span className="h-px w-8 bg-ppa-brass" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
+              {airframe.majorEvents.eyebrow}
+            </span>
+          </div>
+          <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-black leading-[0.95] mb-12 max-w-3xl">
+            {airframe.majorEvents.heading}
+          </h2>
+          <div className="space-y-6 max-w-3xl">
+            {airframe.majorEvents.paragraphs.map((paragraph, idx) => (
+              <p
+                key={idx}
+                className="text-ppa-dark text-lg leading-[1.75] font-light"
+              >
+                {paragraph}
+              </p>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Gallery strip */}
       {gallery.length > 0 && (

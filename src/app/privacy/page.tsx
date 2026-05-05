@@ -17,7 +17,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="font-display text-2xl text-ppa-black tracking-wide mb-3">1. Introduction</h2>
             <p>
-              Plane Place Aviation, LLC (&quot;PPA,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) operates the
+              Plane Place Aviation, LLC (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) operates the
               website ppa.aero and associated marketing tools. This Privacy Policy explains how we
               collect, use, disclose, and safeguard your information when you visit our website or
               interact with our services.

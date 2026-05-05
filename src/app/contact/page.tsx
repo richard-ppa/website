@@ -214,7 +214,7 @@ export default function ContactPage() {
             <div className="relative overflow-hidden min-h-[400px]">
               <Image
                 src="/images/Winglet-Install---James.jpg"
-                alt="PPA technician James performing detailed winglet work"
+                alt="Plane Place Aviation technician James performing detailed winglet work"
                 fill
                 className="object-cover"
               />

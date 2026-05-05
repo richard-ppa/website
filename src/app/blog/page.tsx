@@ -23,7 +23,7 @@ export default function BlogIndexPage() {
         <div className="absolute inset-0">
           <Image
             src="/images/tech-on-lift.jpg"
-            alt="PPA technician on a lift working on a business jet"
+            alt="Plane Place Aviation technician on a lift working on a business jet"
             fill
             className="object-cover"
             priority

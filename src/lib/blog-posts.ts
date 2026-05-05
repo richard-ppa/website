@@ -28,7 +28,7 @@ export const BLOG_POSTS: BlogPost[] = [
     category: "Field Insights",
     date: "2026-04-21",
     dateDisplay: "April 21, 2026",
-    author: "The PPA Structural Team",
+    author: "The Plane Place Aviation Structural Team",
     readingTime: "4 min read",
     hero: {
       src: "/blog/images/challenger-300-corrosion/figure-1.png",
@@ -94,7 +94,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         kind: "heading",
-        text: "The PPA approach",
+        text: "The Plane Place Aviation approach",
       },
       {
         kind: "paragraph",
@@ -131,7 +131,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "plane-place-aviation-receives-mexico-afac-repair-station-certification",
     title: "Plane Place Aviation Receives Mexico AFAC Repair Station Certification",
     excerpt:
-      "PPA is now a Mexico AFAC Certified Repair Station, expanding maintenance services for Mexico-registered Challenger, Hawker, and Citation operators.",
+      "Plane Place Aviation is now a Mexico AFAC Certified Repair Station, expanding maintenance services for Mexico-registered Challenger, Hawker, and Citation operators.",
     category: "Company News",
     date: "2025-08-18",
     dateDisplay: "August 18, 2025",
@@ -165,7 +165,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "now-hiring-ap-mechanic-avionics-technician",
     title: "Now Hiring: A&P Mechanic & Avionics Technician",
     excerpt:
-      "PPA is hiring experienced A&P mechanics and avionics technicians to support our growing Challenger, Hawker, and Citation maintenance operations in Cleburne, Texas.",
+      "Plane Place Aviation is hiring experienced A&P mechanics and avionics technicians to support our growing Challenger, Hawker, and Citation maintenance operations in Cleburne, Texas.",
     category: "Careers",
     date: "2025-07-01",
     dateDisplay: "July 1, 2025",
@@ -173,7 +173,7 @@ export const BLOG_POSTS: BlogPost[] = [
     readingTime: "2 min read",
     hero: {
       src: "/blog/images/now-hiring-ap-mechanic-avionics-technician/hero.jpg",
-      alt: "PPA hiring A&P mechanics and avionics technicians",
+      alt: "Plane Place Aviation hiring A&P mechanics and avionics technicians",
     },
     tags: ["Careers", "Hiring", "A&P Mechanic", "Avionics"],
     sections: [
@@ -223,7 +223,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "plane-place-aviation-expands-operations-with-move-to-larger-hangar-space",
     title: "Plane Place Aviation Expands Operations with Move to Larger Hangar Space",
     excerpt:
-      "PPA expands to 40,000 sq ft of hangar space at Cleburne airport — additional capacity for the airframe-specific maintenance our customers depend on.",
+      "Plane Place Aviation expands to 40,000 sq ft of hangar space at Cleburne airport — additional capacity for the airframe-specific maintenance our customers depend on.",
     category: "Company News",
     date: "2025-03-01",
     dateDisplay: "March 1, 2025",
@@ -231,7 +231,7 @@ export const BLOG_POSTS: BlogPost[] = [
     readingTime: "1 min read",
     hero: {
       src: "/blog/images/plane-place-aviation-expands-operations-with-move-to-larger-hangar-space/hero.jpg",
-      alt: "PPA's newly renovated hangar at Cleburne airport",
+      alt: "Plane Place Aviation's newly renovated hangar at Cleburne airport",
     },
     tags: ["Facilities", "Cleburne", "Expansion"],
     sections: [
@@ -253,7 +253,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "receives-faa-certification-as-a-part-145-repair-station",
     title: "Plane Place Aviation Receives FAA Certification as a Part 145 Repair Station",
     excerpt:
-      "PPA has received FAA Part 145 certification — a milestone enabling expanded service offerings on Hawker, Citation, and Challenger aircraft.",
+      "Plane Place Aviation has received FAA Part 145 certification — a milestone enabling expanded service offerings on Hawker, Citation, and Challenger aircraft.",
     category: "Company News",
     date: "2024-08-01",
     dateDisplay: "August 1, 2024",
@@ -299,7 +299,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "plane-place-aviation-adds-new-challenger-604-605-and-650-capabilities",
     title: "Plane Place Aviation Adds New Challenger 604, 605 and 650 Capabilities",
     excerpt:
-      "PPA expands Challenger maintenance to the 604, 605, and 650 — adding to existing 300 and 350 capabilities, with 24/7 AOG support across Texas and Oklahoma.",
+      "Plane Place Aviation expands Challenger maintenance to the 604, 605, and 650 — adding to existing 300 and 350 capabilities, with 24/7 AOG support across Texas and Oklahoma.",
     category: "Capabilities",
     date: "2024-09-01",
     dateDisplay: "September 1, 2024",
@@ -349,7 +349,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "plane-place-aviation-taps-into-surging-demand-for-airframe-mro",
     title: "Plane Place Aviation Featured in AIN: Tapping into Surging Demand for Airframe MRO",
     excerpt:
-      "Aviation International News profiles PPA on the heels of expanded AOG and mobile repair team services for Texas and Oklahoma, plus growing onsite support at Dallas Love Field.",
+      "Aviation International News profiles Plane Place Aviation on the heels of expanded AOG and mobile repair team services for Texas and Oklahoma, plus growing onsite support at Dallas Love Field.",
     category: "Press",
     date: "2024-04-01",
     dateDisplay: "April 1, 2024",
@@ -371,7 +371,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         kind: "paragraph",
-        text: "AIN highlighted PPA's specialization in Bombardier Challenger 300, Hawker, and Cessna Citation airframes, and our focus on supporting large MROs, charter operations, and aircraft management companies. Co-owners Tristan Noe and Travis Roberson discussed the company's growth trajectory two years after founding, the realities of hiring senior technicians in a tight labor market, and the parts-availability and turnaround pressures shaping the broader MRO industry.",
+        text: "AIN highlighted Plane Place Aviation's specialization in Bombardier Challenger 300, Hawker, and Cessna Citation airframes, and our focus on supporting large MROs, charter operations, and aircraft management companies. Co-owners Tristan Noe and Travis Roberson discussed the company's growth trajectory two years after founding, the realities of hiring senior technicians in a tight labor market, and the parts-availability and turnaround pressures shaping the broader MRO industry.",
       },
       {
         kind: "callout",
@@ -379,7 +379,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         kind: "paragraph",
-        text: "The full AIN article is available at AINonline. For PPA's current capabilities and AOG response coverage, see our [services page](/services).",
+        text: "The full AIN article is available at AINonline. For Plane Place Aviation's current capabilities and AOG response coverage, see our [services page](/services).",
       },
     ],
   },

@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: "https://ppa.aero/images/tech-working-on-wing.jpg",
-        alt: "PPA technician working on aircraft wing in the Cleburne hangar",
+        alt: "Plane Place Aviation technician working on aircraft wing in the Cleburne hangar",
       },
     ],
   },
@@ -42,7 +42,7 @@ export default function AboutPage() {
         <div className="absolute inset-0">
           <Image
             src="/images/tech-working-on-wing.jpg"
-            alt="PPA technician working on aircraft wing"
+            alt="Plane Place Aviation technician working on aircraft wing"
             fill
             className="object-cover"
             priority
@@ -53,7 +53,7 @@ export default function AboutPage() {
           <div className="flex items-center gap-3 mb-6">
             <span className="h-px w-8 bg-ppa-brass-bright" />
             <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass-bright">
-              About PPA
+              About Plane Place Aviation
             </span>
           </div>
           <div className="flex flex-col lg:flex-row lg:items-stretch gap-8 lg:gap-12">
@@ -122,7 +122,7 @@ export default function AboutPage() {
               <div className="aspect-[4/5] relative overflow-hidden">
                 <Image
                   src="/images/Winglet-Install---01.jpg"
-                  alt="PPA team collaborating on winglet structural work"
+                  alt="Plane Place Aviation team collaborating on winglet structural work"
                   fill
                   className="object-cover"
                 />
@@ -216,9 +216,9 @@ export default function AboutPage() {
       <section>
         <div className="grid grid-cols-3 gap-1">
           {[
-            { src: "/images/PPA-22.jpg", alt: "PPA operations" },
-            { src: "/images/PPA-Employees.jpg", alt: "PPA team" },
-            { src: "/images/PPA-HGR-98.jpg", alt: "PPA facility" },
+            { src: "/images/PPA-22.jpg", alt: "Plane Place Aviation operations" },
+            { src: "/images/PPA-Employees.jpg", alt: "Plane Place Aviation team" },
+            { src: "/images/PPA-HGR-98.jpg", alt: "Plane Place Aviation facility" },
           ].map((photo) => (
             <div key={photo.src} className="aspect-[16/9] relative overflow-hidden">
               <Image src={photo.src} alt={photo.alt} fill className="object-cover" />
@@ -241,9 +241,20 @@ export default function AboutPage() {
               <h2 className="font-display text-4xl sm:text-5xl text-ppa-black leading-none mb-8">
                 Certified. Trusted. Proven.
               </h2>
+              <p className="text-ppa-gray font-light leading-relaxed mb-8 max-w-xl">
+                Plane Place Aviation is an FAA-certified Part 145 repair
+                station with full authorization to perform airframe
+                maintenance, inspection, repair, and alteration on Hawker,
+                Citation, and Challenger aircraft. Our Part 145 certification
+                is the FAA's gold standard for independent MRO facilities —
+                it confirms our quality control, training, tooling, and
+                recordkeeping meet the same regulatory bar that OEM-authorized
+                service centers operate under. We're also AFAC-approved to
+                support Mexico-registered operators.
+              </p>
               <div className="space-y-4">
                 {[
-                  { name: "FAA Part 145 Repair Station", desc: "Full authorization for airframe maintenance, repair, and alteration." },
+                  { name: "FAA Part 145 Repair Station", desc: "Independent FAA-approved repair station serving Texas, Oklahoma, and beyond. Full airframe maintenance, inspection, and alteration authorization." },
                   { name: "Mexico AFAC Certification", desc: "Authorized to perform maintenance on Mexican-registered aircraft." },
                 ].map((cert) => (
                   <div key={cert.name} className="flex gap-4 p-5 border border-ppa-border">
@@ -268,9 +279,12 @@ export default function AboutPage() {
                 Cleburne, Texas — KCPT
               </h2>
               <p className="text-ppa-gray font-light leading-relaxed mb-6">
-                30 minutes south of DFW at Cleburne Regional Airport.
-                Lower operating costs that translate to better value
-                for our customers.
+                40,000 sq ft of hangar space across three hangars at
+                Cleburne Regional Airport — 30 minutes south of DFW.
+                Lower operating costs than Love Field or Addison
+                translate directly to better value for our customers,
+                with comfortable lounge and office space for visiting
+                crews.
               </p>
               <div className="space-y-1 text-sm text-ppa-muted mb-6">
                 <p>{COMPANY.address.street}</p>

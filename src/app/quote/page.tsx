@@ -45,7 +45,7 @@ export default function QuotePage() {
         <div className="absolute inset-0">
           <Image
             src="/images/hangar-work.jpg"
-            alt="PPA hangar operations"
+            alt="Plane Place Aviation hangar operations"
             fill
             className="object-cover"
             priority

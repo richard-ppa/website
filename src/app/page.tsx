@@ -43,7 +43,7 @@ const AIRFRAME_IMAGES: Record<string, { src: string; alt: string }> = {
   },
   citation: {
     src: "/images/Citation-Hangar.jpg",
-    alt: "Citation aircraft in the PPA hangar",
+    alt: "Citation aircraft in the Plane Place Aviation hangar",
   },
   challenger: {
     src: "/images/challenger.jpg",
@@ -134,7 +134,7 @@ export default function HomePage() {
         <div className="absolute inset-0">
           <Image
             src="/images/Winglet-Install-03.jpg"
-            alt="PPA technician silhouette working on wing at sunset"
+            alt="Plane Place Aviation technician silhouette working on wing at sunset"
             fill
             className="object-cover"
           />
@@ -198,7 +198,7 @@ export default function HomePage() {
                 <div className="aspect-[4/5] relative overflow-hidden">
                   <Image
                     src="/images/Winglet-Install---01.jpg"
-                    alt="PPA technicians collaborating on winglet structural work"
+                    alt="Plane Place Aviation technicians collaborating on winglet structural work"
                     fill
                     className="object-cover"
                   />
@@ -206,7 +206,7 @@ export default function HomePage() {
                 <div className="absolute -bottom-8 -right-8 w-2/5 aspect-square overflow-hidden border-4 border-ppa-black hidden lg:block">
                   <Image
                     src="/images/Tech-at-Station.jpg"
-                    alt="PPA technician at precision workstation"
+                    alt="Plane Place Aviation technician at precision workstation"
                     fill
                     className="object-cover"
                   />
@@ -219,7 +219,7 @@ export default function HomePage() {
                 <div className="flex items-center gap-3 mb-4">
                   <span className="h-px w-8 bg-ppa-brass" />
                   <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
-                    Why PPA
+                    Why Plane Place Aviation
                   </span>
                 </div>
                 <h2 className="font-display text-4xl sm:text-5xl text-ppa-black leading-none mb-6">
@@ -232,7 +232,7 @@ export default function HomePage() {
                   in 2022 — and still run it today. Not from an executive office,
                   but from the shop floor: setting the schedule, signing off on
                   work orders, and putting hands on the airplanes alongside the
-                  technicians. When you call PPA, the people responsible for the
+                  technicians. When you call Plane Place Aviation, the people responsible for the
                   quality of your maintenance answer the phone.
                 </p>
 

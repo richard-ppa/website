@@ -79,12 +79,15 @@ const SERVICE_DETAILS: Record<
   },
   "maintenance-management": {
     description:
-      "Consulting and management from people who specialize in your aircraft's maintenance. We help you plan maintenance events, manage budgets, and make informed decisions about your aircraft.",
+      "Aircraft maintenance management and consulting from operators who have been in your seat. Your time is valuable — let us do the dirty work and help you navigate your aircraft's maintenance. Our team can represent you in scheduling, negotiating, and overseeing maintenance visits, plan ahead to work on your schedule, reduce downtime, and lower operating costs. We provide one-on-one aircraft maintenance management, regulatory compliance with FAA and DOT requirements, aircraft storage at our Cleburne facility, and weekly, bi-weekly, or monthly service checks tailored to how you operate.",
     features: [
       "Maintenance tracking and scheduling",
+      "Regulatory compliance (FAA, DOT)",
       "Budget forecasting and cost analysis",
-      "Vendor management",
+      "Vendor management and oversight",
       "Records management and audit preparation",
+      "Aircraft storage at Cleburne",
+      "Weekly, bi-weekly, or monthly service checks",
       "Pre-purchase advisory services",
       "Fleet maintenance planning",
     ],
@@ -109,7 +112,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: "https://ppa.aero/images/Wing-MX.jpg",
-        alt: "PPA technician inspecting business jet underside during maintenance",
+        alt: "Plane Place Aviation technician inspecting business jet underside during maintenance",
       },
     ],
   },
@@ -130,7 +133,7 @@ export default function ServicesPage() {
         <div className="absolute inset-0">
           <Image
             src="/images/Wing-MX.jpg"
-            alt="PPA technician inspecting aircraft underside in hangar"
+            alt="Plane Place Aviation technician inspecting aircraft underside in hangar"
             fill
             className="object-cover"
             priority
@@ -178,7 +181,7 @@ export default function ServicesPage() {
         const number = `0${i + 1}`;
         const image =
           SERVICE_IMAGES[service.slug] || "/images/Aircraft-MX.jpg";
-        const altText = `PPA technician performing ${service.name.toLowerCase()} on business jet`;
+        const altText = `Plane Place Aviation technician performing ${service.name.toLowerCase()} on business jet`;
         const textRight = i % 2 === 1; // flip text panel side every other section
         const flipImage = service.slug === "avionics";
 
