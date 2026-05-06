@@ -1,377 +1,132 @@
-"use client";
-
-import { useCallback, useEffect, useState } from "react";
-import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import Link from "next/link";
 import { PageContainer, PageHeader } from "@/components/admin/PageHeader";
-import { SetupRequired } from "@/components/admin/SetupRequired";
-import { Stat, StatGrid } from "@/components/admin/Stat";
 
-interface SeoRow {
-  clicks: number;
-  impressions: number;
-  ctr: number;
-  position: number;
-}
+const GSC_URL = "https://search.google.com/search-console?resource_id=sc-domain:ppa.aero";
+const GSC_GENERIC_URL = "https://search.google.com/search-console";
 
-interface SeoSummary {
-  totalClicks: number;
-  totalImpressions: number;
-  avgPosition: number;
-  avgCtr: number;
-  topQueries: Array<SeoRow & { query: string }>;
-  topPages: Array<SeoRow & { page: string }>;
-  daily: Array<{ date: string; clicks: number; impressions: number }>;
-}
-
-type FetchState =
-  | { status: "loading" }
-  | { status: "ok"; data: SeoSummary }
-  | { status: "not-configured" }
-  | { status: "fetch-failed"; detail: string };
-
-const SETUP_STEPS = [
-  "Go to Google Cloud Console → create a project (or use existing) → enable Search Console API",
-  "Create a service account, generate a JSON key file",
-  "In Search Console → Settings → Users and permissions → add the service account email as a Restricted user for ppa.aero",
-  "In Cloudflare Pages → Settings → Environment variables → add GSC_SERVICE_ACCOUNT_KEY (Secret) with the contents of the JSON key file",
-  "Add GSC_PROPERTY env var (plain text) with value 'sc-domain:ppa.aero' (or the full URL form if you only verified one)",
-  "Redeploy. This page will populate within minutes.",
+const GSC_FEATURES = [
+  {
+    title: "Search performance",
+    desc: "Clicks, impressions, CTR, and average position over time. Filter by query, page, country, device, and search appearance.",
+  },
+  {
+    title: "Keyword + page tracking",
+    desc: "See exactly which queries drive traffic and which pages they land on. Critical for the migration monitoring window.",
+  },
+  {
+    title: "Coverage + indexing",
+    desc: "Catch indexing issues before they hurt traffic — soft 404s, redirect errors, blocked pages, validation failures.",
+  },
+  {
+    title: "Core Web Vitals",
+    desc: "Real-user performance signals (LCP, INP, CLS) on mobile and desktop. Google uses these for ranking.",
+  },
+  {
+    title: "Sitemaps + URL Inspection",
+    desc: "Submit sitemaps, request indexing on specific URLs, see when Google last crawled a page.",
+  },
+  {
+    title: "Manual actions + security",
+    desc: "Spam penalties, hacked content alerts, mobile usability issues — all surfaced here first.",
+  },
 ];
 
-const BRASS = "#a4824a";
-const GRAY = "#6b7280";
-
-function formatInt(n: number): string {
-  return new Intl.NumberFormat("en-US").format(Math.round(n));
-}
-
-function formatPercent(n: number, decimals = 1): string {
-  return `${(n * 100).toFixed(decimals)}%`;
-}
-
-function formatPosition(n: number): string {
-  return n.toFixed(1);
-}
-
-function formatDateShort(iso: string): string {
-  // iso is "YYYY-MM-DD"
-  const [, m, d] = iso.split("-");
-  return `${m}/${d}`;
-}
-
-export default function SeoPage() {
-  const [state, setState] = useState<FetchState>({ status: "loading" });
-
-  const load = useCallback(async () => {
-    setState({ status: "loading" });
-    try {
-      const res = await fetch("/admin/api/seo", { cache: "no-store" });
-      if (res.status === 503) {
-        const body = (await res.json().catch(() => ({}))) as {
-          error?: string;
-          detail?: string;
-        };
-        if (body.error === "gsc-not-configured") {
-          setState({ status: "not-configured" });
-          return;
-        }
-        setState({
-          status: "fetch-failed",
-          detail: body.detail || body.error || "Search Console request failed.",
-        });
-        return;
-      }
-      if (!res.ok) {
-        setState({
-          status: "fetch-failed",
-          detail: `Unexpected response (${res.status})`,
-        });
-        return;
-      }
-      const data = (await res.json()) as SeoSummary;
-      setState({ status: "ok", data });
-    } catch (err) {
-      setState({
-        status: "fetch-failed",
-        detail: err instanceof Error ? err.message : "Network error",
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    load();
-  }, [load]);
-
+export default function AdminSeoPage() {
   return (
     <PageContainer>
       <PageHeader
         eyebrow="Search Console"
         title="Organic search performance"
-        description="Last 28 days. Data from Google Search Console for ppa.aero."
+        description="SEO data lives in Google Search Console — open it directly for full keyword tracking, indexing health, and Core Web Vitals."
       />
 
-      {state.status === "loading" && (
-        <div className="text-sm text-ppa-muted">Loading Search Console data…</div>
-      )}
-
-      {state.status === "not-configured" && (
-        <SetupRequired
-          title="Google Search Console not connected"
-          description="Connecting GSC requires a Google Cloud service account with read access to the ppa.aero property."
-          steps={SETUP_STEPS}
-        />
-      )}
-
-      {state.status === "fetch-failed" && (
-        <div className="bg-red-50 border border-red-300 p-6 lg:p-8">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-red-800 mb-2">
-            Search Console error
+      {/* Primary CTA card */}
+      <div className="bg-ppa-white border border-ppa-border p-8 lg:p-10 mb-10">
+        <div className="grid lg:grid-cols-[1fr_auto] gap-8 items-center">
+          <div>
+            <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-brass mb-2">
+              ppa.aero · Verified property
+            </div>
+            <h2 className="font-display text-2xl sm:text-3xl text-ppa-black mb-3">
+              Open Google Search Console
+            </h2>
+            <p className="text-sm text-ppa-gray font-light leading-relaxed max-w-2xl">
+              Search Console is the source of truth for all organic search data
+              on ppa.aero. We deliberately link out instead of mirroring the
+              data here — GSC&apos;s native interface is dramatically more
+              capable, always up to date, and one click away.
+            </p>
           </div>
-          <h2 className="font-display text-2xl text-red-900 mb-2">
-            Couldn&apos;t fetch Search Console data
-          </h2>
-          <p className="text-sm text-red-900/80 mb-4 break-words">{state.detail}</p>
-          <button
-            type="button"
-            onClick={load}
-            className="inline-flex items-center px-4 py-2 bg-red-900 text-white text-xs font-semibold uppercase tracking-[0.15em] hover:bg-red-800 transition-colors"
-          >
-            Try again
-          </button>
-        </div>
-      )}
-
-      {state.status === "ok" && <SeoDashboard data={state.data} />}
-    </PageContainer>
-  );
-}
-
-function SeoDashboard({ data }: { data: SeoSummary }) {
-  return (
-    <>
-      <StatGrid>
-        <Stat label="Total clicks" value={formatInt(data.totalClicks)} hint="28 days" />
-        <Stat
-          label="Total impressions"
-          value={formatInt(data.totalImpressions)}
-          hint="28 days"
-        />
-        <Stat label="Average position" value={formatPosition(data.avgPosition)} hint="Lower is better" />
-        <Stat label="Average CTR" value={formatPercent(data.avgCtr)} hint="Clicks ÷ impressions" />
-      </StatGrid>
-
-      <section className="mb-10">
-        <div className="bg-ppa-white border border-ppa-border p-5 lg:p-6">
-          <div className="flex items-baseline justify-between mb-4 gap-4 flex-wrap">
-            <h2 className="font-display text-xl text-ppa-black">Daily clicks &amp; impressions</h2>
-            <p className="text-xs text-ppa-muted">Last 28 days</p>
-          </div>
-          <div className="h-[320px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data.daily} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
-                <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false} />
-                <XAxis
-                  dataKey="date"
-                  tickFormatter={formatDateShort}
-                  tick={{ fontSize: 11, fill: GRAY }}
-                  stroke="#d1d5db"
-                />
-                <YAxis
-                  yAxisId="left"
-                  tick={{ fontSize: 11, fill: BRASS }}
-                  stroke="#d1d5db"
-                  allowDecimals={false}
-                />
-                <YAxis
-                  yAxisId="right"
-                  orientation="right"
-                  tick={{ fontSize: 11, fill: GRAY }}
-                  stroke="#d1d5db"
-                  allowDecimals={false}
-                />
-                <Tooltip
-                  contentStyle={{
-                    background: "white",
-                    border: "1px solid #e5e7eb",
-                    fontSize: 12,
-                  }}
-                  labelFormatter={(label) => `Date: ${label}`}
-                />
-                <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Line
-                  yAxisId="left"
-                  type="monotone"
-                  dataKey="clicks"
-                  name="Clicks"
-                  stroke={BRASS}
-                  strokeWidth={2}
-                  dot={false}
-                  activeDot={{ r: 4 }}
-                />
-                <Line
-                  yAxisId="right"
-                  type="monotone"
-                  dataKey="impressions"
-                  name="Impressions"
-                  stroke={GRAY}
-                  strokeWidth={2}
-                  dot={false}
-                  activeDot={{ r: 4 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </section>
-
-      <section className="mb-10">
-        <h2 className="font-display text-xl text-ppa-black mb-3">Top 20 queries</h2>
-        <DataTable
-          columns={[
-            { key: "query", label: "Query", className: "text-left" },
-            { key: "clicks", label: "Clicks", numeric: true, render: (r) => formatInt(r.clicks) },
-            {
-              key: "impressions",
-              label: "Impressions",
-              numeric: true,
-              render: (r) => formatInt(r.impressions),
-            },
-            { key: "ctr", label: "CTR", numeric: true, render: (r) => formatPercent(r.ctr) },
-            {
-              key: "position",
-              label: "Position",
-              numeric: true,
-              render: (r) => formatPosition(r.position),
-            },
-          ]}
-          rows={data.topQueries.map((r) => ({ ...r, label: r.query }))}
-          empty="No query data for this period."
-        />
-      </section>
-
-      <section>
-        <h2 className="font-display text-xl text-ppa-black mb-3">Top 20 pages</h2>
-        <DataTable
-          columns={[
-            { key: "page", label: "Page", className: "text-left", render: (r) => (
-              <a
-                href={r.page}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-ppa-black hover:text-ppa-brass underline-offset-2 hover:underline break-all"
-              >
-                {r.page}
-              </a>
-            ) },
-            { key: "clicks", label: "Clicks", numeric: true, render: (r) => formatInt(r.clicks) },
-            {
-              key: "impressions",
-              label: "Impressions",
-              numeric: true,
-              render: (r) => formatInt(r.impressions),
-            },
-            { key: "ctr", label: "CTR", numeric: true, render: (r) => formatPercent(r.ctr) },
-            {
-              key: "position",
-              label: "Position",
-              numeric: true,
-              render: (r) => formatPosition(r.position),
-            },
-          ]}
-          rows={data.topPages.map((r) => ({ ...r, label: r.page }))}
-          empty="No page data for this period."
-        />
-      </section>
-    </>
-  );
-}
-
-interface TableRow {
-  query?: string;
-  page?: string;
-  label: string;
-  clicks: number;
-  impressions: number;
-  ctr: number;
-  position: number;
-}
-
-interface TableColumn {
-  key: string;
-  label: string;
-  numeric?: boolean;
-  className?: string;
-  render?: (row: TableRow) => React.ReactNode;
-}
-
-function DataTable({
-  columns,
-  rows,
-  empty,
-}: {
-  columns: TableColumn[];
-  rows: TableRow[];
-  empty: string;
-}) {
-  if (rows.length === 0) {
-    return (
-      <div className="bg-ppa-white border border-ppa-border p-6 text-sm text-ppa-muted">
-        {empty}
-      </div>
-    );
-  }
-  return (
-    <div className="bg-ppa-white border border-ppa-border overflow-x-auto">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b border-ppa-border bg-ppa-light/40">
-            {columns.map((col) => (
-              <th
-                key={col.key}
-                className={`px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.15em] text-ppa-muted ${
-                  col.numeric ? "text-right" : "text-left"
-                }`}
-              >
-                {col.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row, i) => (
-            <tr
-              key={`${row.label}-${i}`}
-              className="border-b border-ppa-border/60 last:border-b-0 hover:bg-ppa-light/30"
+          <div className="flex flex-col sm:flex-row gap-3 lg:flex-col">
+            <Link
+              href={GSC_URL}
+              target="_blank"
+              rel="noopener"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 text-[12px] font-semibold uppercase tracking-[0.15em] text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark transition-colors whitespace-nowrap"
             >
-              {columns.map((col) => {
-                const fallback =
-                  col.key === "query" || col.key === "page"
-                    ? row.label
-                    : (row[col.key as keyof TableRow] as React.ReactNode);
-                return (
-                  <td
-                    key={col.key}
-                    className={`px-4 py-2.5 ${
-                      col.numeric ? "text-right tabular-nums" : "text-left"
-                    } text-ppa-black`}
-                  >
-                    {col.render ? col.render(row) : fallback}
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+              Open Search Console
+              <svg
+                className="w-3.5 h-3.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </Link>
+            <Link
+              href={GSC_GENERIC_URL}
+              target="_blank"
+              rel="noopener"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 text-[12px] font-semibold uppercase tracking-[0.15em] text-ppa-dark border border-ppa-border hover:bg-ppa-light transition-colors whitespace-nowrap"
+            >
+              All properties
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* What you'll find in GSC */}
+      <h3 className="font-display text-xl text-ppa-black mb-4">What's in Search Console</h3>
+      <div className="grid sm:grid-cols-2 gap-3 mb-10">
+        {GSC_FEATURES.map((f) => (
+          <div key={f.title} className="bg-ppa-white border border-ppa-border p-5">
+            <div className="font-display text-base text-ppa-black mb-1.5">{f.title}</div>
+            <p className="text-sm text-ppa-gray font-light leading-relaxed">{f.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Quick reference / migration notes */}
+      <div className="bg-ppa-light border border-ppa-border p-5">
+        <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-brass mb-2">
+          Reference
+        </div>
+        <ul className="text-sm text-ppa-dark space-y-1.5 font-light">
+          <li>
+            <span className="text-ppa-muted">Property type:</span>{" "}
+            <code className="text-xs bg-ppa-white px-1.5 py-0.5 border border-ppa-border">
+              sc-domain:ppa.aero
+            </code>
+          </li>
+          <li>
+            <span className="text-ppa-muted">Verified Owner:</span> richard@ppa.aero
+          </li>
+          <li>
+            <span className="text-ppa-muted">Old property (still active during migration):</span>{" "}
+            <Link
+              href="https://search.google.com/search-console?resource_id=sc-domain:planeplaceaviation.com"
+              target="_blank"
+              rel="noopener"
+              className="text-ppa-brass-dark underline decoration-ppa-brass/40 underline-offset-4 hover:decoration-ppa-brass-dark transition-colors"
+            >
+              planeplaceaviation.com
+            </Link>{" "}
+            <span className="text-ppa-muted">— monitor for traffic decline as ppa.aero indexes</span>
+          </li>
+        </ul>
+      </div>
+    </PageContainer>
   );
 }

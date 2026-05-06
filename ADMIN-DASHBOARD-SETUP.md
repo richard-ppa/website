@@ -8,7 +8,7 @@ The `/admin` dashboard is a custom-built management interface for monitoring lea
 |---|---|---|---|
 | Overview | `/admin` | — | Always works |
 | Leads | `/admin/leads` | Cloudflare KV | KV namespace + binding |
-| SEO | `/admin/seo` | Google Search Console API | Google service account creds |
+| SEO | `/admin/seo` | Links out to Google Search Console | None (deliberate) |
 | Traffic | `/admin/traffic` | Cloudflare GraphQL Analytics | Cloudflare API token |
 | Operations | `/admin/operations` | Resend API + R2 binding | Already set up from form work |
 
@@ -72,40 +72,28 @@ The `/admin/leads` page reads these. Existing submissions made BEFORE setup won'
 
 ---
 
-## Module 2: SEO (most setup work)
+## Module 2: SEO (no setup needed — links out to GSC)
 
-Pulls organic search data from Google Search Console.
+The SEO module deliberately does NOT mirror Google Search Console data. Instead, `/admin/seo` shows a polished landing card with a prominent "Open Search Console" button.
 
-### Setup
+### Why no API integration
 
-1. **Google Cloud Console**:
-   - Go to [console.cloud.google.com](https://console.cloud.google.com/)
-   - Create or select a project (e.g., "PPA Marketing")
-   - APIs & Services → Library → search "Search Console API" → **Enable**
-2. **Create service account**:
-   - APIs & Services → Credentials → **Create Credentials** → **Service Account**
-   - Name: `ppa-admin-dashboard`
-   - Skip optional grants → **Done**
-   - Click the new service account → **Keys** tab → **Add Key** → **Create new key** → JSON → download the file
-3. **Grant the service account access to GSC**:
-   - Open [search.google.com/search-console](https://search.google.com/search-console)
-   - Select your `ppa.aero` property → Settings → **Users and permissions**
-   - **Add user**:
-     - Email: the service account email (looks like `ppa-admin-dashboard@your-project.iam.gserviceaccount.com`)
-     - Permission: **Restricted** (read-only is fine)
-4. **Add to Cloudflare Pages env vars**:
-   - Workers & Pages → ppa-website-8vu → Settings → Environment variables → Add:
-     - `GSC_SERVICE_ACCOUNT_KEY` (Secret) → paste the **entire contents** of the JSON key file
-     - `GSC_PROPERTY` (plain text) → either `sc-domain:ppa.aero` (if you have domain-level verification) or `https://ppa.aero/` (if URL-prefix property)
-5. **Trigger redeploy**
+We tried (twice) to wire up GSC API access via service account auth:
+1. Searched Console's "Add User" flow returned "email not found" for service account emails — a known issue for Google accounts that don't have a Workspace org backing them
+2. The OAuth alternative requires either a 7-day re-auth ritual (Testing mode) or 4-8 weeks of Google verification (since `webmasters.readonly` is a sensitive scope)
 
-To find which property format to use, look at your GSC properties — domain properties show `sc-domain:` prefix.
+The trade-off comparison:
+- Native GSC has dramatically more capability than what we'd build (filters, comparisons, Discover data, manual actions, Core Web Vitals, etc.)
+- It's already one click away
+- No tokens to rotate, no quota to manage, no integration to maintain
 
-### Notes
+### What's on /admin/seo
 
-- The service account file should be guarded — anyone with it has read access to your GSC data.
-- The JSON contains escaped newlines in the private key; just paste the raw file contents and the function will handle it.
-- Data updates with a ~24-48h lag (this is GSC's normal lag, not our cache).
+- Link card with prominent "Open Search Console →" button (deep-links to the ppa.aero property)
+- Reference list of capabilities you'll find in GSC
+- Quick reference: property type, verified owner, link to old planeplaceaviation.com property for migration monitoring
+
+No env vars or bindings needed for this module.
 
 ---
 
@@ -172,7 +160,7 @@ If both are present, this module works automatically. If neither is, the page sh
 │  Pages Functions (functions/admin/api/*.ts)                       │
 │                                                                   │
 │  leads.ts       → reads Cloudflare KV (LEADS_KV)                 │
-│  seo.ts         → calls Google Search Console API (JWT auth)     │
+│  (no seo.ts)    → /admin/seo links out to GSC, no API needed    │
 │  traffic.ts     → calls Cloudflare GraphQL Analytics API         │
 │  operations.ts  → calls Resend API + lists R2 bucket             │
 └──────────────────────────────────────────────────────────────────┘
@@ -183,8 +171,6 @@ If both are present, this module works automatically. If neither is, the page sh
 | Variable | Type | Module | Source |
 |---|---|---|---|
 | `LEADS_KV` | KV binding | Leads | Cloudflare KV namespace |
-| `GSC_SERVICE_ACCOUNT_KEY` | Secret | SEO | Google Cloud service account JSON |
-| `GSC_PROPERTY` | Plain | SEO | `sc-domain:ppa.aero` or URL form |
 | `CLOUDFLARE_API_TOKEN` | Secret | Traffic | Cloudflare API tokens page |
 | `CLOUDFLARE_ACCOUNT_ID` | Plain | Traffic | Cloudflare overview sidebar |
 | `CLOUDFLARE_ZONE_ID` | Plain | Traffic | Cloudflare overview sidebar |
@@ -210,9 +196,9 @@ src/components/admin/
 
 functions/admin/api/
 ├── leads.ts             # Reads LEADS_KV
-├── seo.ts               # Calls Google Search Console API
 ├── traffic.ts           # Calls Cloudflare GraphQL Analytics
 └── operations.ts        # Resend + R2
+                         # (no seo.ts — module links out to GSC)
 
 functions/_shared/
 └── leads.ts             # KV schema + helpers (recordLead, readLeadsSummary)
@@ -227,16 +213,6 @@ Cloudflare Access not configured. Set up the Access app per the first section ab
 ### Leads page shows "KV not configured" but I created the namespace
 
 The KV namespace itself isn't enough — you also need the **binding** in Pages settings. Workers & Pages → ppa-website-8vu → Settings → Functions → KV namespace bindings → Add `LEADS_KV` → `ppa-leads`. Then redeploy.
-
-### SEO page shows "GSC fetch failed"
-
-Common causes:
-1. Service account email not added to GSC users (most common)
-2. `GSC_PROPERTY` value wrong (check sc-domain: prefix vs URL form)
-3. Service account JSON has been corrupted in copy/paste — re-paste from the original file
-4. Search Console API not enabled in your Google Cloud project
-
-Check Cloudflare Pages → Functions → real-time logs while you reload `/admin/seo` for the actual error message.
 
 ### Traffic page shows "Cloudflare Analytics fetch failed"
 
