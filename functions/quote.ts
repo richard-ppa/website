@@ -197,10 +197,17 @@ async function verifyTurnstile(token: string, secret: string, remoteIp: string):
       method: "POST",
       body: new URLSearchParams({ secret, response: token, remoteip: remoteIp }),
     });
-    if (!res.ok) return false;
-    const data = (await res.json()) as { success: boolean };
+    if (!res.ok) {
+      console.error("Turnstile siteverify HTTP error", res.status, await res.text().catch(() => ""));
+      return false;
+    }
+    const data = (await res.json()) as { success: boolean; "error-codes"?: string[] };
+    if (data.success !== true) {
+      console.error("Turnstile validation failed", { errorCodes: data["error-codes"] });
+    }
     return data.success === true;
-  } catch {
+  } catch (e) {
+    console.error("Turnstile siteverify threw", e);
     return false;
   }
 }
