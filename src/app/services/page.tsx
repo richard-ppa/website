@@ -4,13 +4,13 @@ import Image from "next/image";
 import { COMPANY, SERVICES } from "@/lib/constants";
 import { Breadcrumb } from "@/components/Breadcrumb";
 
-const SERVICE_IMAGES: Record<string, string> = {
-  "scheduled-maintenance": "/images/Engine-MX.jpg",
-  "pre-purchase-inspections": "/images/pp-inspection.jpg",
-  "aog-response": "/images/aog.jpg",
-  "structural-repairs": "/images/structural-repairs.jpg",
-  avionics: "/images/avionics.jpg",
-  "maintenance-management": "/images/pre-purchase.png",
+const SERVICE_IMAGES: Record<string, { src: string; mobilePosition?: string; desktopPosition?: string }> = {
+  "scheduled-maintenance": { src: "/images/Engine-MX.jpg", mobilePosition: "center" },
+  "pre-purchase-inspections": { src: "/images/pp-inspection.jpg", mobilePosition: "center" },
+  "aog-response": { src: "/images/aog.jpg", mobilePosition: "center" },
+  "structural-repairs": { src: "/images/structural-repairs.jpg", mobilePosition: "center" },
+  avionics: { src: "/images/avionics.jpg", mobilePosition: "center" },
+  "maintenance-management": { src: "/images/pre-purchase.png", mobilePosition: "center 30%" },
 };
 
 const SERVICE_DETAILS: Record<
@@ -182,8 +182,8 @@ export default function ServicesPage() {
       {SERVICES.map((service, i) => {
         const details = SERVICE_DETAILS[service.slug];
         const number = `0${i + 1}`;
-        const image =
-          SERVICE_IMAGES[service.slug] || "/images/Aircraft-MX.jpg";
+        const imageConfig = SERVICE_IMAGES[service.slug] || { src: "/images/Aircraft-MX.jpg" };
+        const image = imageConfig.src;
         const altText = `Plane Place Aviation technician performing ${service.name.toLowerCase()} on business jet`;
         const textRight = i % 2 === 1; // flip text panel side every other section
         const flipImage = service.slug === "avionics";
@@ -199,10 +199,16 @@ export default function ServicesPage() {
               alt={altText}
               fill
               className={`object-cover ${flipImage ? "scale-x-[-1]" : ""}`}
+              style={{
+                objectPosition: imageConfig.mobilePosition || "center",
+              }}
               sizes="100vw"
             />
+            {/* Mobile overlay: top-heavy gradient ensures readability of text in upper portion */}
+            <div className="absolute inset-0 bg-gradient-to-b from-ppa-black/80 via-ppa-black/65 to-ppa-black/40 lg:hidden" />
+            {/* Desktop overlay: side gradient pointing toward the text panel */}
             <div
-              className={`absolute inset-0 ${
+              className={`absolute inset-0 hidden lg:block ${
                 textRight
                   ? "bg-gradient-to-l from-ppa-black via-ppa-black/70 to-ppa-black/10"
                   : "bg-gradient-to-r from-ppa-black via-ppa-black/70 to-ppa-black/10"

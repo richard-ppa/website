@@ -305,7 +305,7 @@ export default async function AirframePage({
       )}
 
       {/* Capabilities — cinematic full-bleed */}
-      <section className="relative h-[85vh] min-h-[620px] overflow-hidden">
+      <section className="relative min-h-[620px] lg:h-[85vh] overflow-hidden">
         <Image
           src={serviceImg.src}
           alt={serviceImg.alt}
@@ -313,9 +313,12 @@ export default async function AirframePage({
           className="object-cover"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-ppa-black via-ppa-black/70 to-ppa-black/10" />
-        <div className="absolute inset-0 flex items-end">
-          <div className="w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16 lg:pb-24">
+        {/* Mobile overlay: top-heavy gradient for readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-ppa-black/80 via-ppa-black/65 to-ppa-black/40 lg:hidden" />
+        {/* Desktop overlay: side gradient */}
+        <div className="absolute inset-0 hidden lg:block bg-gradient-to-r from-ppa-black via-ppa-black/70 to-ppa-black/10" />
+        <div className="relative lg:absolute lg:inset-0 lg:flex lg:items-end">
+          <div className="w-full max-w-[1400px] mx-auto px-6 lg:px-10 py-16 lg:py-0 lg:pb-24">
             <div className="max-w-2xl">
               <span className="font-display text-6xl lg:text-[8rem] text-ppa-brass-bright/40 leading-[0.85] block mb-3">
                 {airframe.name}
