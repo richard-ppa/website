@@ -22,12 +22,19 @@ interface R2Bucket {
   delete(key: string): Promise<void>;
 }
 
+interface KVNamespace {
+  get(key: string): Promise<string | null>;
+  put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
+  list(options?: { prefix?: string; limit?: number; cursor?: string }): Promise<unknown>;
+}
+
 interface Env {
   RESEND_API_KEY: string;
   TURNSTILE_SECRET_KEY: string;
   VIRUSTOTAL_API_KEY: string;
   FILE_SIGNING_SECRET: string;
   QUOTE_FILES: R2Bucket;
+  LEADS_KV?: KVNamespace; // Optional — admin dashboard tracking
 }
 
 interface PagesContext<E> {
@@ -432,6 +439,28 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
     const body = await resendRes.text();
     console.error("Resend API error", resendRes.status, body);
     return errorRedirect("send-failed");
+  }
+
+  // Write to KV for admin dashboard (best-effort, don't fail submission if this fails)
+  if (env.LEADS_KV) {
+    try {
+      const { recordLead } = await import("./_shared/leads");
+      await recordLead(env.LEADS_KV, {
+        id: uuidv4(),
+        type: "quote",
+        ts: new Date().toISOString(),
+        name,
+        company,
+        email,
+        phone,
+        airframe,
+        service,
+        timeline,
+        attachments: processed.length,
+      });
+    } catch (e) {
+      console.error("Lead tracking write failed", e);
+    }
   }
 
   return Response.redirect(new URL("/quote/thank-you", url).toString(), 303);

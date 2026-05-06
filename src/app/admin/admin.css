@@ -1,0 +1,33 @@
+/* Shared admin styles */
+.admin-card {
+  background: var(--ppa-white, #ffffff);
+  border: 1px solid var(--ppa-border, #e5e7eb);
+  padding: 1.5rem;
+}
+
+.admin-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--ppa-muted, #6b7280);
+  font-weight: 600;
+}
+
+.admin-stat-value {
+  font-size: 2rem;
+  line-height: 1;
+  font-weight: 600;
+  color: var(--ppa-black, #111827);
+  font-feature-settings: "tnum" 1;
+}
+
+.admin-stat-delta {
+  font-size: 12px;
+  font-weight: 500;
+}

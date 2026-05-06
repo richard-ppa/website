@@ -1,9 +1,16 @@
 // Cloudflare Pages Function — handles POST to /contact
 // Send Us a Message form. Turnstile-protected, no file attachments.
 
+interface KVNamespace {
+  get(key: string): Promise<string | null>;
+  put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
+  list(options?: { prefix?: string; limit?: number; cursor?: string }): Promise<unknown>;
+}
+
 interface Env {
   RESEND_API_KEY: string;
   TURNSTILE_SECRET_KEY: string;
+  LEADS_KV?: KVNamespace;
 }
 
 interface PagesContext<E> {
@@ -154,6 +161,25 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
     const body = await resendRes.text();
     console.error("Resend API error", resendRes.status, body);
     return errorRedirect("send-failed");
+  }
+
+  // Write to KV for admin dashboard (best-effort)
+  if (env.LEADS_KV) {
+    try {
+      const { recordLead } = await import("./_shared/leads");
+      await recordLead(env.LEADS_KV, {
+        id: crypto.randomUUID(),
+        type: "contact",
+        ts: new Date().toISOString(),
+        name,
+        company,
+        email,
+        phone,
+        messagePreview: message.slice(0, 200),
+      });
+    } catch (e) {
+      console.error("Lead tracking write failed", e);
+    }
   }
 
   return Response.redirect(new URL("/contact/thank-you", url).toString(), 303);
