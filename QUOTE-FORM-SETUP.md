@@ -9,14 +9,14 @@ User submits form on ppa.aero/quote
         ↓
 Cloudflare Pages Function (functions/quote.ts)
         ↓
-Resend API (sends FROM noreply@estimates.ppa.aero)
+Resend API (sends FROM noreply@app.ppa.aero)
         ↓
 quotes@ppa.aero
         ↓
 Cloudflare Email Routing forwards to your real inbox
 ```
 
-- **Sending domain**: `estimates.ppa.aero` (verified in Resend)
+- **Sending domain**: `app.ppa.aero` (verified in Resend)
 - **Receiving address**: `quotes@ppa.aero` (Cloudflare Email Routing → your real inbox)
 - **Reply-To**: customer's email (so you can reply directly to the requester)
 
@@ -67,7 +67,7 @@ Check the Cloudflare Pages **Functions logs** in the dashboard:
 
 Common causes:
 - `RESEND_API_KEY` not set or wrong → check env var
-- Resend domain not verified → check `estimates.ppa.aero` shows Verified in Resend dashboard
+- Resend domain not verified → check `app.ppa.aero` shows Verified in Resend dashboard
 - Rate limit hit → Resend free tier is 100/day, 3000/month
 
 ### Emails not arriving
@@ -92,7 +92,7 @@ Total attachment size limit: 25MB (Pages Function code) / 40MB (Resend ceiling).
 To change the recipient or sender, edit the constants at the top of `functions/quote.ts`:
 
 ```ts
-const FROM_ADDRESS = "Plane Place Aviation Quotes <noreply@estimates.ppa.aero>";
+const FROM_ADDRESS = "Plane Place Aviation Quotes <noreply@app.ppa.aero>";
 const TO_ADDRESS = "quotes@ppa.aero";
 ```
 

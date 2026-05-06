@@ -14,7 +14,7 @@ interface PagesContext<E> {
 }
 type PagesHandler<E> = (context: PagesContext<E>) => Response | Promise<Response>;
 
-const FROM_ADDRESS = "Plane Place Aviation Quotes <noreply@estimates.ppa.aero>";
+const FROM_ADDRESS = "Plane Place Aviation Quotes <noreply@app.ppa.aero>";
 const TO_ADDRESS = "quotes@ppa.aero";
 const MAX_TOTAL_BYTES = 25 * 1024 * 1024; // 25MB total — Resend cap is 40MB, leave headroom
 
