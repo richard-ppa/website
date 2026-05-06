@@ -1,13 +1,35 @@
 // Cloudflare Pages Function — handles POST to /quote
-// Receives the form submission, builds an email, sends via Resend.
-// On success: 303 redirect to /quote/thank-you
-// On error: 303 redirect to /quote?error=...
+//
+// Flow:
+//  1. Validate Turnstile token (server-side)
+//  2. Honeypot + required-field checks
+//  3. Validate each file (extension, magic bytes, size, sanitized filename)
+//  4. Scan each file with VirusTotal (synchronous polling, ~25s budget)
+//  5. Upload clean files to R2 with UUID keys
+//  6. Build HMAC-signed download URLs (30-day expiry)
+//  7. Send email via Resend with download links (NOT attachments)
+
+interface R2PutOptions {
+  httpMetadata?: {
+    contentType?: string;
+    contentDisposition?: string;
+  };
+  customMetadata?: Record<string, string>;
+}
+interface R2Bucket {
+  put(key: string, value: ArrayBuffer | ReadableStream | string, options?: R2PutOptions): Promise<unknown>;
+  get(key: string): Promise<unknown>;
+  delete(key: string): Promise<void>;
+}
 
 interface Env {
   RESEND_API_KEY: string;
+  TURNSTILE_SECRET_KEY: string;
+  VIRUSTOTAL_API_KEY: string;
+  FILE_SIGNING_SECRET: string;
+  QUOTE_FILES: R2Bucket;
 }
 
-// Inline type defs so we don't need @cloudflare/workers-types installed
 interface PagesContext<E> {
   request: Request;
   env: E;
@@ -16,7 +38,13 @@ type PagesHandler<E> = (context: PagesContext<E>) => Response | Promise<Response
 
 const FROM_ADDRESS = "Plane Place Aviation Quotes <noreply@app.ppa.aero>";
 const TO_ADDRESS = "quotes@ppa.aero";
-const MAX_TOTAL_BYTES = 25 * 1024 * 1024; // 25MB total — Resend cap is 40MB, leave headroom
+const ALLOWED_EXTENSIONS = ["pdf", "xls", "xlsx"] as const;
+const MAX_FILE_BYTES = 10 * 1024 * 1024; // 10MB per file
+const MAX_FILES = 5;
+const MAX_TOTAL_BYTES = 25 * 1024 * 1024; // 25MB total
+const VT_POLL_MAX_ATTEMPTS = 12; // 12 × 2s = 24s
+const VT_POLL_INTERVAL_MS = 2000;
+const SIGNED_URL_TTL_SECONDS = 60 * 60 * 24 * 30; // 30 days
 
 function escapeHtml(s: string): string {
   return s
@@ -27,14 +55,147 @@ function escapeHtml(s: string): string {
     .replace(/'/g, "&#39;");
 }
 
-function bufferToBase64(buf: ArrayBuffer): string {
-  // Cloudflare Workers runtime supports btoa on binary strings
-  const bytes = new Uint8Array(buf);
-  let binary = "";
-  for (let i = 0; i < bytes.byteLength; i++) {
-    binary += String.fromCharCode(bytes[i]);
+function sanitizeFilename(name: string): string {
+  // Strip path separators, control chars, leading dots; trim length
+  const cleaned = name
+    .replace(/[/\\]/g, "_")
+    .replace(/[\x00-\x1f]/g, "")
+    .replace(/^\.+/, "")
+    .trim();
+  return cleaned.length > 100 ? cleaned.slice(0, 100) : cleaned || "file";
+}
+
+function getExtension(filename: string): string {
+  const idx = filename.lastIndexOf(".");
+  return idx === -1 ? "" : filename.slice(idx + 1).toLowerCase();
+}
+
+// Magic-byte check — verifies file content matches its claimed extension
+function checkMagicBytes(bytes: Uint8Array, ext: string): boolean {
+  if (bytes.length < 8) return false;
+  if (ext === "pdf") {
+    // %PDF-
+    return bytes[0] === 0x25 && bytes[1] === 0x50 && bytes[2] === 0x44 && bytes[3] === 0x46 && bytes[4] === 0x2d;
   }
-  return btoa(binary);
+  if (ext === "xls") {
+    // OLE compound document: D0 CF 11 E0 A1 B1 1A E1
+    return (
+      bytes[0] === 0xd0 && bytes[1] === 0xcf && bytes[2] === 0x11 && bytes[3] === 0xe0 &&
+      bytes[4] === 0xa1 && bytes[5] === 0xb1 && bytes[6] === 0x1a && bytes[7] === 0xe1
+    );
+  }
+  if (ext === "xlsx") {
+    // ZIP archive: PK\x03\x04 (XLSX is a zip)
+    return bytes[0] === 0x50 && bytes[1] === 0x4b && bytes[2] === 0x03 && bytes[3] === 0x04;
+  }
+  return false;
+}
+
+function uuidv4(): string {
+  return crypto.randomUUID();
+}
+
+async function hmacSign(message: string, secret: string): Promise<string> {
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  const sig = await crypto.subtle.sign("HMAC", key, enc.encode(message));
+  // URL-safe base64
+  let b64 = btoa(String.fromCharCode(...new Uint8Array(sig)));
+  return b64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+async function buildSignedUrl(origin: string, fileId: string, secret: string): Promise<string> {
+  const expires = Math.floor(Date.now() / 1000) + SIGNED_URL_TTL_SECONDS;
+  const sig = await hmacSign(`${fileId}|${expires}`, secret);
+  return `${origin}/files/${fileId}?expires=${expires}&signature=${sig}`;
+}
+
+interface VTAnalysisStats {
+  malicious: number;
+  suspicious: number;
+  undetected: number;
+  harmless: number;
+  failure: number;
+  "type-unsupported": number;
+  timeout: number;
+}
+interface VTAnalysisResult {
+  attributes: {
+    status: "queued" | "in-progress" | "completed";
+    stats?: VTAnalysisStats;
+  };
+}
+
+async function scanWithVirusTotal(
+  fileBytes: ArrayBuffer,
+  filename: string,
+  apiKey: string
+): Promise<{ ok: true } | { ok: false; reason: string }> {
+  // Upload file
+  const form = new FormData();
+  form.append("file", new Blob([fileBytes]), filename);
+
+  let analysisId: string;
+  try {
+    const upload = await fetch("https://www.virustotal.com/api/v3/files", {
+      method: "POST",
+      headers: { "x-apikey": apiKey },
+      body: form,
+    });
+    if (!upload.ok) {
+      return { ok: false, reason: `vt-upload-${upload.status}` };
+    }
+    const json = (await upload.json()) as { data?: { id?: string } };
+    analysisId = json.data?.id || "";
+    if (!analysisId) return { ok: false, reason: "vt-no-analysis-id" };
+  } catch {
+    return { ok: false, reason: "vt-upload-failed" };
+  }
+
+  // Poll for completion
+  for (let i = 0; i < VT_POLL_MAX_ATTEMPTS; i++) {
+    await new Promise((r) => setTimeout(r, VT_POLL_INTERVAL_MS));
+    try {
+      const res = await fetch(`https://www.virustotal.com/api/v3/analyses/${analysisId}`, {
+        headers: { "x-apikey": apiKey },
+      });
+      if (!res.ok) continue;
+      const json = (await res.json()) as { data?: VTAnalysisResult };
+      const data = json.data;
+      if (!data) continue;
+      if (data.attributes.status === "completed") {
+        const stats = data.attributes.stats;
+        if (!stats) return { ok: false, reason: "vt-no-stats" };
+        if (stats.malicious > 0 || stats.suspicious > 0) {
+          return { ok: false, reason: "virus-detected" };
+        }
+        return { ok: true };
+      }
+    } catch {
+      continue;
+    }
+  }
+  return { ok: false, reason: "vt-timeout" };
+}
+
+async function verifyTurnstile(token: string, secret: string, remoteIp: string): Promise<boolean> {
+  try {
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      body: new URLSearchParams({ secret, response: token, remoteip: remoteIp }),
+    });
+    if (!res.ok) return false;
+    const data = (await res.json()) as { success: boolean };
+    return data.success === true;
+  } catch {
+    return false;
+  }
 }
 
 export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
@@ -52,12 +213,20 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
     return errorRedirect("invalid-request");
   }
 
-  // Honeypot — bots often fill hidden fields
+  // Honeypot
   const honeypot = formData.get("website");
   if (typeof honeypot === "string" && honeypot.trim() !== "") {
-    // Pretend success so the bot doesn't retry
     return Response.redirect(new URL("/quote/thank-you", url).toString(), 303);
   }
+
+  // Turnstile validation
+  const turnstileToken = formData.get("cf-turnstile-response");
+  if (typeof turnstileToken !== "string" || !turnstileToken) {
+    return errorRedirect("turnstile-failed");
+  }
+  const remoteIp = request.headers.get("CF-Connecting-IP") || "";
+  const turnstileOk = await verifyTurnstile(turnstileToken, env.TURNSTILE_SECRET_KEY, remoteIp);
+  if (!turnstileOk) return errorRedirect("turnstile-failed");
 
   const get = (k: string) => {
     const v = formData.get(k);
@@ -74,36 +243,88 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
   const timeline = get("timeline");
   const details = get("details");
 
-  // Required fields
   if (!name || !email || !phone || !airframe || !service) {
     return errorRedirect("missing-fields");
   }
-
-  // Basic email shape check
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return errorRedirect("invalid-email");
   }
 
-  // Build attachment list
-  const files = formData.getAll("attachments") as File[];
-  const attachments: Array<{ filename: string; content: string }> = [];
-  let totalBytes = 0;
+  // Process attachments
+  const rawFiles = formData.getAll("attachments") as File[];
+  const realFiles = rawFiles.filter((f) => f instanceof File && f.size > 0);
 
-  for (const file of files) {
-    if (!(file instanceof File)) continue;
-    if (file.size === 0) continue;
-    totalBytes += file.size;
-    if (totalBytes > MAX_TOTAL_BYTES) {
-      return errorRedirect("attachments-too-large");
-    }
-    const buf = await file.arrayBuffer();
-    attachments.push({
-      filename: file.name,
-      content: bufferToBase64(buf),
-    });
+  if (realFiles.length > MAX_FILES) {
+    return errorRedirect("too-many-files");
   }
 
-  // Build email — plain HTML table, easy to scan
+  let totalBytes = 0;
+  for (const f of realFiles) totalBytes += f.size;
+  if (totalBytes > MAX_TOTAL_BYTES) {
+    return errorRedirect("attachments-too-large");
+  }
+
+  // Validate, scan, upload
+  type ProcessedFile = {
+    fileId: string;
+    filename: string;
+    sizeBytes: number;
+    downloadUrl: string;
+  };
+  const processed: ProcessedFile[] = [];
+
+  for (const file of realFiles) {
+    // Per-file size
+    if (file.size > MAX_FILE_BYTES) {
+      return errorRedirect("file-too-large");
+    }
+
+    const safeName = sanitizeFilename(file.name);
+    const ext = getExtension(safeName);
+    if (!ALLOWED_EXTENSIONS.includes(ext as (typeof ALLOWED_EXTENSIONS)[number])) {
+      return errorRedirect("file-type-not-allowed");
+    }
+
+    const buf = await file.arrayBuffer();
+    const head = new Uint8Array(buf.slice(0, 8));
+    if (!checkMagicBytes(head, ext)) {
+      return errorRedirect("file-magic-mismatch");
+    }
+
+    // VirusTotal scan
+    const scan = await scanWithVirusTotal(buf, safeName, env.VIRUSTOTAL_API_KEY);
+    if (!scan.ok) {
+      console.error("VirusTotal scan failed", scan.reason, safeName);
+      if (scan.reason === "virus-detected") return errorRedirect("virus-detected");
+      return errorRedirect("scan-failed");
+    }
+
+    // Upload to R2
+    const fileId = uuidv4();
+    const r2Key = `attachments/${fileId}`;
+    try {
+      await env.QUOTE_FILES.put(r2Key, buf, {
+        httpMetadata: {
+          contentType: file.type || "application/octet-stream",
+          contentDisposition: `attachment; filename="${safeName}"`,
+        },
+        customMetadata: {
+          originalFilename: safeName,
+          uploaderName: name.slice(0, 200),
+          uploaderEmail: email.slice(0, 200),
+          uploaderCompany: company.slice(0, 200),
+          uploadedAt: new Date().toISOString(),
+        },
+      });
+    } catch {
+      return errorRedirect("storage-failed");
+    }
+
+    const downloadUrl = await buildSignedUrl(url.origin, fileId, env.FILE_SIGNING_SECRET);
+    processed.push({ fileId, filename: safeName, sizeBytes: file.size, downloadUrl });
+  }
+
+  // Build email
   const rows: Array<[string, string]> = [
     ["Name", name],
     ["Company", company || "—"],
@@ -131,12 +352,27 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
        </div>`
     : "";
 
+  const formatBytes = (b: number): string => {
+    if (b < 1024) return `${b} B`;
+    if (b < 1024 * 1024) return `${(b / 1024).toFixed(1)} KB`;
+    return `${(b / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
   const attachmentsBlock =
-    attachments.length > 0
+    processed.length > 0
       ? `<div style="margin-top:24px;padding-top:24px;border-top:1px solid #e5e7eb;">
-           <div style="color:#4b5563;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Attachments (${attachments.length})</div>
-           <ul style="margin:0;padding-left:20px;color:#111827;font-size:14px;">
-             ${attachments.map((a) => `<li>${escapeHtml(a.filename)}</li>`).join("")}
+           <div style="color:#4b5563;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Attachments (${processed.length}) — virus-scanned, expire in 30 days</div>
+           <ul style="margin:0;padding:0;list-style:none;">
+             ${processed
+               .map(
+                 (p) =>
+                   `<li style="margin-bottom:10px;padding:10px 14px;background:#f9fafb;border:1px solid #e5e7eb;">
+                      <div style="font-size:14px;color:#111827;font-weight:500;">${escapeHtml(p.filename)}</div>
+                      <div style="font-size:12px;color:#6b7280;margin-top:2px;">${formatBytes(p.sizeBytes)}</div>
+                      <a href="${escapeHtml(p.downloadUrl)}" style="display:inline-block;margin-top:6px;color:#b45309;font-size:13px;text-decoration:underline;">Download file</a>
+                    </li>`
+               )
+               .join("")}
            </ul>
          </div>`
       : "";
@@ -161,27 +397,15 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
   </div>
 </body></html>`;
 
-  // Plain-text fallback
   const text =
     `New Quote Request\n\n` +
     rows.map(([k, v]) => `${k}: ${v}`).join("\n") +
     (details ? `\n\nAdditional Details:\n${details}` : "") +
-    (attachments.length > 0
-      ? `\n\nAttachments:\n${attachments.map((a) => `- ${a.filename}`).join("\n")}`
+    (processed.length > 0
+      ? `\n\nAttachments (${processed.length}) — virus-scanned, expire in 30 days:\n${processed
+          .map((p) => `- ${p.filename} (${formatBytes(p.sizeBytes)})\n  ${p.downloadUrl}`)
+          .join("\n")}`
       : "");
-
-  // Send via Resend
-  const resendBody: Record<string, unknown> = {
-    from: FROM_ADDRESS,
-    to: [TO_ADDRESS],
-    reply_to: email,
-    subject: `Quote Request: ${name}${company ? ` (${company})` : ""} — ${airframe}`,
-    html,
-    text,
-  };
-  if (attachments.length > 0) {
-    resendBody.attachments = attachments;
-  }
 
   let resendRes: Response;
   try {
@@ -191,14 +415,20 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
         Authorization: `Bearer ${env.RESEND_API_KEY}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(resendBody),
+      body: JSON.stringify({
+        from: FROM_ADDRESS,
+        to: [TO_ADDRESS],
+        reply_to: email,
+        subject: `Quote Request: ${name}${company ? ` (${company})` : ""} — ${airframe}`,
+        html,
+        text,
+      }),
     });
   } catch {
     return errorRedirect("send-failed");
   }
 
   if (!resendRes.ok) {
-    // Log to Cloudflare Workers console so we can debug from the dashboard
     const body = await resendRes.text();
     console.error("Resend API error", resendRes.status, body);
     return errorRedirect("send-failed");

@@ -1,10 +1,9 @@
 // Cloudflare Pages Function — handles POST to /contact
-// Receives the "Send Us a Message" form, sends via Resend.
-// On success: 303 redirect to /contact/thank-you
-// On error: 303 redirect to /contact?error=...
+// Send Us a Message form. Turnstile-protected, no file attachments.
 
 interface Env {
   RESEND_API_KEY: string;
+  TURNSTILE_SECRET_KEY: string;
 }
 
 interface PagesContext<E> {
@@ -23,6 +22,20 @@ function escapeHtml(s: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+async function verifyTurnstile(token: string, secret: string, remoteIp: string): Promise<boolean> {
+  try {
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      body: new URLSearchParams({ secret, response: token, remoteip: remoteIp }),
+    });
+    if (!res.ok) return false;
+    const data = (await res.json()) as { success: boolean };
+    return data.success === true;
+  } catch {
+    return false;
+  }
 }
 
 export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
@@ -45,6 +58,15 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
   if (typeof honeypot === "string" && honeypot.trim() !== "") {
     return Response.redirect(new URL("/contact/thank-you", url).toString(), 303);
   }
+
+  // Turnstile
+  const turnstileToken = formData.get("cf-turnstile-response");
+  if (typeof turnstileToken !== "string" || !turnstileToken) {
+    return errorRedirect("turnstile-failed");
+  }
+  const remoteIp = request.headers.get("CF-Connecting-IP") || "";
+  const turnstileOk = await verifyTurnstile(turnstileToken, env.TURNSTILE_SECRET_KEY, remoteIp);
+  if (!turnstileOk) return errorRedirect("turnstile-failed");
 
   const get = (k: string) => {
     const v = formData.get(k);

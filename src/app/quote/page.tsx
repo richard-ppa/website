@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Script from "next/script";
 import { COMPANY, AIRFRAMES } from "@/lib/constants";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { FormErrorBanner } from "@/components/FormErrorBanner";
+
+const TURNSTILE_SITE_KEY = "0x4AAAAAADJznk9rZYC4F2WZ";
 
 const ALL_MODELS = Object.values(AIRFRAMES).flatMap((airframe) =>
   airframe.models.map((model) => `${airframe.name} ${model}`)
@@ -193,14 +196,18 @@ export default function QuotePage() {
                 id="attachments"
                 name="attachments"
                 multiple
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx,.txt,.csv"
+                accept=".pdf,.xls,.xlsx,application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 className="block w-full text-sm text-ppa-dark file:mr-4 file:px-5 file:py-2.5 file:border-0 file:bg-ppa-light file:text-ppa-dark file:text-[11px] file:font-semibold file:uppercase file:tracking-[0.1em] hover:file:bg-ppa-border/50 cursor-pointer border border-ppa-border"
               />
               <p className="mt-2 text-xs text-ppa-muted">
                 Squawk lists, logbook pages, prior work orders, or anything else
-                helpful. PDF, DOC, XLS, or image formats.
+                helpful. PDF or Excel only — up to 5 files, 10MB each. All
+                files are virus-scanned before delivery.
               </p>
             </div>
+
+            {/* Turnstile widget */}
+            <div className="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="light" />
 
             <button
               type="submit"
@@ -214,6 +221,13 @@ export default function QuotePage() {
               emergencies, call us directly.
             </p>
           </form>
+
+          <Script
+            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+            strategy="lazyOnload"
+            async
+            defer
+          />
 
           {/* AOG callout */}
           <div className="mt-12 text-center border-t border-ppa-border pt-10">

@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Script from "next/script";
 import { COMPANY } from "@/lib/constants";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { FormErrorBanner } from "@/components/FormErrorBanner";
+
+const TURNSTILE_SITE_KEY = "0x4AAAAAADJznk9rZYC4F2WZ";
 
 export const metadata: Metadata = {
   title: "Contact — AOG Hotline, Quote Requests & Location",
@@ -216,6 +219,9 @@ export default function ContactPage() {
                   />
                 </div>
 
+                {/* Turnstile widget */}
+                <div className="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="light" />
+
                 <button
                   type="submit"
                   className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark transition-colors"
@@ -223,6 +229,13 @@ export default function ContactPage() {
                   Send Message
                 </button>
               </form>
+
+              <Script
+                src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+                strategy="lazyOnload"
+                async
+                defer
+              />
             </div>
 
             <div className="relative overflow-hidden min-h-[400px]">
