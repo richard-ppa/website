@@ -18,6 +18,8 @@ interface TrafficSummary {
   totalUniques: number;
   totalRequests: number;
   daily: Array<{ date: string; pageViews: number; uniques: number }>;
+  // Top-N data is last 24 hours due to Cloudflare free-plan adaptive endpoint limit
+  topPagesWindow: "24h";
   topPages: Array<{ path: string; views: number }>;
   topCountries: Array<{ country: string; views: number }>;
   topReferrers: Array<{ referrer: string; views: number }>;
@@ -135,7 +137,7 @@ const ADAPTIVE_QUERY = /* GraphQL */ `
             datetime_geq: $start
             datetime_leq: $end
             requestSource: "eyeball"
-            edgeResponseContentTypeName: "html"
+
           }
           orderBy: [count_DESC]
         ) {
@@ -150,28 +152,13 @@ const ADAPTIVE_QUERY = /* GraphQL */ `
             datetime_geq: $start
             datetime_leq: $end
             requestSource: "eyeball"
-            edgeResponseContentTypeName: "html"
+
           }
           orderBy: [count_DESC]
         ) {
           count
           dimensions {
             metric: clientCountryName
-          }
-        }
-        topReferrers: httpRequestsAdaptiveGroups(
-          limit: 10
-          filter: {
-            datetime_geq: $start
-            datetime_leq: $end
-            requestSource: "eyeball"
-            edgeResponseContentTypeName: "html"
-          }
-          orderBy: [count_DESC]
-        ) {
-          count
-          dimensions {
-            metric: refererHost
           }
         }
       }
@@ -193,12 +180,13 @@ export const onRequestGet: PagesHandler<Env> = async ({ env }) => {
   const now = new Date();
   const end = new Date(now);
   const start = new Date(now);
-  start.setUTCDate(start.getUTCDate() - 27); // inclusive 28-day window
+  start.setUTCDate(start.getUTCDate() - 27); // inclusive 28-day window for daily totals
   const startDate = isoDate(start);
   const endDate = isoDate(end);
-  // Adaptive endpoint expects ISO datetimes
-  const startDt = new Date(`${startDate}T00:00:00Z`).toISOString();
-  const endDt = new Date(`${endDate}T23:59:59Z`).toISOString();
+  // Adaptive endpoint on free plan is limited to 1-day windows.
+  // Use last 24h for top pages/countries/referrers.
+  const adaptiveStart = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
+  const adaptiveEnd = now.toISOString();
 
   try {
     const [dailyData, adaptiveData] = await Promise.all([
@@ -209,8 +197,8 @@ export const onRequestGet: PagesHandler<Env> = async ({ env }) => {
       }),
       gql<AdaptiveResp>(token, ADAPTIVE_QUERY, {
         zoneTag,
-        start: startDt,
-        end: endDt,
+        start: adaptiveStart,
+        end: adaptiveEnd,
       }),
     ]);
 
@@ -240,22 +228,15 @@ export const onRequestGet: PagesHandler<Env> = async ({ env }) => {
       country: g.dimensions.metric || "(unknown)",
       views: g.count,
     }));
-    const topReferrers = (zone?.topReferrers ?? [])
-      .map((g) => ({
-        referrer: g.dimensions.metric || "(direct)",
-        views: g.count,
-      }))
-      // Cloudflare returns empty string for direct traffic; coalesce above
-      .filter((r) => r.views > 0);
-
     const summary: TrafficSummary = {
       totalPageViews,
       totalUniques,
       totalRequests,
       daily,
+      topPagesWindow: "24h",
       topPages,
       topCountries,
-      topReferrers,
+      topReferrers: [], // not available on free Cloudflare plan
     };
 
     return jsonResponse(summary);

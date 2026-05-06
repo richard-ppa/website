@@ -311,7 +311,7 @@ export default function TrafficPage() {
           <div className="grid lg:grid-cols-2 gap-6 mb-8">
             <TrafficTable
               eyebrow="Top pages"
-              title="Most visited (28d)"
+              title="Most visited (last 24h)"
               headers={["Path", "Views"]}
               rows={state.data.topPages.map((p) => [
                 <span key="p" className="font-mono text-[12px] text-ppa-black break-all">
@@ -325,7 +325,7 @@ export default function TrafficPage() {
             />
             <TrafficTable
               eyebrow="Top countries"
-              title="Visitors by country"
+              title="By country (last 24h)"
               headers={["Country", "Views"]}
               rows={state.data.topCountries.map((c) => {
                 const flag = COUNTRY_FLAGS[c.country];
@@ -343,20 +343,7 @@ export default function TrafficPage() {
             />
           </div>
 
-          <TrafficTable
-            eyebrow="Top referrers"
-            title="Where visitors are coming from"
-            headers={["Referrer", "Views"]}
-            rows={state.data.topReferrers.map((r) => [
-              <span key="r" className="text-ppa-black break-all">
-                {truncateReferrer(r.referrer)}
-              </span>,
-              <span key="v" className="tabular-nums text-ppa-black">
-                {formatNumber(r.views)}
-              </span>,
-            ])}
-            emptyMessage="No referrer data yet."
-          />
+          {/* Top referrers omitted — clientRequestReferer is a paid-only Cloudflare GraphQL field */}
         </>
       )}
     </PageContainer>
