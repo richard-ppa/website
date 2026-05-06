@@ -1,8 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { COMPANY, NAV_LINKS, AIRFRAMES, SERVICES } from "@/lib/constants";
 
 export function Footer() {
+  const pathname = usePathname();
+  // Hide public-site footer inside the admin dashboard
+  if (pathname.startsWith("/admin")) return null;
+
   return (
     <footer className="bg-ppa-light border-t border-ppa-border">
       {/* CTA Strip */}

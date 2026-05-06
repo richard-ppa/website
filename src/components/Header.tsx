@@ -22,6 +22,9 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Hide public-site nav inside the admin dashboard — admin has its own header
+  if (pathname.startsWith("/admin")) return null;
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       <nav
