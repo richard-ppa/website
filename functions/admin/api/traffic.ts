@@ -5,6 +5,7 @@ interface Env {
   CLOUDFLARE_API_TOKEN?: string; // Secret
   CLOUDFLARE_ACCOUNT_ID?: string; // Plain
   CLOUDFLARE_ZONE_ID?: string; // Plain
+  EXCLUDED_IPS?: string; // Optional, comma-separated list of IPs to exclude from top-N queries
 }
 
 interface PagesContext<E> {
@@ -23,6 +24,7 @@ interface TrafficSummary {
   topPages: Array<{ path: string; views: number }>;
   topCountries: Array<{ country: string; views: number }>;
   topReferrers: Array<{ referrer: string; views: number }>;
+  excludedIpCount: number; // Number of IPs being filtered from top-N (0 if none)
 }
 
 const GRAPHQL_ENDPOINT = "https://api.cloudflare.com/client/v4/graphql";
@@ -138,45 +140,43 @@ interface AdaptiveResp {
   };
 }
 
-// Top-N queries use httpRequestsAdaptiveGroups. We split into one query per dimension
-// using aliases so a single round-trip is enough.
-const ADAPTIVE_QUERY = /* GraphQL */ `
-  query GetAdaptive($zoneTag: String!, $start: String!, $end: String!) {
-    viewer {
-      zones(filter: { zoneTag: $zoneTag }) {
-        topPages: httpRequestsAdaptiveGroups(
-          limit: 100
-          filter: {
-            datetime_geq: $start
-            datetime_leq: $end
-            requestSource: "eyeball"
+// Top-N queries use httpRequestsAdaptiveGroups. Build query dynamically so we can
+// optionally inject a clientIP_notin filter when EXCLUDED_IPS env var is set.
+function buildAdaptiveQuery(excludedIps: string[]): string {
+  const ipFilter = excludedIps.length > 0
+    ? `clientIP_notin: [${excludedIps.map((ip) => `"${ip}"`).join(", ")}]`
+    : "";
+  const sharedFilter = `
+    datetime_geq: $start
+    datetime_leq: $end
+    requestSource: "eyeball"
+    ${ipFilter}
+  `;
+  return /* GraphQL */ `
+    query GetAdaptive($zoneTag: String!, $start: String!, $end: String!) {
+      viewer {
+        zones(filter: { zoneTag: $zoneTag }) {
+          topPages: httpRequestsAdaptiveGroups(
+            limit: 100
+            filter: { ${sharedFilter} }
+            orderBy: [count_DESC]
+          ) {
+            count
+            dimensions { metric: clientRequestPath }
           }
-          orderBy: [count_DESC]
-        ) {
-          count
-          dimensions {
-            metric: clientRequestPath
-          }
-        }
-        topCountries: httpRequestsAdaptiveGroups(
-          limit: 10
-          filter: {
-            datetime_geq: $start
-            datetime_leq: $end
-            requestSource: "eyeball"
-
-          }
-          orderBy: [count_DESC]
-        ) {
-          count
-          dimensions {
-            metric: clientCountryName
+          topCountries: httpRequestsAdaptiveGroups(
+            limit: 10
+            filter: { ${sharedFilter} }
+            orderBy: [count_DESC]
+          ) {
+            count
+            dimensions { metric: clientCountryName }
           }
         }
       }
     }
-  }
-`;
+  `;
+}
 
 export const onRequestGet: PagesHandler<Env> = async ({ env }) => {
   if (!env.CLOUDFLARE_API_TOKEN || !env.CLOUDFLARE_ACCOUNT_ID || !env.CLOUDFLARE_ZONE_ID) {
@@ -200,6 +200,12 @@ export const onRequestGet: PagesHandler<Env> = async ({ env }) => {
   const adaptiveStart = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
   const adaptiveEnd = now.toISOString();
 
+  // Parse excluded IPs from env var
+  const excludedIps = (env.EXCLUDED_IPS || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
   try {
     const [dailyData, adaptiveData] = await Promise.all([
       gql<DailyResp>(token, DAILY_QUERY, {
@@ -207,7 +213,7 @@ export const onRequestGet: PagesHandler<Env> = async ({ env }) => {
         start: startDate,
         end: endDate,
       }),
-      gql<AdaptiveResp>(token, ADAPTIVE_QUERY, {
+      gql<AdaptiveResp>(token, buildAdaptiveQuery(excludedIps), {
         zoneTag,
         start: adaptiveStart,
         end: adaptiveEnd,
@@ -254,6 +260,7 @@ export const onRequestGet: PagesHandler<Env> = async ({ env }) => {
       topPages,
       topCountries,
       topReferrers: [], // not available on free Cloudflare plan
+      excludedIpCount: excludedIps.length,
     };
 
     return jsonResponse(summary);
