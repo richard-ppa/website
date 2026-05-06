@@ -14,7 +14,7 @@ interface PagesContext<E> {
 type PagesHandler<E> = (context: PagesContext<E>) => Response | Promise<Response>;
 
 const FROM_ADDRESS = "Plane Place Aviation Contact <noreply@app.ppa.aero>";
-const TO_ADDRESS = "quotes@ppa.aero";
+const TO_ADDRESS = "info@ppa.aero";
 
 function escapeHtml(s: string): string {
   return s
