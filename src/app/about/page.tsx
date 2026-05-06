@@ -39,7 +39,7 @@ export default function AboutPage() {
   return (
     <>
       {/* Hero — Full-screen team photo with intro */}
-      <section className="relative h-screen min-h-[700px] flex items-end overflow-hidden">
+      <section className="relative h-[100dvh] min-h-[600px] lg:min-h-[700px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <Image
             src="/images/tech-working-on-wing.jpg"
