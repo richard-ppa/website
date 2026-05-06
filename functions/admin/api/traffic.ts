@@ -42,6 +42,19 @@ function isoDate(d: Date): string {
   return d.toISOString().slice(0, 10);
 }
 
+// Cloudflare's free-plan top-pages query counts every HTTP request by path,
+// not just page views. We filter out infrastructure noise (RUM beacons,
+// RSC prefetches, static assets) so the dashboard shows real page traffic.
+function isRealPagePath(path: string): boolean {
+  if (!path) return false;
+  if (path === "/") return true;
+  if (path.startsWith("/cdn-cgi/")) return false; // Cloudflare RUM + edge
+  if (path.startsWith("/_next/")) return false; // Next.js JS/CSS bundles
+  if (path.includes("__next.") || path.includes("__PAGE__")) return false; // RSC prefetch
+  if (/\.(txt|js|css|map|ico|jpg|jpeg|png|gif|svg|webp|avif|woff|woff2|ttf)$/i.test(path)) return false;
+  return true;
+}
+
 interface GraphQLResponse<T> {
   data?: T;
   errors?: Array<{ message: string }>;
@@ -132,12 +145,11 @@ const ADAPTIVE_QUERY = /* GraphQL */ `
     viewer {
       zones(filter: { zoneTag: $zoneTag }) {
         topPages: httpRequestsAdaptiveGroups(
-          limit: 20
+          limit: 100
           filter: {
             datetime_geq: $start
             datetime_leq: $end
             requestSource: "eyeball"
-
           }
           orderBy: [count_DESC]
         ) {
@@ -220,10 +232,15 @@ export const onRequestGet: PagesHandler<Env> = async ({ env }) => {
     }
 
     const zone = adaptiveData.viewer.zones[0];
-    const topPages = (zone?.topPages ?? []).map((g) => ({
-      path: g.dimensions.metric || "(unknown)",
-      views: g.count,
-    }));
+    const topPages = (zone?.topPages ?? [])
+      .map((g) => ({
+        path: g.dimensions.metric || "(unknown)",
+        views: g.count,
+      }))
+      // Filter infrastructure noise: Cloudflare RUM beacons, Next.js RSC prefetches,
+      // JS/CSS bundles, image assets, etc. Only count actual page paths.
+      .filter((p) => isRealPagePath(p.path))
+      .slice(0, 20);
     const topCountries = (zone?.topCountries ?? []).map((g) => ({
       country: g.dimensions.metric || "(unknown)",
       views: g.count,
