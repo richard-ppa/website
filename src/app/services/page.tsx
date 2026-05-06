@@ -192,7 +192,7 @@ export default function ServicesPage() {
           <section
             key={service.slug}
             id={service.slug}
-            className="relative h-[85vh] min-h-[620px] overflow-hidden border-t border-ppa-white/20"
+            className="relative min-h-[620px] lg:h-[85vh] overflow-hidden border-t border-ppa-white/20"
           >
             <Image
               src={image}
@@ -208,10 +208,10 @@ export default function ServicesPage() {
                   : "bg-gradient-to-r from-ppa-black via-ppa-black/70 to-ppa-black/10"
               }`}
             />
-            <div className="absolute inset-0 flex items-end">
-              <div className="w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-16 lg:pb-24">
+            <div className="relative lg:absolute lg:inset-0 lg:flex lg:items-end">
+              <div className="w-full max-w-[1400px] mx-auto px-6 lg:px-10 py-16 lg:py-0 lg:pb-24">
                 <div
-                  className={`max-w-2xl ${textRight ? "ml-auto" : ""}`}
+                  className={`max-w-2xl ${textRight ? "lg:ml-auto" : ""}`}
                 >
                   <div className="relative inline-block mb-3">
                     <div
