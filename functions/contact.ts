@@ -1,6 +1,8 @@
 // Cloudflare Pages Function — handles POST to /contact
 // Send Us a Message form. Turnstile-protected, no file attachments.
 
+import { FOUNDER_EMAILS } from "./_shared/founders";
+
 interface KVNamespace {
   get(key: string): Promise<string | null>;
   put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
@@ -20,7 +22,7 @@ interface PagesContext<E> {
 type PagesHandler<E> = (context: PagesContext<E>) => Response | Promise<Response>;
 
 const FROM_ADDRESS = "Plane Place Aviation Contact <noreply@app.ppa.aero>";
-const TO_ADDRESS = "info@ppa.aero";
+const DEFAULT_TO = "info@ppa.aero";
 
 function escapeHtml(s: string): string {
   return s
@@ -92,6 +94,9 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
   const email = get("email");
   const phone = get("phone");
   const message = get("message");
+  const recipientSlug = get("recipient");
+  const founder = recipientSlug ? FOUNDER_EMAILS[recipientSlug] : null;
+  const toAddress = founder ? founder.email : DEFAULT_TO;
 
   if (!name || !email || !message) {
     return errorRedirect("missing-fields");
@@ -106,6 +111,9 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
     ["Email", email],
     ["Phone", phone || "—"],
   ];
+  if (founder) {
+    rows.unshift(["Direct message for", founder.name]);
+  }
 
   const tableRows = rows
     .map(
@@ -120,7 +128,7 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
 <html><body style="margin:0;padding:0;background:#f9fafb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
   <div style="max-width:640px;margin:0 auto;padding:32px 24px;">
     <div style="background:#fff;padding:32px;border:1px solid #e5e7eb;">
-      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.15em;color:#b45309;font-weight:600;margin-bottom:8px;">New Contact Message</div>
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.15em;color:#b45309;font-weight:600;margin-bottom:8px;">${founder ? `Direct message — ${escapeHtml(founder.name)}` : "New Contact Message"}</div>
       <h1 style="margin:0 0 24px 0;font-size:24px;color:#111827;">${escapeHtml(name)}${
         company ? ` — ${escapeHtml(company)}` : ""
       }</h1>
@@ -139,7 +147,7 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
 </body></html>`;
 
   const text =
-    `New Contact Message\n\n` +
+    (founder ? `Direct message for ${founder.name}\n\n` : `New Contact Message\n\n`) +
     rows.map(([k, v]) => `${k}: ${v}`).join("\n") +
     `\n\nMessage:\n${message}`;
 
@@ -153,9 +161,11 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
       },
       body: JSON.stringify({
         from: FROM_ADDRESS,
-        to: [TO_ADDRESS],
+        to: [toAddress],
         reply_to: email,
-        subject: `Contact: ${name}${company ? ` (${company})` : ""}`,
+        subject: founder
+          ? `Direct message for ${founder.name}: ${name}${company ? ` (${company})` : ""}`
+          : `Contact: ${name}${company ? ` (${company})` : ""}`,
         html,
         text,
       }),
@@ -183,6 +193,7 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
         email,
         phone,
         messagePreview: message.slice(0, 200),
+        recipient: founder ? founder.name : undefined,
       });
     } catch (e) {
       console.error("Lead tracking write failed", e);

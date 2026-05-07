@@ -35,6 +35,7 @@ export interface LeadRecord {
   attachments?: number;
   // Contact-specific
   messagePreview?: string;
+  recipient?: string; // Founder name when message was sent direct
 }
 
 const RECENT_LIST_KEY = "index:recent";

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { COMPANY, NAV_LINKS, AIRFRAMES, SERVICES } from "@/lib/constants";
+import { FounderMessageButton } from "./FounderMessageButton";
 
 export function Footer() {
   const pathname = usePathname();
@@ -49,9 +50,9 @@ export function Footer() {
             <Image
               src="/images/logo.png"
               alt="Plane Place Aviation"
-              width={180}
-              height={51}
-              className="h-10 w-auto mb-5"
+              width={234}
+              height={66}
+              className="h-[52px] w-auto mb-5"
             />
             <p className="text-sm text-ppa-gray leading-relaxed mb-5">
               FAA Part 145 repair station specializing exclusively in Hawker,
@@ -110,7 +111,7 @@ export function Footer() {
             <h3 className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-muted mt-8 mb-5">
               Company
             </h3>
-            <ul className="space-y-2.5">
+            <ul className="grid grid-cols-3 gap-x-4 gap-y-2.5">
               {NAV_LINKS.filter((l) => !l.children).map((link) => (
                 <li key={link.href}>
                   <Link
@@ -142,16 +143,11 @@ export function Footer() {
                 </a>
               </div>
               {COMPANY.founders.map((founder) => (
-                <div key={founder.email}>
+                <div key={founder.slug}>
                   <p className="text-sm text-ppa-dark">
                     {founder.name}, {founder.title}
                   </p>
-                  <a
-                    href={`mailto:${founder.email}`}
-                    className="text-sm text-ppa-gray hover:text-ppa-brass transition-colors"
-                  >
-                    {founder.email}
-                  </a>
+                  <FounderMessageButton founder={founder} variant="footer" />
                 </div>
               ))}
             </div>

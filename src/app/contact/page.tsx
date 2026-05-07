@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Script from "next/script";
 import { COMPANY } from "@/lib/constants";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { FormErrorBanner } from "@/components/FormErrorBanner";
+import { Turnstile } from "@/components/Turnstile";
+import { FounderMessageButton } from "@/components/FounderMessageButton";
+import { LocationMap } from "@/components/LocationMap";
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAADJznk9rZYC4F2WZ";
 
@@ -90,23 +92,18 @@ export default function ContactPage() {
               </p>
             </a>
 
-            {/* Email */}
+            {/* Founders */}
             <div className="bg-ppa-white p-8 lg:p-10">
               <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-brass">
-                Email
+                Reach a Founder
               </span>
               <div className="mt-4 space-y-4">
                 {COMPANY.founders.map((founder) => (
-                  <div key={founder.email}>
+                  <div key={founder.slug}>
                     <p className="text-sm text-ppa-dark">
                       {founder.name}, {founder.title}
                     </p>
-                    <a
-                      href={`mailto:${founder.email}`}
-                      className="text-sm text-ppa-gray hover:text-ppa-brass transition-colors"
-                    >
-                      {founder.email}
-                    </a>
+                    <FounderMessageButton founder={founder} />
                   </div>
                 ))}
               </div>
@@ -123,9 +120,32 @@ export default function ContactPage() {
                   {COMPANY.address.city}, {COMPANY.address.state}{" "}
                   {COMPANY.address.zip}
                 </p>
-                <p className="text-ppa-brass mt-2">{COMPANY.address.airport}</p>
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                    `${COMPANY.address.street}, ${COMPANY.address.city}, ${COMPANY.address.state} ${COMPANY.address.zip}`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-ppa-brass hover:text-ppa-brass-dark transition-colors mt-2 inline-block underline-offset-2 hover:underline"
+                >
+                  {COMPANY.address.airport}
+                </a>
               </div>
             </div>
+          </div>
+
+          {/* Map — full width below the 3 contact cards */}
+          <div className="mt-10 border border-ppa-border overflow-hidden">
+            <LocationMap
+              lat={32.3535}
+              lng={-97.4344}
+              fitBoundsTo={[
+                [32.7555, -97.3308], // Fort Worth
+                [32.7767, -96.797],  // Dallas
+              ]}
+              className="h-[420px] w-full"
+              label={`${COMPANY.name} — ${COMPANY.address.street}, ${COMPANY.address.city}, ${COMPANY.address.state} ${COMPANY.address.zip}`}
+            />
           </div>
         </div>
       </section>
@@ -220,22 +240,15 @@ export default function ContactPage() {
                 </div>
 
                 {/* Turnstile widget */}
-                <div className="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="light" />
+                <Turnstile siteKey={TURNSTILE_SITE_KEY} />
 
                 <button
                   type="submit"
-                  className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark transition-colors"
+                  className="px-8 py-3.5 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark transition-colors disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-ppa-brass"
                 >
                   Send Message
                 </button>
               </form>
-
-              <Script
-                src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-                strategy="afterInteractive"
-                async
-                defer
-              />
             </div>
 
             <div className="relative overflow-hidden min-h-[400px]">

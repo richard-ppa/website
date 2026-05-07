@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Script from "next/script";
 import { COMPANY, AIRFRAMES } from "@/lib/constants";
+import { SERVICE_OPTIONS, TIMELINE_OPTIONS } from "@/lib/quoteFormLabels";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { FormErrorBanner } from "@/components/FormErrorBanner";
+import { Turnstile } from "@/components/Turnstile";
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAADJznk9rZYC4F2WZ";
 
@@ -151,13 +152,9 @@ export default function QuotePage() {
               <label htmlFor="service" className="form-label">Service Needed *</label>
               <select id="service" name="service" required className="form-input">
                 <option value="">Select service...</option>
-                <option value="scheduled">Scheduled Maintenance / Phase Inspection</option>
-                <option value="ppi">Pre-Purchase Inspection</option>
-                <option value="aog">AOG / Emergency Service</option>
-                <option value="structural">Structural Repair</option>
-                <option value="avionics">Avionics</option>
-                <option value="management">Maintenance Management</option>
-                <option value="other">Other</option>
+                {SERVICE_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
               </select>
             </div>
 
@@ -166,11 +163,9 @@ export default function QuotePage() {
               <label htmlFor="timeline" className="form-label">Timeline</label>
               <select id="timeline" name="timeline" className="form-input">
                 <option value="">When do you need service?</option>
-                <option value="asap">ASAP / AOG</option>
-                <option value="30days">Within 30 days</option>
-                <option value="60days">Within 60 days</option>
-                <option value="90days">Within 90 days</option>
-                <option value="planning">Just planning ahead</option>
+                {TIMELINE_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
               </select>
             </div>
 
@@ -207,11 +202,11 @@ export default function QuotePage() {
             </div>
 
             {/* Turnstile widget */}
-            <div className="cf-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="light" />
+            <Turnstile siteKey={TURNSTILE_SITE_KEY} />
 
             <button
               type="submit"
-              className="w-full py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark transition-colors"
+              className="w-full py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark transition-colors disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-ppa-brass"
             >
               Submit Quote Request
             </button>
@@ -221,13 +216,6 @@ export default function QuotePage() {
               emergencies, call us directly.
             </p>
           </form>
-
-          <Script
-            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-            strategy="afterInteractive"
-            async
-            defer
-          />
 
           {/* AOG callout */}
           <div className="mt-12 text-center border-t border-ppa-border pt-10">

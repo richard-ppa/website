@@ -207,12 +207,11 @@ export default async function BlogPostPage({ params }: PageProps) {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
           <div>
             <h2 className="font-display text-3xl lg:text-5xl text-ppa-black leading-none">
-              Seeing something similar on your aircraft?
+              {post.cta?.headline ?? "Need maintenance on your Hawker, Citation, or Challenger?"}
             </h2>
             <p className="mt-3 text-ppa-gray max-w-xl">
-              We handle Challenger structural work in-house. Send us the squawk
-              or your upcoming inspection scope — we&apos;ll tell you what
-              we&apos;d do about it.
+              {post.cta?.body ??
+                "Send us the squawk or your upcoming inspection scope — we'll tell you what we'd do about it. FAA Part 145 specialist serving the South-Central US from Cleburne, TX."}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">

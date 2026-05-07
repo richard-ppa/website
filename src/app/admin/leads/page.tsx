@@ -14,6 +14,7 @@ import {
 import { PageHeader, PageContainer } from "@/components/admin/PageHeader";
 import { Stat, StatGrid } from "@/components/admin/Stat";
 import { SetupRequired } from "@/components/admin/SetupRequired";
+import { serviceLabel, timelineLabel } from "@/lib/quoteFormLabels";
 
 interface LeadRecord {
   id: string;
@@ -373,8 +374,8 @@ function DetailCell({ record }: { record: LeadRecord }) {
   if (record.type === "quote") {
     const bits: string[] = [];
     if (record.airframe) bits.push(record.airframe);
-    if (record.service) bits.push(record.service);
-    if (record.timeline) bits.push(record.timeline);
+    if (record.service) bits.push(serviceLabel(record.service));
+    if (record.timeline) bits.push(timelineLabel(record.timeline));
     if (record.attachments && record.attachments > 0) {
       bits.push(`${record.attachments} attachment${record.attachments === 1 ? "" : "s"}`);
     }

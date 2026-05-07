@@ -17,12 +17,12 @@ export const COMPANY = {
     {
       name: "Tristan Noe",
       title: "Co-Founder / Director of Maintenance",
-      email: "tristan@ppa.aero",
+      slug: "tristan",
     },
     {
       name: "Travis Roberson",
       title: "Co-Founder / VP of Maintenance",
-      email: "travis@ppa.aero",
+      slug: "travis",
     },
   ],
   leadership: [

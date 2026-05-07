@@ -80,7 +80,7 @@ const SERVICE_DETAILS: Record<
   },
   "maintenance-management": {
     description:
-      "Aircraft maintenance management and consulting from operators who have been in your seat. Your time is valuable — let us do the dirty work and help you navigate your aircraft's maintenance. Our team can represent you in scheduling, negotiating, and overseeing maintenance visits, plan ahead to work on your schedule, reduce downtime, and lower operating costs. We provide one-on-one aircraft maintenance management, regulatory compliance with FAA and DOT requirements, aircraft storage at our Cleburne facility, and weekly, bi-weekly, or monthly service checks tailored to how you operate.",
+      "We provide one-on-one aircraft maintenance management, regulatory compliance with FAA and DOT requirements, aircraft storage at our Cleburne facility, and weekly, bi-weekly, or monthly service checks tailored to how you operate.",
     features: [
       "Maintenance tracking and scheduling",
       "Regulatory compliance (FAA, DOT)",
@@ -178,87 +178,110 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Service sections — cinematic full-bleed, alternating text side for rhythm */}
+      {/* Service sections — editorial photo+text, alternating side for rhythm */}
       {SERVICES.map((service, i) => {
         const details = SERVICE_DETAILS[service.slug];
-        const number = `0${i + 1}`;
         const imageConfig = SERVICE_IMAGES[service.slug] || { src: "/images/Aircraft-MX.jpg" };
         const image = imageConfig.src;
         const altText = `Plane Place Aviation technician performing ${service.name.toLowerCase()} on business jet`;
-        const textRight = i % 2 === 1; // flip text panel side every other section
-        const flipImage = service.slug === "avionics";
+        const imageRight = i % 2 === 0; // 01 → image right, 02 → image left, alternating
+
+        const textBlock = (
+          <div
+            className={
+              imageRight
+                ? "px-6 py-16 lg:py-20 lg:pl-10 lg:pr-16"
+                : "px-6 py-16 lg:py-20 lg:pl-16 lg:pr-10"
+            }
+          >
+            <div
+              className={
+                imageRight
+                  ? "lg:ml-auto lg:max-w-[580px]"
+                  : "lg:max-w-[580px]"
+              }
+            >
+              <h2 className="font-display text-4xl sm:text-5xl text-ppa-black leading-none mb-8">
+                {service.name}
+              </h2>
+              <p className="text-ppa-gray font-light leading-relaxed mb-8">
+                {details?.description}
+              </p>
+              <ul className="flex flex-wrap gap-2.5 mb-10">
+                {details?.features.map((feature) => (
+                  <li
+                    key={feature}
+                    className="group inline-flex items-center gap-2 rounded-full border border-ppa-border bg-ppa-white pl-2.5 pr-4 py-2 text-xs font-medium text-ppa-dark shadow-[0_3px_8px_rgba(20,30,55,0.12),0_1px_2px_rgba(20,30,55,0.08)] transition-all hover:-translate-y-0.5 hover:border-ppa-brass/60 hover:bg-ppa-light hover:shadow-[0_8px_18px_rgba(20,30,55,0.16),0_2px_4px_rgba(20,30,55,0.10)]"
+                  >
+                    <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-ppa-brass/10 text-ppa-brass transition-colors group-hover:bg-ppa-brass group-hover:text-ppa-white">
+                      <svg
+                        aria-hidden="true"
+                        className="w-3 h-3"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={3}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </span>
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/quote"
+                className="inline-flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.15em] text-ppa-brass hover:text-ppa-brass-dark transition-colors"
+              >
+                Get a Quote
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+        );
+
+        const imageBlock = (
+          <div className="relative h-full min-h-[420px] lg:min-h-[640px]">
+            <Image
+              src={image}
+              alt={altText}
+              fill
+              className="object-cover"
+              style={{ objectPosition: imageConfig.desktopPosition || imageConfig.mobilePosition || "center" }}
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+            {/* Bottom scrim for caption legibility */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/55 via-black/15 to-transparent"
+            />
+            {/* Editorial caption */}
+            <div className="absolute bottom-6 left-6 lg:bottom-8 lg:left-8 flex items-center gap-3">
+              <span className="h-px w-6 bg-ppa-brass-bright" />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/95">
+                {service.name} · Cleburne, TX
+              </span>
+            </div>
+          </div>
+        );
 
         return (
           <section
             key={service.slug}
             id={service.slug}
-            className="relative min-h-[620px] lg:h-[85vh] overflow-hidden border-t border-ppa-white/20"
+            className="overflow-hidden"
           >
-            <Image
-              src={image}
-              alt={altText}
-              fill
-              className={`object-cover ${flipImage ? "scale-x-[-1]" : ""}`}
-              style={{
-                objectPosition: imageConfig.mobilePosition || "center",
-              }}
-              sizes="100vw"
-            />
-            {/* Mobile overlay: top-heavy gradient ensures readability of text in upper portion */}
-            <div className="absolute inset-0 bg-gradient-to-b from-ppa-black/80 via-ppa-black/65 to-ppa-black/40 lg:hidden" />
-            {/* Desktop overlay: side gradient pointing toward the text panel */}
-            <div
-              className={`absolute inset-0 hidden lg:block ${
-                textRight
-                  ? "bg-gradient-to-l from-ppa-black via-ppa-black/70 to-ppa-black/10"
-                  : "bg-gradient-to-r from-ppa-black via-ppa-black/70 to-ppa-black/10"
-              }`}
-            />
-            <div className="relative lg:absolute lg:inset-0 lg:flex lg:items-end">
-              <div className="w-full max-w-[1400px] mx-auto px-6 lg:px-10 py-16 lg:py-0 lg:pb-24">
-                <div
-                  className={`max-w-2xl ${textRight ? "lg:ml-auto" : ""}`}
-                >
-                  <div className="relative inline-block mb-3">
-                    <div
-                      aria-hidden
-                      className="absolute inset-0 blur-xl opacity-60 pointer-events-none"
-                      style={{
-                        background:
-                          "conic-gradient(from 210deg at 50% 50%, #00eaff 0deg, #00aeef 90deg, #3b82f6 180deg, #1e3a8a 270deg, #00eaff 360deg)",
-                      }}
-                    />
-                    <span className="relative font-display text-7xl lg:text-[9rem] text-[#00aeef]/40 leading-none block">
-                      {number}
-                    </span>
-                  </div>
-                  <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl text-ppa-white leading-[0.95] mb-6">
-                    {service.name}
-                  </h2>
-                  <p className="text-lg text-ppa-light/85 font-light leading-relaxed mb-8 max-w-xl">
-                    {details?.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mb-10 max-w-xl">
-                    {details?.features.map((feature) => (
-                      <span
-                        key={feature}
-                        className="text-xs text-ppa-white border border-ppa-white/30 px-3 py-1.5 backdrop-blur-sm"
-                      >
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
-                  <Link
-                    href="/quote"
-                    className="inline-flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.15em] text-ppa-brass-bright hover:text-ppa-white transition-colors"
-                  >
-                    Get a Quote
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </Link>
-                </div>
-              </div>
+            {/*
+              Mobile (single col): image always on top, text below.
+              Desktop: alternate via order utilities so visual rhythm flips
+              row-to-row without changing mobile order.
+              No section padding/gap → rows sit flush edge-to-edge.
+            */}
+            <div className="grid lg:grid-cols-2">
+              <div className={`relative ${imageRight ? "lg:order-2" : ""}`}>{imageBlock}</div>
+              <div className={`lg:self-center ${imageRight ? "lg:order-1" : ""}`}>{textBlock}</div>
             </div>
           </section>
         );

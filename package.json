@@ -4,16 +4,22 @@
   "description": "Plane Place Aviation — Hawker, Citation & Challenger MRO",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "tsx --env-file-if-exists=.env.local scripts/fetch-articles.ts && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed:articles": "tsx --env-file-if-exists=.env.local scripts/seed-articles.ts"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/postcss": "^4.2.2",
+    "@types/leaflet": "^1.9.21",
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "framer-motion": "^12.38.0",
+    "leaflet": "^1.9.4",
     "next": "^16.2.0",
     "postcss": "^8.5.8",
     "react": "^19.2.4",

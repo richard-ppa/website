@@ -20,12 +20,14 @@ const ERROR_MESSAGES: Record<string, string> = {
 
 export function FormErrorBanner() {
   const [error, setError] = useState<string | null>(null);
+  const [detail, setDetail] = useState<string | null>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const code = params.get("error");
     if (code && ERROR_MESSAGES[code]) {
       setError(ERROR_MESSAGES[code]);
+      setDetail(params.get("detail"));
     }
   }, []);
 
@@ -37,6 +39,9 @@ export function FormErrorBanner() {
       className="mb-8 border border-red-200 bg-red-50 p-4 text-sm text-red-900"
     >
       <strong className="font-semibold">Submission error.</strong> {error}
+      {detail ? (
+        <div className="mt-2 text-xs text-red-700/80 font-mono">code: {detail}</div>
+      ) : null}
     </div>
   );
 }

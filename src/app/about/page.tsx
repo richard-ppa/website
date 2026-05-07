@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { COMPANY } from "@/lib/constants";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { LocationMap } from "@/components/LocationMap";
 
 export const metadata: Metadata = {
   title: "About — Founder-Led Aircraft MRO in Cleburne, TX",
@@ -61,9 +62,9 @@ export default function AboutPage() {
           </div>
           <div className="flex flex-col lg:flex-row lg:items-stretch gap-8 lg:gap-12">
             <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl text-ppa-white leading-[0.9] shrink-0">
-              Built by Mechanics.
+              Big Enough to Handle.
               <br />
-              <span className="text-ppa-muted">Run by Mechanics.</span>
+              <span className="text-ppa-muted">Small Enough to Care.</span>
             </h1>
             <div className="lg:border-l-2 lg:border-ppa-brass-bright lg:pl-12 flex items-center">
               <p className="text-lg lg:text-xl text-ppa-light/85 font-light leading-relaxed max-w-xl">
@@ -78,11 +79,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Our Story — Split layout */}
-      <section className="py-24 lg:py-32">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            <div>
+      {/* Our Story — Photo-led, right-bleed */}
+      <section className="py-24 lg:py-32 overflow-hidden">
+        <div className="grid lg:grid-cols-2 items-center gap-y-14">
+          {/* Text column */}
+          <div className="px-6 lg:pl-10 lg:pr-16">
+            <div className="lg:ml-auto lg:max-w-[580px]">
               <div className="flex items-center gap-3 mb-4">
                 <span className="h-px w-8 bg-ppa-brass" />
                 <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
@@ -119,28 +121,37 @@ export default function AboutPage() {
                   answer, the first time.
                 </p>
               </div>
-            </div>
-
-            <div className="relative">
-              <div className="aspect-[4/5] relative overflow-hidden">
-                <Image
-                  src="/images/Winglet-Install---01.jpg"
-                  alt="Plane Place Aviation team collaborating on winglet structural work"
-                  fill
-                  className="object-cover"
-                />
+              <div className="mt-10 flex items-center gap-4">
+                <span className="h-px w-10 bg-ppa-brass" />
+                <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-black">
+                  Tristan Noe &amp; Travis Roberson, Co-Founders
+                </span>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Tagline — Full width */}
-      <section className="py-16 lg:py-24 border-y border-ppa-border">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 text-center">
-          <p className="font-display text-5xl sm:text-6xl lg:text-7xl text-ppa-brass leading-none">
-            Precise. Professional. Attentive.
-          </p>
+          {/* Image column — bleeds to right viewport edge */}
+          <div className="relative min-h-[480px] lg:min-h-[760px]">
+            <Image
+              src="/images/Aircraft-in-Hangar---BW.jpg"
+              alt="Business jet in the Plane Place Aviation hangar"
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 55vw"
+            />
+            {/* Scrim for caption legibility */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/55 via-black/15 to-transparent"
+            />
+            {/* Editorial caption */}
+            <div className="absolute bottom-6 left-6 lg:bottom-8 lg:left-8 flex items-center gap-3">
+              <span className="h-px w-6 bg-ppa-brass" />
+              <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/95">
+                Hangar 98 · Cleburne, TX · Est. 2022
+              </span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -233,7 +244,7 @@ export default function AboutPage() {
       {/* Certifications */}
       <section className="py-24 lg:py-32">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <span className="h-px w-8 bg-ppa-brass" />
@@ -242,7 +253,7 @@ export default function AboutPage() {
                 </span>
               </div>
               <h2 className="font-display text-4xl sm:text-5xl text-ppa-black leading-none mb-8">
-                Certified. Trusted. Proven.
+                Precise. Professional. Attentive.
               </h2>
               <p className="text-ppa-gray font-light leading-relaxed mb-8 max-w-xl">
                 Plane Place Aviation is an FAA-certified Part 145 repair
@@ -259,6 +270,7 @@ export default function AboutPage() {
                 {[
                   { name: "FAA Part 145 Repair Station", desc: "Independent FAA-approved repair station serving Texas, Oklahoma, and beyond. Full airframe maintenance, inspection, and alteration authorization." },
                   { name: "Mexico AFAC Certification", desc: "Authorized to perform maintenance on Mexican-registered aircraft." },
+                  { name: "AOG Mobile Response — TX & OK", desc: "Mobile maintenance team on call for Aircraft on Ground emergencies across Texas and Oklahoma. When your aircraft is down, we come to you." },
                 ].map((cert) => (
                   <div key={cert.name} className="flex gap-4 p-5 border border-ppa-border">
                     <span className="text-ppa-brass font-display text-xl mt-0.5">+</span>
@@ -305,6 +317,21 @@ export default function AboutPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
+
+              {/* Map */}
+              <div className="mt-8 border border-ppa-border overflow-hidden">
+                <LocationMap
+                  lat={32.3535}
+                  lng={-97.4344}
+                  // Auto-zoom to show Cleburne (marker), Fort Worth, and Dallas
+                  fitBoundsTo={[
+                    [32.7555, -97.3308], // Fort Worth
+                    [32.7767, -96.797],  // Dallas
+                  ]}
+                  className="h-[360px] w-full"
+                  label={`${COMPANY.name} — ${COMPANY.address.street}, ${COMPANY.address.city}, ${COMPANY.address.state} ${COMPANY.address.zip}`}
+                />
+              </div>
             </div>
           </div>
         </div>

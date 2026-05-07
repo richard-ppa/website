@@ -1,0 +1,6 @@
+# Cloudflare Pages SPA fallback for the admin article editor.
+# /admin/articles/new and /admin/articles itself are real static pages
+# (served first by Cloudflare). Any other /admin/articles/<id> URL is rewritten
+# to /admin/articles/new/, where the Editor reads the actual ID from
+# window.location.pathname / usePathname() and fetches the right article.
+/admin/articles/*  /admin/articles/new/index.html  200
