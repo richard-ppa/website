@@ -43,7 +43,7 @@ export const onRequestPost: PagesHandler<Env> = async ({ env, params }) => {
   try {
     const existing = await selectArticleById(env, id);
     if (!existing) return jsonResponse({ error: "not-found" }, { status: 404 });
-    const updated = await updateArticle(env, id, { published: false });
+    const updated = await updateArticle(env, id, { published: false, status: "draft" });
     if (!updated) return jsonResponse({ error: "not-found" }, { status: 404 });
     return jsonResponse(updated);
   } catch (e) {

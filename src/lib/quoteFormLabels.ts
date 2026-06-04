@@ -12,6 +12,7 @@ export const SERVICE_OPTIONS: ReadonlyArray<{ value: string; label: string }> = 
   { value: "structural", label: "Structural Repair" },
   { value: "avionics", label: "Avionics" },
   { value: "management", label: "Maintenance Management" },
+  { value: "parts", label: "Part Request" },
   { value: "other", label: "Other" },
 ];
 

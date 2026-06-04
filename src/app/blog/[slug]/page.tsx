@@ -32,6 +32,43 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+// Extract FAQ items from a post's sections by looking for a heading like
+// "Frequently Asked Questions" followed by question-heading + paragraph pairs.
+// A heading qualifies as a question only if its text ends with "?". The first
+// heading that doesn't end with "?" (e.g., "Final Thoughts") closes the FAQ.
+// Returns null if no FAQ is detected.
+function extractFaqItems(sections: BlogSection[]): Array<{ q: string; a: string }> | null {
+  const startIdx = sections.findIndex(
+    (s) => s.kind === "heading" && /^frequently asked questions/i.test(s.text.trim())
+  );
+  if (startIdx === -1) return null;
+
+  const items: Array<{ q: string; a: string }> = [];
+  let i = startIdx + 1;
+  while (i < sections.length) {
+    const sec = sections[i];
+    if (sec.kind !== "heading") {
+      i++;
+      continue;
+    }
+    // A question heading must end with "?". If it doesn't, the FAQ section is over.
+    if (!/\?\s*$/.test(sec.text.trim())) break;
+
+    // Collect the paragraph(s) that follow until the next heading or non-prose block.
+    const answerParts: string[] = [];
+    let j = i + 1;
+    while (j < sections.length && sections[j].kind === "paragraph") {
+      answerParts.push((sections[j] as { kind: "paragraph"; text: string }).text);
+      j++;
+    }
+    if (answerParts.length === 0) break;
+
+    items.push({ q: sec.text.trim(), a: answerParts.join(" ") });
+    i = j;
+  }
+  return items.length > 0 ? items : null;
+}
+
 function renderInline(text: string) {
   // Bold pass only — split on **…**
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
@@ -109,6 +146,33 @@ export default async function BlogPostPage({ params }: PageProps) {
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
+  // Compute the article body (concatenated prose) and word count so the
+  // schema accurately conveys content depth — a small but real ranking signal.
+  const articleBodyText = post.sections
+    .filter(
+      (s): s is Extract<BlogSection, { kind: "paragraph" | "callout" | "heading" }> =>
+        s.kind === "paragraph" || s.kind === "callout" || s.kind === "heading"
+    )
+    .map((s) => s.text)
+    .join(" ");
+  const wordCount = articleBodyText.split(/\s+/).filter(Boolean).length;
+
+  // Pick a relevant /capabilities page based on the post's tags. The blog
+  // → pillar link below uses this too. Falls back to /capabilities if no
+  // airframe is identifiable from the tags.
+  const lowerTags = post.tags.map((t) => t.toLowerCase()).join(" ");
+  const relatedCapability = lowerTags.includes("hawker")
+    ? { slug: "hawker", name: "Hawker" }
+    : lowerTags.includes("citation")
+    ? { slug: "citation", name: "Citation" }
+    : lowerTags.includes("challenger")
+    ? { slug: "challenger", name: "Challenger" }
+    : null;
+
+  // Slug for the author Person — links the schema to the matching Person
+  // record we ship on the /about page (same @id pattern there).
+  const authorSlug = post.author.toLowerCase().replace(/\s+/g, "-");
+
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": post.category === "Field Insights" ? "TechArticle" : "BlogPosting",
@@ -116,10 +180,21 @@ export default async function BlogPostPage({ params }: PageProps) {
     description: post.excerpt,
     image: `https://ppa.aero${post.hero.src}`,
     datePublished: post.date,
+    // dateModified should reflect actual modifications. We don't track that
+    // per-post yet (BlogPost has no updatedAt field), so fall back to date.
+    // When the Supabase fetch adds updatedAt, swap this to post.updatedAt.
     dateModified: post.date,
-    author: { "@type": "Organization", name: post.author },
+    // Named-person author — Google's E-E-A-T framework rewards human
+    // attribution on technical/safety content. Linked via @id to the Person
+    // record on /about.
+    author: {
+      "@type": "Person",
+      "@id": `https://ppa.aero/about#${authorSlug}`,
+      name: post.author,
+    },
     publisher: {
       "@type": "Organization",
+      "@id": "https://ppa.aero/#organization",
       name: "Plane Place Aviation",
       logo: { "@type": "ImageObject", url: "https://ppa.aero/images/ppa-logo.png" },
     },
@@ -129,7 +204,28 @@ export default async function BlogPostPage({ params }: PageProps) {
     },
     keywords: post.tags.join(", "),
     articleSection: post.category,
+    wordCount,
+    articleBody: articleBodyText,
+    inLanguage: "en-US",
   };
+
+  // FAQPage schema — emitted only when the post contains a recognizable FAQ
+  // section. Google's FAQ rich results are limited to government/health sites
+  // since Aug 2023, but the structured data still helps with topical clarity,
+  // voice search, and "People Also Ask" surfacing.
+  const faqItems = extractFaqItems(post.sections);
+  const faqJsonLd = faqItems
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "@id": `https://ppa.aero/blog/${post.slug}#faq`,
+        mainEntity: faqItems.map((item) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: { "@type": "Answer", text: item.a },
+        })),
+      }
+    : null;
 
   return (
     <article>
@@ -137,6 +233,12 @@ export default async function BlogPostPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       {/* Hero */}
       <section className="relative h-[70vh] min-h-[500px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
@@ -197,6 +299,38 @@ export default async function BlogPostPage({ params }: PageProps) {
                   {tag}
                 </span>
               ))}
+            </div>
+          )}
+
+          {/* Related capability — internal link from blog → pillar page.
+              Auto-derived from the post's tags. Boosts topical authority for
+              the corresponding airframe page. */}
+          {relatedCapability && (
+            <div className="mt-12 pt-8 border-t border-ppa-border">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="h-px w-8 bg-ppa-brass" />
+                <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
+                  Related
+                </span>
+              </div>
+              <Link
+                href={`/capabilities/${relatedCapability.slug}`}
+                className="group inline-flex items-baseline gap-3 text-ppa-black hover:text-ppa-brass-dark transition-colors"
+              >
+                <span className="font-display text-2xl lg:text-3xl leading-tight">
+                  {relatedCapability.name} maintenance at Plane Place Aviation
+                </span>
+                <span
+                  aria-hidden
+                  className="text-ppa-brass text-xl group-hover:translate-x-1 transition-transform inline-block"
+                >
+                  →
+                </span>
+              </Link>
+              <p className="mt-2 text-sm text-ppa-muted max-w-2xl">
+                Inspection cadence, recurring findings, parts notes, and what
+                operators should know about {relatedCapability.name.toLowerCase()} maintenance with PPA.
+              </p>
             </div>
           )}
         </div>

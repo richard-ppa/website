@@ -11,9 +11,14 @@ export function Footer() {
   // Hide public-site footer inside the admin dashboard
   if (pathname.startsWith("/admin")) return null;
 
+  // /careers renders its own page-local "Apply" CTA strip in the same visual
+  // slot, so suppress the global quote CTA there to avoid stacking two.
+  const hideQuoteCTA = pathname === "/careers";
+
   return (
     <footer className="bg-ppa-light border-t border-ppa-border">
       {/* CTA Strip */}
+      {!hideQuoteCTA && (
       <div className="bg-ppa-brass">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16 lg:py-20 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
           <div>
@@ -41,6 +46,7 @@ export function Footer() {
           </div>
         </div>
       </div>
+      )}
 
       {/* Footer columns */}
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16">

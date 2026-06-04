@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { COMPANY } from "@/lib/constants";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { TrackConversion } from "@/components/TrackConversion";
 
 export const metadata: Metadata = {
   title: "Thank You — Message Received",
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
 export default function ContactThankYouPage() {
   return (
     <>
+      <TrackConversion event="generate_lead" type="contact" />
       <section className="relative h-[55vh] min-h-[400px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <Image

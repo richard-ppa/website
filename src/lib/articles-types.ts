@@ -16,6 +16,14 @@ import type { BlogPost, BlogSection } from "./blog-posts";
 export type { BlogPost, BlogSection };
 
 /**
+ * Workflow status — drives the editor → review → publish flow.
+ *   - draft:     being authored (Tristan/Travis filling in placeholders)
+ *   - in_review: submitted; Richard reviewing
+ *   - published: live on the site (matches published=true)
+ */
+export type ArticleStatus = "draft" | "in_review" | "published";
+
+/**
  * Full row as stored in Supabase. snake_case mirrors the DB columns.
  */
 export interface Article {
@@ -34,7 +42,8 @@ export interface Article {
   sections: BlogSection[]; // jsonb -> typed via BlogSection
   cta_headline: string | null;
   cta_body: string | null;
-  published: boolean;
+  status: ArticleStatus;
+  published: boolean; // mirrors status === "published"
   published_at: string | null; // ISO timestamp
   created_at: string; // ISO timestamp
   updated_at: string; // ISO timestamp
@@ -46,8 +55,9 @@ export interface Article {
  */
 export type ArticleInsert = Omit<
   Article,
-  "id" | "created_at" | "updated_at" | "published" | "published_at"
+  "id" | "created_at" | "updated_at" | "status" | "published" | "published_at"
 > & {
+  status?: ArticleStatus;
   published?: boolean;
   published_at?: string | null;
 };

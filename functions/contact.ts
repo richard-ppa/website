@@ -2,6 +2,12 @@
 // Send Us a Message form. Turnstile-protected, no file attachments.
 
 import { FOUNDER_EMAILS } from "./_shared/founders";
+import {
+  buildSourceBlockHtml,
+  buildSourceBlockText,
+  extractAttribution,
+  recordLead,
+} from "./_shared/leads";
 
 interface KVNamespace {
   get(key: string): Promise<string | null>;
@@ -105,6 +111,10 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
     return errorRedirect("invalid-email");
   }
 
+  // Capture source attribution (Referer header → UTM / channel) once so both
+  // the email and the KV record use the same data.
+  const attribution = extractAttribution(request);
+
   const rows: Array<[string, string]> = [
     ["Name", name],
     ["Company", company || "—"],
@@ -139,6 +149,7 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
         <div style="color:#4b5563;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px;">Message</div>
         <div style="color:#111827;font-size:15px;line-height:1.6;white-space:pre-wrap;">${escapeHtml(message)}</div>
       </div>
+      ${buildSourceBlockHtml(attribution)}
     </div>
     <div style="margin-top:16px;text-align:center;color:#9ca3af;font-size:12px;">
       Submitted via the contact form on <a href="https://ppa.aero/contact" style="color:#9ca3af;">ppa.aero/contact</a>
@@ -149,7 +160,8 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
   const text =
     (founder ? `Direct message for ${founder.name}\n\n` : `New Contact Message\n\n`) +
     rows.map(([k, v]) => `${k}: ${v}`).join("\n") +
-    `\n\nMessage:\n${message}`;
+    `\n\nMessage:\n${message}` +
+    buildSourceBlockText(attribution);
 
   let resendRes: Response;
   try {
@@ -183,7 +195,6 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
   // Write to KV for admin dashboard (best-effort)
   if (env.LEADS_KV) {
     try {
-      const { recordLead } = await import("./_shared/leads");
       await recordLead(env.LEADS_KV, {
         id: crypto.randomUUID(),
         type: "contact",
@@ -194,6 +205,7 @@ export const onRequestPost: PagesHandler<Env> = async ({ request, env }) => {
         phone,
         messagePreview: message.slice(0, 200),
         recipient: founder ? founder.name : undefined,
+        attribution,
       });
     } catch (e) {
       console.error("Lead tracking write failed", e);

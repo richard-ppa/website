@@ -11,7 +11,17 @@ import {
   SupabaseError,
   type SupabaseEnv,
 } from "../../_shared/supabase";
-import type { Article, ArticleInsert } from "../../../src/lib/articles-types";
+import type {
+  Article,
+  ArticleInsert,
+  ArticleStatus,
+} from "../../../src/lib/articles-types";
+
+const VALID_STATUSES: ReadonlySet<ArticleStatus> = new Set<ArticleStatus>([
+  "draft",
+  "in_review",
+  "published",
+]);
 
 interface Env extends SupabaseEnv {
   CLOUDFLARE_DEPLOY_WEBHOOK_URL?: string;
@@ -115,12 +125,33 @@ function validateInsert(body: unknown): { ok: true; value: ArticleInsert } | { o
   return { ok: true, value };
 }
 
-export const onRequestGet: PagesHandler<Env> = async ({ env }) => {
+export const onRequestGet: PagesHandler<Env> = async ({ env, request }) => {
   if (!envConfigured(env)) {
     return jsonResponse({ error: "supabase-not-configured" }, { status: 503 });
   }
+
+  // Optional ?status=draft|in_review|published filter.
+  const url = new URL(request.url);
+  const statusParam = url.searchParams.get("status");
+  let statusFilter: ArticleStatus | undefined;
+  if (statusParam !== null && statusParam !== "") {
+    if (!VALID_STATUSES.has(statusParam as ArticleStatus)) {
+      return jsonResponse(
+        {
+          error: "validation",
+          details: { status: "must be one of draft | in_review | published" },
+        },
+        { status: 400 }
+      );
+    }
+    statusFilter = statusParam as ArticleStatus;
+  }
+
   try {
-    const articles = await selectArticles(env);
+    const all = await selectArticles(env);
+    const articles = statusFilter
+      ? all.filter((a) => a.status === statusFilter)
+      : all;
     return jsonResponse({ articles });
   } catch (e) {
     console.error("selectArticles failed", e);

@@ -42,14 +42,15 @@ const AIRFRAME_HERO_IMAGES: Record<string, { src: string; alt: string; position?
   },
 };
 
-const AIRFRAME_SERVICE_IMAGES: Record<string, { src: string; alt: string }> = {
+const AIRFRAME_SERVICE_IMAGES: Record<string, { src: string; alt: string; flip?: boolean }> = {
   hawker: {
-    src: "/images/Tech-at-Station.jpg",
-    alt: "Plane Place Aviation technician at workstation reviewing Hawker maintenance records",
+    src: "/images/Landing-Gear-Inspection.jpg",
+    alt: "Plane Place Aviation technicians performing a landing gear inspection on a Hawker",
   },
   citation: {
-    src: "/images/Citation-Engine-Work-on-ladder.jpg",
-    alt: "Plane Place Aviation technician on a ladder performing Citation engine work",
+    src: "/images/Citation%20Engine%20Overhaul%202.jpg",
+    alt: "Plane Place Aviation technicians performing a Citation engine overhaul",
+    flip: true,
   },
   challenger: {
     src: "/images/challenger-in-shop.jpg",
@@ -155,8 +156,52 @@ export default async function AirframePage({
     (a) => a.slug !== slug
   );
 
+  // Service schema — declares this page as a Service offered by the root
+  // LocalBusiness (linked via @id), scoped to the specific airframe family.
+  // Helps Google understand the relationship between the per-airframe pages
+  // and the parent Organization.
+  const serviceJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `https://ppa.aero/capabilities/${slug}#service`,
+    serviceType: `${airframe.name} Aircraft Maintenance`,
+    name: `${airframe.name} Maintenance, Inspection & Repair`,
+    description: airframe.description,
+    url: `https://ppa.aero/capabilities/${slug}`,
+    provider: { "@id": "https://ppa.aero/#organization" },
+    brand: {
+      "@type": "Brand",
+      name: airframe.manufacturer,
+    },
+    category: `${airframe.manufacturer} ${airframe.name} — ${airframe.models.join(
+      ", "
+    )}`,
+    areaServed: [
+      { "@type": "State", name: "Texas" },
+      { "@type": "State", name: "Oklahoma" },
+    ],
+    audience: {
+      "@type": "Audience",
+      audienceType:
+        "Part 135 Charter Operators, Corporate Flight Departments, Aircraft Management Companies, Individual Owners",
+    },
+    image: `https://ppa.aero${heroImg.src}`,
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: `${airframe.name} Maintenance Services`,
+      itemListElement: airframe.services.map((s) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: s },
+      })),
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
       {/* Hero */}
       <section className="relative h-[100dvh] min-h-[600px] lg:min-h-[700px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
@@ -215,7 +260,11 @@ export default async function AirframePage({
 
       {/* Models served — light bg with cyan vertical rules between columns */}
       {(() => {
-        const count = airframe.models.length;
+        // Cast to number — airframe.models is `as const` so .length narrows
+        // to a literal type, which makes equality checks against other
+        // literals (e.g., === 4) fail at the type level when no current
+        // airframe has 4 models. The runtime check is still meaningful.
+        const count: number = airframe.models.length;
         const lgCols =
           count === 4
             ? "lg:grid-cols-4"
@@ -291,6 +340,49 @@ export default async function AirframePage({
         </div>
       </section>
 
+      {/* Pillar sections — deep technical body content for topical authority */}
+      {(() => {
+        type PillarSection = {
+          eyebrow: string;
+          heading: string;
+          paragraphs: readonly string[];
+        };
+        const pillarSections = (airframe as { pillarSections?: readonly PillarSection[] })
+          .pillarSections;
+        if (!pillarSections || pillarSections.length === 0) return null;
+        return (
+          <section className="bg-ppa-light py-20 lg:py-28 border-t border-ppa-border">
+            <div className="max-w-[1100px] mx-auto px-6 lg:px-10">
+              <div className="space-y-20 lg:space-y-24">
+                {pillarSections.map((section, sectionIdx) => (
+                  <article key={sectionIdx} className="max-w-3xl">
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="h-px w-8 bg-ppa-brass" />
+                      <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
+                        {section.eyebrow}
+                      </span>
+                    </div>
+                    <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl text-ppa-black leading-[0.95] mb-8">
+                      {section.heading}
+                    </h2>
+                    <div className="space-y-5">
+                      {section.paragraphs.map((paragraph, pIdx) => (
+                        <p
+                          key={pIdx}
+                          className="text-ppa-dark text-lg leading-[1.75] font-light"
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
+
       {/* Gallery strip */}
       {gallery.length > 0 && (
         <section>
@@ -310,7 +402,7 @@ export default async function AirframePage({
           src={serviceImg.src}
           alt={serviceImg.alt}
           fill
-          className="object-cover"
+          className={`object-cover ${serviceImg.flip ? "scale-x-[-1]" : ""}`}
           sizes="100vw"
         />
         {/* Mobile overlay: top-heavy gradient for readability */}

@@ -57,7 +57,7 @@ const AIRFRAME_CARD_DESCRIPTIONS: Record<string, string> = {
   hawker:
     "Extensive experience across the entire Hawker 800 series — from the classic 800 through the 900XP and 1000. Type-specific tooling, dedicated procedures, and access to extensive Hawker parts inventory through a parts-out partner on the field. 8-year major inspections, B/C/D/E/F/G phase inspections, landing gear overhauls, and avionics upgrades.",
   citation:
-    "Full-service Citation maintenance from the 550 series through the 680 Sovereign — including the Citation 560XL/XLS and Citation 650. Phase 1–5 inspections, annual inspections, structural repairs, landing gear service, avionics troubleshooting, all in-house at our Cleburne, Texas hangar.",
+    "Full-service Citation maintenance from the 550 series through the 680 Sovereign — including the Citation 560XL, 560XLS, and Citation 650. Phase 1–5 inspections, annual inspections, structural repairs, landing gear service, avionics troubleshooting, all in-house at our Cleburne, Texas hangar.",
   challenger:
     "Specialist Challenger maintenance with factory-trained Challenger 300/350 technicians on staff for 96- and 192-month inspection events. Plane Place Aviation has completed several major Challenger 300/350 inspections and landing gear removals — and supports Challenger 604, 605, and 650 with 24/7 AOG response across Texas and Oklahoma.",
 };
@@ -65,7 +65,7 @@ const AIRFRAME_CARD_DESCRIPTIONS: Record<string, string> = {
 const FAQ_ITEMS: { q: string; a: string }[] = [
   {
     q: "What aircraft does Plane Place Aviation service?",
-    a: "We specialize exclusively in three business jet families: Hawker (800, 800XP, 900XP, 1000), Citation (550, 560, 560XL/XLS, 650, 680), and Challenger (300, 350, 604, 605, 650). Our shop, tooling, and technician training are dedicated to these specific airframes — we don't context-switch between unrelated aircraft families.",
+    a: "We specialize exclusively in three business jet families: Hawker (800, 800XP, 900XP, 1000), Citation (550, 560, 560XL, 560XLS, 650, 680), and Challenger (300, 350, 604, 605, 650). Our shop, tooling, and technician training are dedicated to these specific airframes — we don't context-switch between unrelated aircraft families.",
   },
   {
     q: "What is an FAA Part 145 repair station?",
@@ -115,7 +115,7 @@ const serviceJsonLd = {
         name: "Citation Maintenance",
         url: "https://ppa.aero/capabilities/citation",
         itemListElement: [
-          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Citation 550 / 560 / 560XL/XLS / 650 / 680 phase inspections and structural repair" } },
+          { "@type": "Offer", itemOffered: { "@type": "Service", name: "Citation 550 / 560 / 560XL / 560XLS / 650 / 680 phase inspections and structural repair" } },
         ],
       },
       {

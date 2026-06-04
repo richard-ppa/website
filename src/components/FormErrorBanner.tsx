@@ -16,6 +16,11 @@ const ERROR_MESSAGES: Record<string, string> = {
   "scan-failed": "We couldn't complete the security scan on your files. Please try again in a few minutes, or call us directly at (817) 768-8884.",
   "storage-failed": "We couldn't store your attachment. Please try again, or call us directly at (817) 768-8884.",
   "send-failed": "We couldn't deliver your request. Please try again, or call us directly at (817) 768-8884.",
+  // Careers form — overrides for messages that differ from the quote form
+  "careers-resume-required": "Please attach your resume to submit an application.",
+  "careers-too-many-files": "Maximum 2 files per application — resume plus one supporting document.",
+  "careers-attachments-too-large": "Your files exceed the 20MB total limit. Please reduce file sizes and try again.",
+  "careers-file-type-not-allowed": "Only PDF or Word documents (.pdf, .doc, .docx) are allowed.",
 };
 
 export function FormErrorBanner() {

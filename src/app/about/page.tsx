@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { COMPANY } from "@/lib/constants";
 import { Breadcrumb } from "@/components/Breadcrumb";
-import { LocationMap } from "@/components/LocationMap";
+import { KCTPFacilityMap } from "@/components/location/KCTPFacilityMap";
 
 export const metadata: Metadata = {
   title: "About — Founder-Led Aircraft MRO in Cleburne, TX",
@@ -36,9 +36,44 @@ export const metadata: Metadata = {
   },
 };
 
+// Page-level schema: declares /about as an AboutPage and includes a Person
+// node for each leadership team member (linked to the root LocalBusiness via
+// worksFor). The Person nodes are stable @ids referenced by blog post
+// author records, which strengthens E-E-A-T attribution for technical
+// content authored by named PPA people.
+const aboutJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": "https://ppa.aero/about#webpage",
+      url: "https://ppa.aero/about",
+      name: "About — Plane Place Aviation",
+      isPartOf: { "@id": "https://ppa.aero/#website" },
+      about: { "@id": "https://ppa.aero/#organization" },
+      inLanguage: "en-US",
+    },
+    ...COMPANY.leadership.map((member) => {
+      const slug = member.name.toLowerCase().replace(/\s+/g, "-");
+      return {
+        "@type": "Person",
+        "@id": `https://ppa.aero/about#${slug}`,
+        name: member.name,
+        jobTitle: member.title,
+        image: `https://ppa.aero${member.photo}`,
+        worksFor: { "@id": "https://ppa.aero/#organization" },
+      };
+    }),
+  ],
+};
+
 export default function AboutPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutJsonLd) }}
+      />
       {/* Hero — Full-screen team photo with intro */}
       <section className="relative h-[100dvh] min-h-[600px] lg:min-h-[700px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
@@ -80,7 +115,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Story — Photo-led, right-bleed */}
-      <section className="py-24 lg:py-32 overflow-hidden">
+      <section className="overflow-hidden pt-16 lg:pt-24">
         <div className="grid lg:grid-cols-2 items-center gap-y-14">
           {/* Text column */}
           <div className="px-6 lg:pl-10 lg:pr-16">
@@ -148,7 +183,7 @@ export default function AboutPage() {
             <div className="absolute bottom-6 left-6 lg:bottom-8 lg:left-8 flex items-center gap-3">
               <span className="h-px w-6 bg-ppa-brass" />
               <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-white/95">
-                Hangar 98 · Cleburne, TX · Est. 2022
+                Hangar 2100 · Cleburne, TX · Est. 2022
               </span>
             </div>
           </div>
@@ -199,7 +234,7 @@ export default function AboutPage() {
           <div className="h-px bg-ppa-border mb-10 lg:mb-12" />
 
           {/* Leadership / Leads — uniform row */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-8">
             {COMPANY.leadership.slice(2).map((member) => (
               <div
                 key={member.name}
@@ -223,21 +258,6 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Photo strip */}
-      <section>
-        <div className="grid grid-cols-3 gap-1">
-          {[
-            { src: "/images/PPA-22.jpg", alt: "Plane Place Aviation operations" },
-            { src: "/images/PPA-Employees.jpg", alt: "Plane Place Aviation team" },
-            { src: "/images/PPA-HGR-98.jpg", alt: "Plane Place Aviation facility" },
-          ].map((photo) => (
-            <div key={photo.src} className="aspect-[16/9] relative overflow-hidden">
-              <Image src={photo.src} alt={photo.alt} fill className="object-cover" />
-            </div>
-          ))}
         </div>
       </section>
 
@@ -284,54 +304,7 @@ export default function AboutPage() {
             </div>
 
             <div>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="h-px w-8 bg-ppa-brass" />
-                <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
-                  Location
-                </span>
-              </div>
-              <h2 className="font-display text-4xl text-ppa-black leading-none mb-6">
-                Cleburne, Texas — KCPT
-              </h2>
-              <p className="text-ppa-gray font-light leading-relaxed mb-6">
-                40,000 sq ft of hangar space across three hangars at
-                Cleburne Regional Airport — 30 minutes south of DFW.
-                Lower operating costs than Love Field or Addison
-                translate directly to better value for our customers,
-                with comfortable lounge and office space for visiting
-                crews.
-              </p>
-              <div className="space-y-1 text-sm text-ppa-muted mb-6">
-                <p>{COMPANY.address.street}</p>
-                <p>
-                  {COMPANY.address.city}, {COMPANY.address.state}{" "}
-                  {COMPANY.address.zip}
-                </p>
-              </div>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-3 text-[13px] font-semibold uppercase tracking-[0.15em] text-ppa-brass hover:text-ppa-brass-light transition-colors"
-              >
-                Get Directions
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-
-              {/* Map */}
-              <div className="mt-8 border border-ppa-border overflow-hidden">
-                <LocationMap
-                  lat={32.3535}
-                  lng={-97.4344}
-                  // Auto-zoom to show Cleburne (marker), Fort Worth, and Dallas
-                  fitBoundsTo={[
-                    [32.7555, -97.3308], // Fort Worth
-                    [32.7767, -96.797],  // Dallas
-                  ]}
-                  className="h-[360px] w-full"
-                  label={`${COMPANY.name} — ${COMPANY.address.street}, ${COMPANY.address.city}, ${COMPANY.address.state} ${COMPANY.address.zip}`}
-                />
-              </div>
+              <KCTPFacilityMap />
             </div>
           </div>
         </div>

@@ -1,0 +1,755 @@
+/* ------------------------------------------------------------------
+   CoverTool.css
+   Cover-only styles ported from src/app/admin/estimate-cover/page.tsx
+   (styled-jsx block). Form-panel UI helper classes are also included
+   here so the extension build doesn't need Tailwind/PPA design tokens.
+   ------------------------------------------------------------------ */
+
+/* === Form panel (extension-only helpers) ========================= */
+
+.cv-tool-root {
+  font-family: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #0F1828;
+  background: #f7f6f3;
+  min-height: 100%;
+}
+
+.cv-tool-header-rule {
+  display: inline-block;
+  height: 1px;
+  width: 32px;
+  background: #1E6AA0;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+.cv-tool-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: #1E6AA0;
+}
+.cv-tool-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0F1828;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 8px 0 8px;
+}
+.cv-tool-sub {
+  font-size: 13px;
+  color: #4b5563;
+  font-weight: 300;
+  margin: 0 0 32px;
+  max-width: 640px;
+  line-height: 1.5;
+}
+
+.cv-tool-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+@media (max-width: 1024px) {
+  .cv-tool-layout { grid-template-columns: 1fr; }
+}
+
+.cv-tool-form {
+  background: #ffffff;
+  border: 1px solid #d4d6db;
+}
+.cv-tool-form-inner {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Section */
+.cv-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cv-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #8088A0;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #d4d6db;
+}
+
+/* Field */
+.cv-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cv-field-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #0F1828;
+}
+.cv-field-hint {
+  font-size: 11px;
+  color: #8088A0;
+}
+
+/* Generic input */
+.form-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-family: inherit;
+  color: #0F1828;
+  background: #ffffff;
+  border: 1px solid #d4d6db;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+.form-input:hover { border-color: #273b81; }
+.form-input:focus { border-color: #1E6AA0; }
+
+/* Select arrow */
+.form-select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 36px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none' stroke='%230E2A56' stroke-width='2'><path d='M1 1l5 5 5-5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  cursor: pointer;
+}
+
+/* Grids of buttons */
+.cv-btn-row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.cv-btn-row-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.cv-field-row-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.cv-thumb-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+
+/* Toggle buttons (airframe, hero mode, doc type) */
+.cv-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+  padding: 10px;
+  background: #ffffff;
+  border: 1px solid #d4d6db;
+  color: #0F1828;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+.cv-toggle:hover { border-color: #273b81; }
+.cv-toggle.is-on {
+  background: #273b81;
+  border-color: #273b81;
+  color: #ffffff;
+}
+.cv-toggle-label {
+  font-size: 13px;
+  font-weight: 700;
+}
+.cv-toggle-tag {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+  color: #8088A0;
+}
+.cv-toggle.is-on .cv-toggle-tag { color: rgba(255, 255, 255, 0.65); }
+
+.cv-toggle-flat {
+  padding: 8px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #d4d6db;
+  color: #0F1828;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+.cv-toggle-flat:hover { border-color: #273b81; }
+.cv-toggle-flat.is-on {
+  background: #273b81;
+  border-color: #273b81;
+  color: #ffffff;
+}
+
+/* Image thumbs */
+.cv-thumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background-size: cover;
+  background-position: center;
+  border: 2px solid transparent;
+  outline: 1px solid #d4d6db;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  transition: border-color 0.15s ease, outline 0.15s ease;
+}
+.cv-thumb:hover {
+  outline: 1px solid #273b81;
+}
+.cv-thumb.is-on {
+  border-color: #1E6AA0;
+  outline: none;
+}
+.cv-thumb-badge {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: #1E6AA0;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.cv-help {
+  font-size: 11px;
+  color: #8088A0;
+  margin: 6px 0 0;
+}
+
+/* Total/$ prefix wrapper */
+.cv-input-prefixed {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.cv-input-prefix {
+  position: absolute;
+  left: 12px;
+  color: #8088A0;
+  font-weight: 600;
+  font-size: 13px;
+  pointer-events: none;
+}
+.cv-input-prefix-sm {
+  position: absolute;
+  left: 12px;
+  color: #8088A0;
+  font-weight: 600;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+/* File drop */
+.file-drop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px dashed #d4d6db;
+  background: #ffffff;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.file-drop:hover { border-color: #1E6AA0; }
+.file-drop.is-over {
+  border-color: #1E6AA0;
+  background: rgba(22, 166, 222, 0.04);
+}
+.file-drop-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background: #f3f4f6;
+  color: #273b81;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.file-drop-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.file-drop-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0F1828;
+}
+.file-drop-sub {
+  font-size: 11px;
+  color: #8088A0;
+}
+
+.file-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #273b81;
+  background: #ffffff;
+}
+.file-chip-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: #273b81;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.file-chip-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.file-chip-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0F1828;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.file-chip-size {
+  font-size: 11px;
+  color: #8088A0;
+}
+.file-chip-x {
+  flex-shrink: 0;
+  padding: 6px;
+  color: #8088A0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.file-chip-x:hover {
+  color: #0F1828;
+  background: #f3f4f6;
+}
+
+.cv-error {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: #fef2f2;
+  border-left: 2px solid #dc2626;
+  color: #991b1b;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Actions footer */
+.cv-actions {
+  position: sticky;
+  bottom: 0;
+  background: #ffffff;
+  border-top: 1px solid #d4d6db;
+  padding: 16px;
+  display: flex;
+  gap: 8px;
+}
+.cv-actions-primary {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #1E6AA0;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease;
+}
+.cv-actions-primary:hover:not(:disabled) { background: #155680; }
+.cv-actions-primary:disabled {
+  background: #d4d6db;
+  cursor: not-allowed;
+}
+.cv-actions-icon {
+  padding: 12px 14px;
+  border: 1px solid #d4d6db;
+  background: #ffffff;
+  color: #273b81;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+  font-family: inherit;
+}
+.cv-actions-icon:hover { border-color: #273b81; }
+
+/* Preview stage */
+.cv-stage {
+  position: relative;
+  background: #0F1828;
+  overflow: hidden;
+  border: 1px solid #d4d6db;
+  min-height: 760px;
+  height: calc(100vh - 200px);
+}
+.cv-stage-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  filter: drop-shadow(0 30px 60px rgba(0,0,0,0.45));
+}
+
+/* === Cover (the printed/captured artifact) ====================== */
+
+/* Hard cascade reset for the cover - undoes Tailwind preflight,
+   globals.css inheritance (body font-family, line-height: 1.55,
+   font-feature-settings), and font-metric variations that diverge
+   between the live browser DOM and the html2canvas capture.
+   Without this, the captured output gets pushed around by upstream
+   rules that don't affect the design-tool iframe. */
+.cover, .cover * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  line-height: 1;
+  font-feature-settings: normal;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+}
+/* Note: an h1/h2/h3/p reset was tried here and removed - it had
+   specificity (0,1,1) which beat our own (0,1,0) title rules, and
+   its font-weight: inherit / margin: 0 then killed the bold and
+   the negative margin on .cv-portrait-title. The general
+   .cover, .cover * reset above handles margin/padding zeroing for
+   every element including h1, and Tailwind preflight rules are
+   layered (@layer base) so they lose to our unlayered rules. */
+.cover img { display: block; max-width: none; height: auto; }
+.cover button { all: unset; }
+
+.cover {
+  --cv-navy: #0E2A56;
+  --cv-cyan: #16A6DE;
+  --cv-cyan-deep: #0F89B8;
+  --cv-cream: #F4F0E8;
+  --cv-ink: #0B1B36;
+  --cv-ink-mute: #8088A0;
+  --cv-line: rgba(14, 42, 86, 0.12);
+  --cv-line-strong: rgba(14, 42, 86, 0.25);
+  --cv-ghost: #273b81; /* PPA brand navy - used for the registration-number ghost text in the title */
+
+  width: 850px;
+  height: 1100px;
+  background: var(--cv-cream);
+  color: var(--cv-navy);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  font-family: "Archivo", system-ui, sans-serif;
+}
+
+.cv-logo { height: 36px; width: auto; display: block; }
+.cv-logo--lg { height: auto; width: 360px; }
+
+.cv-mono { font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+
+/* Shared base styles used by the Portrait layout */
+.cv-title-line { display: block; color: var(--cv-navy); }
+.cv-title-line--ghost { color: rgba(14, 42, 86, 0.28); }
+.cv-grid-item { display: flex; flex-direction: column; gap: 4px; }
+.cv-grid-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--cv-ink-mute);
+}
+.cv-grid-value { font-size: 18px; font-weight: 600; color: var(--cv-navy); letter-spacing: -0.01em; }
+.cv-total-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--cv-ink-mute); padding-top: 16px;
+}
+.cv-total-value {
+  font-size: 72px; font-weight: 800; letter-spacing: -0.04em;
+  line-height: 1; color: var(--cv-navy);
+  font-variant-numeric: tabular-nums; text-align: right;
+}
+
+/* Portrait layout */
+.cover-portrait { background: #061538; padding: 0; }
+.cv-portrait-hero { position: relative; height: 660px; overflow: hidden; }
+.cv-portrait-single {
+  position: absolute; inset: 0; background-size: cover;
+  background-position: center; background-color: #1a2a3a;
+}
+.cv-portrait-collage {
+  position: absolute; inset: 0; display: grid;
+  grid-template-columns: 1fr 1fr; grid-template-rows: 1.7fr 1fr;
+  gap: 6px; background: var(--cv-cream);
+}
+.cv-collage-cell {
+  position: relative; overflow: hidden;
+  background: #1a2a3a no-repeat center / cover;
+}
+.cv-collage-big { grid-column: 1 / -1; }
+.cv-portrait-scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg,
+    rgba(6, 21, 56, 0.85) 0%,
+    rgba(6, 21, 56, 0.55) 18%,
+    transparent 38%, transparent 58%,
+    rgba(6, 21, 56, 0.55) 100%);
+}
+.cv-portrait-head {
+  position: absolute; top: 0; left: 0; right: 0;
+  padding: 32px 48px; display: flex;
+  justify-content: space-between; align-items: flex-start; gap: 24px;
+}
+.cv-portrait-meta {
+  display: flex; flex-direction: column; gap: 10px;
+  align-items: flex-end; text-align: right; padding-top: 6px;
+}
+.cv-portrait-meta-row { display: flex; flex-direction: column; gap: 2px; }
+.cv-portrait-meta-label {
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  font-weight: 600; color: white;
+}
+.cv-portrait-meta-value {
+  font-size: 14px; font-weight: 600; color: white;
+  font-variant-numeric: tabular-nums; letter-spacing: 0.02em;
+}
+.cv-portrait-hero-foot {
+  position: absolute; bottom: 28px; left: 48px; right: 48px;
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+.cv-portrait-num {
+  color: #ffffff; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+}
+.cv-portrait-card {
+  background: var(--cv-cream); padding: 40px 48px 48px;
+  flex: 1; display: flex; flex-direction: column;
+}
+.cv-portrait-eyebrow {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--cv-cyan);
+  line-height: 1; margin: 0 0 22px;
+}
+/* Title - model name to the left, navy pill containing the registration
+   number to the right. The pill bleeds off the right edge of the card
+   (margin-right: -48px) with rounded corners only on the left.
+   !important on line-height / font-size / font-family because:
+     - The cascade reset hardens inheritance, but body { line-height: 1.55 }
+       in globals.css and Tailwind preflight's h1 { font-size: inherit }
+       can still slip through depending on stylesheet load order.
+     - styled-jsx injects styles at runtime which puts them late in the
+       cascade, BUT we want bulletproof guarantees here, not "should win." */
+.cv-portrait-title {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap;
+  gap: 18px;
+  margin: 0 -48px 28px 0;
+  padding: 0;
+  font-family: "Archivo", system-ui, sans-serif !important;
+  font-size: 65px !important;
+  line-height: 1 !important;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+  min-width: 0;
+  height: auto;
+}
+.cv-title-model {
+  flex: 0 0 auto;
+  color: var(--cv-navy);
+  font-weight: 800 !important;
+  font-family: "Archivo", system-ui, sans-serif !important;
+  font-size: 65px !important;
+  line-height: 1 !important;
+  white-space: nowrap;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block;
+}
+.cv-title-pill {
+  flex: 1 1 auto;
+  min-width: 80px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start;
+  background: var(--cv-navy);
+  color: white;
+  font-family: "Archivo", system-ui, sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 60px !important;
+  line-height: 1 !important;
+  letter-spacing: -0.02em;
+  padding: 18px 48px 18px 28px !important;
+  border-radius: 18px 0 0 18px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.cv-portrait-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  padding: 18px 0;
+  /* Explicit margin shorthand so the cascade reset (which zeroes all
+     margins) doesn't strip this. */
+  margin: 0 0 20px;
+}
+.cv-portrait-grid .cv-grid-value { font-size: 15px; }
+/* Three-column summary band: Total / Work Scope / Prepared By, separated
+   by vertical hairline rules.
+   Same html2canvas-hardening as the title:
+     - Symmetric vertical padding on the container (22/22) instead of
+       asymmetric (28/18) so the capture engine renders predictably
+     - Explicit line-height: 1 on every text node - inherited browser
+       defaults add invisible leading that html2canvas measures
+       differently than the live render
+     - Explicit margin: 0 resets on value/scope/sub so the only spacing
+       is the one we declare. */
+.cv-portrait-summary {
+  display: grid;
+  /* minmax(0, 1fr) is the canonical fix for grid items that wont shrink
+     below their content. Plain 1fr keeps the implicit auto floor, so a
+     wide nowrap child still pushes the column past its share.
+     minmax(0,1fr) sets the floor to 0, locking columns to truly equal
+     thirds regardless of content. */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0;
+  padding: 22px 0;
+  border-top: 1px solid var(--cv-line-strong);
+  border-bottom: 1px solid var(--cv-line-strong);
+  margin: 0 0 18px;
+}
+.cv-summary-col {
+  padding: 6px 28px; display: flex; flex-direction: column;
+  align-items: center; justify-content: flex-start;
+  text-align: center; min-height: 144px;
+  line-height: 1;
+  /* CRITICAL: grid items default to min-width: auto which prevents them
+     from shrinking below their content's intrinsic min-content size.
+     Without min-width: 0 the nowrap scope text would push this column
+     wider than its 1fr share, eating into the neighbors. */
+  min-width: 0;
+  overflow: hidden;
+}
+.cv-summary-col + .cv-summary-col { border-left: 1px solid var(--cv-line-strong); }
+.cv-summary-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--cv-ink-mute);
+  line-height: 1; margin: 0 0 18px;
+}
+.cv-summary-total-value {
+  font-size: 44px; font-weight: 800; letter-spacing: -0.04em;
+  line-height: 1; color: var(--cv-navy);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+.cv-summary-sub {
+  font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--cv-ink-mute);
+  font-weight: 500;
+  line-height: 1.3; margin: 16px 0 0;
+}
+.cv-summary-scope-main {
+  font-size: 36px; font-weight: 800; letter-spacing: 0.02em;
+  line-height: 1; color: var(--cv-navy); text-transform: uppercase;
+  margin: 0;
+}
+.cv-summary-scope-kind {
+  font-size: 18px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--cv-navy);
+  line-height: 1; margin: 10px 0 0;
+}
+.cv-summary-prep {
+  flex-direction: column !important;
+  align-items: center; justify-content: center;
+  gap: 12px; text-align: center;
+}
+.cv-summary-prep-row {
+  display: flex; flex-direction: row;
+  align-items: flex-start; justify-content: center;
+  gap: 16px; text-align: right;
+}
+.cv-summary-prep-text {
+  display: flex; flex-direction: column;
+  align-items: flex-end; text-align: right;
+}
+.cv-summary-prep .cv-summary-label { margin-bottom: 12px; }
+.cv-summary-prep-name {
+  font-size: 14px; font-weight: 700; color: var(--cv-navy);
+  letter-spacing: -0.005em; line-height: 1.15;
+}
+.cv-summary-prep-title {
+  margin-top: 3px; font-size: 11px; color: var(--cv-ink-mute);
+  font-weight: 500; letter-spacing: 0.04em; line-height: 1.3;
+}
+.cv-summary-prep-contact {
+  display: flex; flex-direction: row;
+  align-items: center; justify-content: center;
+  gap: 8px; white-space: nowrap;
+}
+.cv-summary-prep-email,
+.cv-summary-prep-phone {
+  font-size: 10px; color: var(--cv-ink-mute);
+  font-weight: 500; letter-spacing: 0.02em; line-height: 1.3;
+}
+.cv-summary-prep-pipe {
+  color: var(--cv-navy); font-weight: 600;
+  font-size: 10px; line-height: 1; user-select: none;
+}
+/* Override the shared summary-label size for the Prepared By column
+   only - keeps ESTIMATE TOTAL and WORK SCOPE labels at their default
+   11px while shrinking PREPARED BY to 7.5px. */
+.cv-summary-prep .cv-summary-label { font-size: 7.5px; }
+/* <img> rendered at native resolution via object-fit: cover.
+   html2canvas-pro handles object-fit on img tags correctly (the
+   original html2canvas did not), and rendering as an img lets the
+   capture engine draw the source bitmap directly rather than
+   re-sampling through CSS background scaling. */
+.cv-summary-prep-photo {
+  flex-shrink: 0; width: 110px; height: 110px; border-radius: 50%;
+  object-fit: cover; object-position: center top;
+  background-color: rgba(14, 42, 86, 0.08);
+  border: 1px solid var(--cv-line-strong);
+  display: block;
+}
+.cv-portrait-footer {
+  margin-top: auto; padding-top: 18px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 10px; line-height: 1; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--cv-navy); flex-wrap: wrap;
+}
+/* Footer dot - rendered as a literal "·" text character so the font's
+   own typographic metrics handle vertical alignment. Eliminates the
+   flex-centering vs. caps-visual-middle drift the styled-div approach
+   caused. The character is hidden from screen readers (it's purely
+   decorative) and is upsized + bolded to read as a bullet, not punctuation. */
+.cv-portrait-footer-bar {
+  color: var(--cv-cyan);
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1;
+  transform: translateY(-3px);
+  display: inline-block;
+}
+
+.spinner { animation: ec-spin 0.8s linear infinite; }
+@keyframes ec-spin { to { transform: rotate(360deg); } }

@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { PageHeader, PageContainer } from "@/components/admin/PageHeader";
-import type { Article, BlogSection } from "@/lib/articles-types";
+import type { Article, ArticleStatus, BlogSection } from "@/lib/articles-types";
+import { StatusBadge } from "../_status-badge";
 
 // Form state mirrors the Article shape but tolerates the empty-draft case.
 interface FormState {
@@ -118,20 +119,25 @@ type Toast = { kind: "success" | "error" | "info"; message: string } | null;
 export default function ArticleEditor() {
   const params = useParams<{ id: string }>();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Resolve the article ID from the URL pathname first, falling back to route
-  // params. With static export + Cloudflare Pages SPA fallback (`_redirects`),
-  // a UUID URL like /admin/articles/<uuid> is served by /admin/articles/new/
-  // — useParams() reports "new" but the URL bar shows the UUID. usePathname()
-  // sees the real URL, so we extract the segment from there.
+  // Resolve the article ID. With static export we ONLY render the
+  // /admin/articles/new route. Editing an existing article works by passing
+  // ?id=<uuid> as a query string (no SPA fallback / no dynamic-path tricks
+  // needed). Legacy path-based URLs are also accepted via usePathname() for
+  // forward-compat with anything still linking the old way.
+  const idFromQuery = searchParams?.get("id") ?? null;
   const idFromPath = useMemo(() => {
     if (!pathname) return null;
     const m = pathname.match(/^\/admin\/articles\/([^/]+)\/?$/);
     return m?.[1] ?? null;
   }, [pathname]);
   const id =
-    idFromPath && idFromPath !== "new" ? idFromPath : params?.id ?? null;
+    idFromQuery ||
+    (idFromPath && idFromPath !== "new" ? idFromPath : null) ||
+    params?.id ||
+    null;
   const isNew = !id || id === "new";
 
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
@@ -140,10 +146,19 @@ export default function ArticleEditor() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [toast, setToast] = useState<Toast>(null);
   const [confirmModal, setConfirmModal] = useState<
     null | { kind: "publish" | "delete" | "unpublish" }
   >(null);
+
+  // Defensive status read — older rows may not have `status` set yet.
+  const currentStatus: ArticleStatus = (() => {
+    const s = article?.status;
+    if (s === "draft" || s === "in_review" || s === "published") return s;
+    if (article?.published) return "published";
+    return "draft";
+  })();
 
   useEffect(() => {
     if (isNew) {
@@ -276,12 +291,11 @@ export default function ArticleEditor() {
         message: opts.preview ? "Saved — opening preview…" : "Saved.",
       });
       if (isNew) {
-        // Update the URL to the persistent editor URL via history API rather
-        // than router.replace — under static export, /admin/articles/<uuid>
-        // isn't a known Next.js route, so router-driven navigation would try
-        // to fetch a non-existent page. Cloudflare Pages handles the URL via
-        // the _redirects SPA fallback; we just need the URL bar to reflect it.
-        window.history.replaceState(null, "", `/admin/articles/${data.id}`);
+        // After creating a new article, update the URL bar to the persistent
+        // editor URL via history API. We use the query-string form so the
+        // URL points at a real static page (/admin/articles/new) — no SPA
+        // fallback needed.
+        window.history.replaceState(null, "", `/admin/articles/new?id=${data.id}`);
       }
       return data;
     } catch (e) {
@@ -360,6 +374,70 @@ export default function ArticleEditor() {
     }
   }
 
+  async function doSubmitForReview() {
+    if (isNew || !article) return;
+    setSubmitting(true);
+    try {
+      // Save first so the reviewer sees the latest content.
+      const saved = await save();
+      if (!saved) return;
+      const res = await fetch(`/admin/api/articles/${saved.id}/submit-for-review`, {
+        method: "POST",
+        credentials: "same-origin",
+      });
+      if (!res.ok) {
+        setToast({ kind: "error", message: `Submit failed (${res.status})` });
+        return;
+      }
+      const data = (await res.json()) as {
+        article: Article;
+        email_sent?: boolean;
+        email_error?: string;
+      };
+      setArticle(data.article);
+      setForm(articleToForm(data.article));
+      setToast({
+        kind: "success",
+        message: "Submitted for review. Richard will get an email.",
+      });
+    } catch (e) {
+      setToast({
+        kind: "error",
+        message: e instanceof Error ? e.message : "Submit failed",
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function doSendBackToDraft() {
+    if (isNew || !article) return;
+    setSubmitting(true);
+    try {
+      const res = await fetch(`/admin/api/articles/${article.id}`, {
+        method: "PATCH",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "draft" }),
+      });
+      if (!res.ok) {
+        setToast({ kind: "error", message: `Failed to send back to draft (${res.status})` });
+        return;
+      }
+      const data = (await res.json()) as Article;
+      setArticle(data);
+      setForm(articleToForm(data));
+      setToast({ kind: "info", message: "Sent back to draft." });
+    } catch (e) {
+      setToast({
+        kind: "error",
+        message: e instanceof Error ? e.message : "Failed to send back to draft",
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   async function doDelete() {
     setConfirmModal(null);
     if (isNew || !article) return;
@@ -429,13 +507,20 @@ export default function ArticleEditor() {
         title={form.title || (isNew ? "Untitled draft" : "Untitled")}
         description={
           article
-            ? `${article.published ? "Published" : "Draft"}${
+            ? `${
+                currentStatus === "published"
+                  ? "Published"
+                  : currentStatus === "in_review"
+                  ? "Awaiting review"
+                  : "Draft"
+              }${
                 article.published_at
                   ? ` · since ${article.published_at.slice(0, 10)}`
                   : ""
               }`
-            : "Fill in the fields below — published defaults to false."
+            : "Fill in the fields below — new articles start as drafts."
         }
+        action={article ? <StatusBadge status={currentStatus} /> : undefined}
       />
 
       <div className="grid lg:grid-cols-[2fr,1fr] gap-6">
@@ -546,8 +631,8 @@ export default function ArticleEditor() {
         {/* Sidebar */}
         <div className="space-y-6">
           <FieldGroup title="Status">
-            <div className="flex items-center gap-3">
-              <StatusBadge published={article?.published ?? false} />
+            <div className="flex items-center gap-3 flex-wrap">
+              <StatusBadge status={article ? currentStatus : "draft"} />
               {article?.updated_at && (
                 <span className="text-xs text-ppa-muted">
                   Last edited {article.updated_at.slice(0, 10)}
@@ -600,7 +685,7 @@ export default function ArticleEditor() {
               <button
                 type="button"
                 onClick={() => save()}
-                disabled={saving || publishing}
+                disabled={saving || publishing || submitting}
                 className={primaryBtn}
               >
                 {saving ? "Saving…" : isNew ? "Create draft" : "Save"}
@@ -608,37 +693,64 @@ export default function ArticleEditor() {
               <button
                 type="button"
                 onClick={saveAndPreview}
-                disabled={saving || publishing}
-                className={secondaryBtn}
+                disabled={saving || publishing || submitting}
+                className={secondaryBtnFull}
               >
                 Save & preview
               </button>
 
-              {!isNew && article && !article.published && (
+              {/* status: draft — show Submit for Review (primary action) */}
+              {!isNew && article && currentStatus === "draft" && (
                 <button
                   type="button"
-                  onClick={() => setConfirmModal({ kind: "publish" })}
-                  disabled={saving || publishing}
-                  className={publishBtn}
+                  onClick={doSubmitForReview}
+                  disabled={saving || publishing || submitting}
+                  className={submitForReviewBtn}
                 >
-                  {publishing ? "Publishing…" : "Publish"}
+                  {submitting ? "Submitting…" : "Submit for Review"}
                 </button>
               )}
-              {!isNew && article && article.published && (
+
+              {/* status: in_review — show Publish (primary) + Send back to draft */}
+              {!isNew && article && currentStatus === "in_review" && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setConfirmModal({ kind: "publish" })}
+                    disabled={saving || publishing || submitting}
+                    className={publishBtn}
+                  >
+                    {publishing ? "Publishing…" : "Publish"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={doSendBackToDraft}
+                    disabled={saving || publishing || submitting}
+                    className={secondaryBtnFull}
+                  >
+                    {submitting ? "Sending…" : "Send back to draft"}
+                  </button>
+                </>
+              )}
+
+              {/* status: published — show Unpublish */}
+              {!isNew && article && currentStatus === "published" && (
                 <button
                   type="button"
                   onClick={() => setConfirmModal({ kind: "unpublish" })}
-                  disabled={saving || publishing}
-                  className={secondaryBtn}
+                  disabled={saving || publishing || submitting}
+                  className={secondaryBtnFull}
                 >
                   Unpublish
                 </button>
               )}
-              {!isNew && article && (
+
+              {/* Delete: shown for draft only, matching the spec's draft button bar. */}
+              {!isNew && article && currentStatus === "draft" && (
                 <button
                   type="button"
                   onClick={() => setConfirmModal({ kind: "delete" })}
-                  disabled={saving || publishing}
+                  disabled={saving || publishing || submitting}
                   className={dangerBtn}
                 >
                   Delete
@@ -1084,30 +1196,23 @@ function Field({
   );
 }
 
-function StatusBadge({ published }: { published: boolean }) {
-  if (published) {
-    return (
-      <span className="inline-flex items-center px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-emerald-900 bg-emerald-100 border border-emerald-300 rounded-sm">
-        Published
-      </span>
-    );
-  }
-  return (
-    <span className="inline-flex items-center px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-muted bg-ppa-light border border-ppa-border rounded-sm">
-      Draft
-    </span>
-  );
-}
-
 const inputClass =
   "w-full px-3 py-2 text-sm bg-ppa-white border border-ppa-border text-ppa-black focus:outline-none focus:border-ppa-brass focus:ring-0";
 const textareaClass =
   "w-full px-3 py-2 text-sm bg-ppa-white border border-ppa-border text-ppa-black focus:outline-none focus:border-ppa-brass focus:ring-0 font-light leading-relaxed resize-y";
 const primaryBtn =
   "w-full px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.15em] text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-center";
+// Compact secondary (used inline in section editors)
 const secondaryBtn =
   "px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.15em] text-ppa-black bg-ppa-white border border-ppa-border hover:border-ppa-brass/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-center";
+// Full-width secondary (used in the sidebar action bar)
+const secondaryBtnFull =
+  "w-full px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.15em] text-ppa-black bg-ppa-white border border-ppa-border hover:border-ppa-brass/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-center";
+// Submit for Review — cyan primary (matches NEEDS REVIEW badge palette family)
+const submitForReviewBtn =
+  "w-full px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.15em] text-ppa-white bg-[#0C7CB0] hover:bg-[#075E87] transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-center";
+// Publish — brand navy (final approval action)
 const publishBtn =
-  "w-full px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.15em] text-ppa-white bg-emerald-700 hover:bg-emerald-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-center";
+  "w-full px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.15em] text-ppa-white bg-ppa-navy hover:bg-ppa-navy-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-center";
 const dangerBtn =
   "w-full px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.15em] text-red-800 bg-ppa-white border border-red-300 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-center";

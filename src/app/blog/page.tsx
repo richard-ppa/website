@@ -17,8 +17,37 @@ export default function BlogIndexPage() {
   const posts = getAllPosts();
   const [featured, ...rest] = posts;
 
+  // CollectionPage + ItemList — tells Google this is the index of the blog
+  // collection and enumerates every post for crawl efficiency / topical
+  // signal. Each entry links to the post's BlogPosting/TechArticle schema.
+  const collectionJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": "https://ppa.aero/blog#webpage",
+    url: "https://ppa.aero/blog",
+    name: "Field Insights — Plane Place Aviation Blog",
+    description:
+      "Technical notes from the Plane Place Aviation team on Hawker, Citation, and Challenger maintenance, inspections, and recurring findings.",
+    isPartOf: { "@id": "https://ppa.aero/#website" },
+    inLanguage: "en-US",
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: posts.length,
+      itemListElement: posts.map((p, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        url: `https://ppa.aero/blog/${p.slug}`,
+        name: p.title,
+      })),
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
+      />
       {/* Header — cinematic hero */}
       <section className="relative h-[65vh] min-h-[480px] flex items-end overflow-hidden">
         <div className="absolute inset-0">

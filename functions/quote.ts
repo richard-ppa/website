@@ -71,8 +71,10 @@ const SERVICE_LABELS: Record<string, string> = {
   structural: "Structural Repair",
   avionics: "Avionics",
   management: "Maintenance Management",
+  parts: "Part Request",
   other: "Other",
 };
+
 const TIMELINE_LABELS: Record<string, string> = {
   asap: "ASAP / AOG",
   "30days": "Within 30 days",
@@ -264,7 +266,53 @@ interface StagedFile {
   sizeBytes: number;
 }
 
-function buildQuoteEmailHtml(fields: QuoteFields, attachments: Array<{ filename: string; sizeBytes: number; downloadUrl: string }>, banner?: string): string {
+import {
+  buildSourceBlockHtml,
+  buildSourceBlockText,
+  type LeadAttribution,
+} from "./_shared/leads";
+import {
+  buildClaimUrl,
+  CLAIMERS,
+  CLAIMER_KEYS,
+  type ClaimerKey,
+} from "./_shared/claim";
+
+type ClaimUrls = Partial<Record<ClaimerKey, string>>;
+
+// Compact text-link style — keeps the panel scannable when there are 5+ names.
+function buildClaimBlockHtml(claimUrls?: ClaimUrls): string {
+  if (!claimUrls) return "";
+  const links = CLAIMER_KEYS.filter((k) => claimUrls[k])
+    .map(
+      (k) =>
+        `<a href="${escapeHtml(
+          claimUrls[k] as string
+        )}" style="color:#b45309;text-decoration:underline;font-weight:600;white-space:nowrap;">${escapeHtml(
+          CLAIMERS[k].name
+        )}</a>`
+    )
+    .join(" &nbsp;·&nbsp; ");
+  if (!links) return "";
+  return `<div style="margin-top:24px;padding:18px 20px;background:#fefce8;border:1px solid #fde68a;">
+            <div style="color:#78350f;font-size:11px;text-transform:uppercase;letter-spacing:0.15em;font-weight:600;margin-bottom:8px;">Response Coordination</div>
+            <div style="color:#111827;font-size:14px;line-height:1.7;">Click your name to claim — the rest of the team gets notified, no reply-all needed: ${links}</div>
+            <div style="margin-top:8px;color:#92400e;font-size:11px;font-style:italic;">Links expire in 30 days.</div>
+          </div>`;
+}
+
+function buildClaimBlockText(claimUrls?: ClaimUrls): string {
+  if (!claimUrls) return "";
+  const lines = CLAIMER_KEYS.filter((k) => claimUrls[k]).map(
+    (k) => `${CLAIMERS[k].name}: ${claimUrls[k]}`
+  );
+  if (!lines.length) return "";
+  return `\n\nResponse Coordination — click your link to claim (notifies the team):\n${lines.join(
+    "\n"
+  )}\n(Links expire in 30 days.)`;
+}
+
+function buildQuoteEmailHtml(fields: QuoteFields, attachments: Array<{ filename: string; sizeBytes: number; downloadUrl: string }>, banner?: string, attribution?: LeadAttribution, claimUrls?: ClaimUrls): string {
   const formatBytes = (b: number): string => {
     if (b < 1024) return `${b} B`;
     if (b < 1024 * 1024) return `${(b / 1024).toFixed(1)} KB`;
@@ -335,6 +383,8 @@ function buildQuoteEmailHtml(fields: QuoteFields, attachments: Array<{ filename:
       </table>
       ${detailsBlock}
       ${attachmentsBlock}
+      ${buildClaimBlockHtml(claimUrls)}
+      ${buildSourceBlockHtml(attribution)}
     </div>
     <div style="margin-top:16px;text-align:center;color:#9ca3af;font-size:12px;">
       Submitted via the quote form on <a href="https://ppa.aero/quote" style="color:#9ca3af;">ppa.aero/quote</a>
@@ -343,7 +393,7 @@ function buildQuoteEmailHtml(fields: QuoteFields, attachments: Array<{ filename:
 </body></html>`;
 }
 
-function buildQuoteEmailText(fields: QuoteFields, attachments: Array<{ filename: string; sizeBytes: number; downloadUrl: string }>, banner?: string): string {
+function buildQuoteEmailText(fields: QuoteFields, attachments: Array<{ filename: string; sizeBytes: number; downloadUrl: string }>, banner?: string, attribution?: LeadAttribution, claimUrls?: ClaimUrls): string {
   const formatBytes = (b: number): string => {
     if (b < 1024) return `${b} B`;
     if (b < 1024 * 1024) return `${(b / 1024).toFixed(1)} KB`;
@@ -368,7 +418,9 @@ function buildQuoteEmailText(fields: QuoteFields, attachments: Array<{ filename:
       ? `\n\nAttachments (${attachments.length}) — virus-scanned, expire in 30 days:\n${attachments
           .map((p) => `- ${p.filename} (${formatBytes(p.sizeBytes)})\n  ${p.downloadUrl}`)
           .join("\n")}`
-      : "")
+      : "") +
+    buildClaimBlockText(claimUrls) +
+    buildSourceBlockText(attribution)
   );
 }
 
@@ -402,8 +454,14 @@ async function processSubmission(
   env: Env,
   origin: string,
   fields: QuoteFields,
-  staged: StagedFile[]
+  staged: StagedFile[],
+  attribution: unknown
 ): Promise<void> {
+  // Generate the lead ID up-front so claim URLs in the email reference the
+  // same record that recordLead writes to KV.
+  const leadId = uuidv4();
+  const isPartRequest = fields.service === "parts";
+
   // Scan files (if any)
   const scanResults: ScanResult[] = [];
   if (staged.length > 0) {
@@ -437,8 +495,8 @@ async function processSubmission(
     const banner =
       `WARNING: One or more attachments were flagged as malicious by VirusTotal and have been deleted from storage. ` +
       `Files: ${malicious.map((m) => m.file.filename).join(", ")}. The customer was shown a success page; you may want to follow up directly.`;
-    const html = buildQuoteEmailHtml(fields, [], banner);
-    const text = buildQuoteEmailText(fields, [], banner);
+    const html = buildQuoteEmailHtml(fields, [], banner, attribution as LeadAttribution | undefined);
+    const text = buildQuoteEmailText(fields, [], banner, attribution as LeadAttribution | undefined);
     await sendEmail(env, subject, html, text, fields.email);
     return;
   }
@@ -462,17 +520,21 @@ async function processSubmission(
           .join(", ")}). Files were uploaded but VirusTotal could not confirm they are clean — review before opening.`
       : undefined;
 
-  const subject = `Quote Request: ${fields.name}${fields.company ? ` (${fields.company})` : ""} — ${fields.airframe}`;
-  const html = buildQuoteEmailHtml(fields, attachments, banner);
-  const text = buildQuoteEmailText(fields, attachments, banner);
-  await sendEmail(env, subject, html, text, fields.email);
+  // Build per-recipient claim URLs for every quote so any member of the
+  // quotes@ DL can take the request without a reply-all dance.
+  const claimUrls: ClaimUrls = {};
+  for (const key of CLAIMER_KEYS) {
+    claimUrls[key] = await buildClaimUrl(origin, leadId, key, env.FILE_SIGNING_SECRET);
+  }
 
-  // Record lead
+  // Record the lead BEFORE sending the email so /claim can look up customer
+  // context the moment a recipient clicks. recordLead is sub-second; email
+  // delivery takes longer, so there's no realistic race.
   if (env.LEADS_KV) {
     try {
       const { recordLead } = await import("./_shared/leads");
       await recordLead(env.LEADS_KV, {
-        id: uuidv4(),
+        id: leadId,
         type: "quote",
         ts: new Date().toISOString(),
         name: fields.name,
@@ -483,11 +545,20 @@ async function processSubmission(
         service: fields.service,
         timeline: fields.timeline,
         attachments: staged.length,
+        attribution: attribution as ReturnType<
+          typeof import("./_shared/leads").extractAttribution
+        >,
       });
     } catch (e) {
       console.error("Lead tracking write failed", e);
     }
   }
+
+  const subjectPrefix = isPartRequest ? "Part Request" : "Quote Request";
+  const subject = `${subjectPrefix}: ${fields.name}${fields.company ? ` (${fields.company})` : ""} — ${fields.airframe}`;
+  const html = buildQuoteEmailHtml(fields, attachments, banner, attribution as LeadAttribution | undefined, claimUrls);
+  const text = buildQuoteEmailText(fields, attachments, banner, attribution as LeadAttribution | undefined, claimUrls);
+  await sendEmail(env, subject, html, text, fields.email);
 }
 
 export const onRequestPost: PagesHandler<Env> = async (ctx) => {
@@ -602,8 +673,14 @@ export const onRequestPost: PagesHandler<Env> = async (ctx) => {
     staged.push({ buf, filename: safeName, fileId, r2Key, sizeBytes: file.size });
   }
 
+  // Capture attribution (Referer header, UA, UTM params) from the submitting
+  // request before we defer processing. Best-effort — empty object if the
+  // browser strips Referer.
+  const { extractAttribution } = await import("./_shared/leads");
+  const attribution = extractAttribution(request);
+
   // Defer scan + email + KV write so the customer doesn't wait on VirusTotal.
-  ctx.waitUntil(processSubmission(env, url.origin, fields, staged));
+  ctx.waitUntil(processSubmission(env, url.origin, fields, staged, attribution));
 
   return Response.redirect(new URL("/quote/thank-you", url).toString(), 303);
 };

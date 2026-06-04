@@ -14,3 +14,10 @@ next-env.d.ts
 public/blog/**/*.docx
 GSC Results.xlsx
 ~$*.xlsx
+
+# Bombardier OEM maintenance planning documents (licensed-to-operator)
+CH300MM_iMPD*.xlsx
+CH350MM_iMPD*.xlsx
+
+# Claude Code local state
+.claude/

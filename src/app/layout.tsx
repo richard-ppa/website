@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, Geist, Inter } from "next/font/google";
+import { Archivo, Geist, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -23,6 +23,13 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jetbrains-mono",
 });
 
 export const metadata: Metadata = {
@@ -69,8 +76,21 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
+// Root site-level JSON-LD as a @graph so we can ship multiple top-level
+// types (LocalBusiness + WebSite) in a single script tag with stable @ids
+// the rest of the site references via @id (e.g., publisher links here).
+const websiteJsonLd = {
+  "@type": "WebSite",
+  "@id": "https://ppa.aero/#website",
+  url: "https://ppa.aero",
+  name: "Plane Place Aviation",
+  description:
+    "FAA Part 145 repair station specializing exclusively in Hawker, Citation, and Challenger aircraft maintenance.",
+  publisher: { "@id": "https://ppa.aero/#organization" },
+  inLanguage: "en-US",
+};
+
+const localBusinessJsonLd = {
   "@type": "LocalBusiness",
   "@id": "https://ppa.aero/#organization",
   name: "Plane Place Aviation",
@@ -109,6 +129,18 @@ const jsonLd = {
     { "@type": "State", name: "Texas" },
     { "@type": "State", name: "Oklahoma" },
   ],
+  // Standard hangar hours — AOG response is 24/7 and is described separately
+  // in the OfferCatalog below.
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "07:00",
+      closes: "17:00",
+    },
+  ],
+  hasMap:
+    "https://www.google.com/maps/place/1650+Airport+Dr,+Cleburne,+TX+76033",
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Aircraft Maintenance Services",
@@ -123,13 +155,18 @@ const jsonLd = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [websiteJsonLd, localBusinessJsonLd],
+};
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${archivo.variable} ${geist.variable} ${inter.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${geist.variable} ${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
         {/* Google Analytics — replace G-XXXXXXXXXX with your GA4 measurement ID */}
         {process.env.NEXT_PUBLIC_GA_ID && (

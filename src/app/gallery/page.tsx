@@ -36,6 +36,19 @@ export const metadata: Metadata = {
 type Photo = { src: string; alt: string };
 
 const PHOTOS: Photo[] = [
+  { src: "/images/Gallery/Plane Place Aviation Hangar Shots (4).jpg", alt: "Hawker business jet parked on the ramp at Plane Place Aviation in Cleburne, Texas" },
+  { src: "/images/Gallery/Plane Place Aviation Hangar Shots (6).jpg", alt: "Hawker undergoing maintenance in the Plane Place Aviation hangar with Texas and American flags" },
+  { src: "/images/Gallery/Plane Place Aviation hangar images (2).jpg", alt: "Multiple business jets undergoing maintenance in the Plane Place Aviation hangar" },
+  { src: "/images/Gallery/Plane Place Aviation Hangar Shots (2).jpg", alt: "Bombardier Challenger with engine cowling open in the Plane Place Aviation hangar" },
+  { src: "/images/Gallery/Plane Place Aviation Hangar Shots (10).jpg", alt: "Cessna Citation engine maintenance in the Plane Place Aviation hangar in Cleburne, Texas" },
+  { src: "/images/Gallery/Plane Place Aviation Hangar Shots (13).jpg", alt: "Plane Place Aviation technicians performing engine work suspended from a forklift" },
+  { src: "/images/Gallery/Plane Place Aviation hangar images (4).jpg", alt: "Disassembled business jet engine on a stand during a heavy maintenance event" },
+  { src: "/images/Gallery/Plane Place Aviation hangar images (3).jpg", alt: "Plane Place Aviation technician performing maintenance beneath an open engine cowling" },
+  { src: "/images/Gallery/Plane Place Aviation Hangar Shots (11).jpg", alt: "Bombardier Challenger 350 engine cowling open during scheduled maintenance" },
+  { src: "/images/Gallery/Plane Place Aviation Hangar Shots (9).jpg", alt: "Plane Place Aviation technician drilling into a wing component during structural work" },
+  { src: "/images/Gallery/Plane Place Aviation Hangar Shots (5).jpg", alt: "Plane Place Aviation technician working on landing gear assembly" },
+  { src: "/images/Gallery/Plane Place Aviation Hangar Shots (3).jpg", alt: "Close-up of a business jet engine with cowling open during inspection" },
+  { src: "/images/Gallery/Plane Place Aviation hangar images (1).jpg", alt: "Business jet tail section view in the Plane Place Aviation hangar in Cleburne, Texas" },
   { src: "/images/Gallery/Hangar-Hawkers.jpg", alt: "Hawker aircraft in the Plane Place Aviation hangar in Cleburne, Texas" },
   { src: "/images/Gallery/Challenger-MX.jpg", alt: "Bombardier Challenger maintenance at Plane Place Aviation" },
   { src: "/images/Gallery/Citation-Hangar.jpg", alt: "Cessna Citation aircraft in the Plane Place Aviation hangar" },
@@ -84,7 +97,7 @@ const imageGalleryJsonLd = {
   publisher: { "@id": "https://ppa.aero/#organization" },
   image: PHOTOS.map((p) => ({
     "@type": "ImageObject",
-    contentUrl: `https://ppa.aero${p.src}`,
+    contentUrl: `https://ppa.aero${encodeURI(p.src)}`,
     description: p.alt,
   })),
 };

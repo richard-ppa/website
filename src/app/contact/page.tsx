@@ -40,9 +40,27 @@ export const metadata: Metadata = {
   },
 };
 
+// ContactPage schema — tells Google this is a Contact page, linked to the
+// root LocalBusiness so all the contact info there can be associated with
+// this page.
+const contactJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "@id": "https://ppa.aero/contact#webpage",
+  url: "https://ppa.aero/contact",
+  name: "Contact — Plane Place Aviation",
+  isPartOf: { "@id": "https://ppa.aero/#website" },
+  about: { "@id": "https://ppa.aero/#organization" },
+  inLanguage: "en-US",
+};
+
 export default function ContactPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactJsonLd) }}
+      />
       {/* Hero */}
       <section className="relative h-[100dvh] min-h-[600px] lg:min-h-[700px] flex items-end overflow-hidden">
         <div className="absolute inset-0">

@@ -190,32 +190,25 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-24 lg:py-32">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            <AnimatedSection direction="left">
-              <div className="relative">
-                <div className="aspect-[4/5] relative overflow-hidden">
-                  <Image
-                    src="/images/Winglet-Install---01.jpg"
-                    alt="Plane Place Aviation technicians collaborating on winglet structural work"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="absolute -bottom-8 -right-8 w-2/5 aspect-square overflow-hidden border-4 border-ppa-black hidden lg:block">
-                  <Image
-                    src="/images/Tech-at-Station.jpg"
-                    alt="Plane Place Aviation technician at precision workstation"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </div>
-            </AnimatedSection>
+      <section className="overflow-hidden py-24 lg:py-32">
+        <div className="grid lg:grid-cols-2 items-center gap-y-14">
+          {/* Image column — bleeds to left viewport edge */}
+          <AnimatedSection direction="left">
+            <div className="relative min-h-[480px] lg:min-h-[760px]">
+              <Image
+                src="/images/Gallery/Plane Place Aviation hangar images (3).jpg"
+                alt="Plane Place Aviation technician performing maintenance beneath an open engine cowling"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 55vw"
+              />
+            </div>
+          </AnimatedSection>
 
-            <AnimatedSection direction="right">
-              <div>
+          {/* Text column */}
+          <AnimatedSection direction="right">
+            <div className="px-6 lg:pl-16 lg:pr-10">
+              <div className="lg:max-w-[580px]">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="h-px w-8 bg-ppa-brass" />
                   <span className="text-[11px] font-semibold uppercase tracking-[0.25em] text-ppa-brass">
@@ -275,8 +268,8 @@ export default function HomePage() {
                   ))}
                 </div>
               </div>
-            </AnimatedSection>
-          </div>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 

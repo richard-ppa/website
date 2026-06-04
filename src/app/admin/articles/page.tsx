@@ -4,7 +4,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { PageHeader, PageContainer } from "@/components/admin/PageHeader";
 import { SetupRequired } from "@/components/admin/SetupRequired";
-import type { Article } from "@/lib/articles-types";
+import type { Article, ArticleStatus } from "@/lib/articles-types";
+import { StatusBadge } from "./_status-badge";
+
+type FilterValue = "all" | ArticleStatus;
 
 type FetchState =
   | { status: "loading" }
@@ -27,6 +30,13 @@ const MONTH_ABBR = [
   "Dec",
 ];
 
+const FILTER_TABS: Array<{ value: FilterValue; label: string }> = [
+  { value: "all", label: "All" },
+  { value: "draft", label: "Drafts" },
+  { value: "in_review", label: "In Review" },
+  { value: "published", label: "Published" },
+];
+
 function formatDateTime(iso: string): string {
   try {
     const dt = new Date(iso);
@@ -44,44 +54,76 @@ function formatDateTime(iso: string): string {
   }
 }
 
+function articleStatus(a: Article): ArticleStatus {
+  // Defensive — handle older rows that may not yet have `status` set.
+  if (a.status === "draft" || a.status === "in_review" || a.status === "published") {
+    return a.status;
+  }
+  return a.published ? "published" : "draft";
+}
+
+async function fetchArticles(filter: FilterValue): Promise<Article[] | { setup: true } | { error: string }> {
+  const url =
+    filter === "all"
+      ? "/admin/api/articles"
+      : `/admin/api/articles?status=${encodeURIComponent(filter)}`;
+  const res = await fetch(url, { credentials: "same-origin" });
+  if (res.status === 503) {
+    let body: { error?: string } = {};
+    try {
+      body = (await res.json()) as { error?: string };
+    } catch {
+      // ignore
+    }
+    if (body.error === "supabase-not-configured") {
+      return { setup: true };
+    }
+    return { error: "Service unavailable" };
+  }
+  if (!res.ok) {
+    return { error: `Request failed (${res.status})` };
+  }
+  const data = (await res.json()) as { articles: Article[] };
+  return data.articles ?? [];
+}
+
 export default function ArticlesListPage() {
+  const [filter, setFilter] = useState<FilterValue>("all");
   const [state, setState] = useState<FetchState>({ status: "loading" });
 
+  // Independent "Needs Review" lane — always fetched on mount so the section
+  // appears regardless of the active filter tab.
+  const [needsReview, setNeedsReview] = useState<Article[]>([]);
+
+  // Reload the main table whenever the filter changes.
   useEffect(() => {
     let cancelled = false;
-    async function load() {
-      try {
-        const res = await fetch("/admin/api/articles", { credentials: "same-origin" });
-        if (cancelled) return;
-        if (res.status === 503) {
-          let body: { error?: string } = {};
-          try {
-            body = (await res.json()) as { error?: string };
-          } catch {
-            // ignore
-          }
-          if (body.error === "supabase-not-configured") {
-            setState({ status: "setup-required" });
-            return;
-          }
-          setState({ status: "error", message: "Service unavailable" });
-          return;
-        }
-        if (!res.ok) {
-          setState({ status: "error", message: `Request failed (${res.status})` });
-          return;
-        }
-        const data = (await res.json()) as { articles: Article[] };
-        setState({ status: "ready", articles: data.articles ?? [] });
-      } catch (e) {
-        if (cancelled) return;
-        setState({
-          status: "error",
-          message: e instanceof Error ? e.message : "Unknown error",
-        });
+    setState({ status: "loading" });
+    fetchArticles(filter).then((result) => {
+      if (cancelled) return;
+      if (Array.isArray(result)) {
+        setState({ status: "ready", articles: result });
+      } else if ("setup" in result) {
+        setState({ status: "setup-required" });
+      } else {
+        setState({ status: "error", message: result.error });
       }
-    }
-    load();
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [filter]);
+
+  // Fetch the "Needs Review" lane once on mount.
+  useEffect(() => {
+    let cancelled = false;
+    fetchArticles("in_review").then((result) => {
+      if (cancelled) return;
+      if (Array.isArray(result)) {
+        setNeedsReview(result);
+      }
+      // Silent failure — the main table will surface setup/error states.
+    });
     return () => {
       cancelled = true;
     };
@@ -103,8 +145,6 @@ export default function ArticlesListPage() {
         }
       />
 
-      {state.status === "loading" && <LoadingSkeleton />}
-
       {state.status === "setup-required" && (
         <SetupRequired
           title="Supabase not configured"
@@ -119,7 +159,7 @@ export default function ArticlesListPage() {
       )}
 
       {state.status === "error" && (
-        <div className="bg-red-50 border border-red-300 p-6 text-sm text-red-900">
+        <div className="bg-red-50 border border-red-300 p-6 text-sm text-red-900 mb-6">
           <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-red-800 mb-2">
             Error
           </div>
@@ -127,35 +167,158 @@ export default function ArticlesListPage() {
         </div>
       )}
 
-      {state.status === "ready" && <ArticlesTable articles={state.articles} />}
+      {state.status !== "setup-required" && needsReview.length > 0 && (
+        <NeedsReviewSection articles={needsReview} />
+      )}
+
+      {state.status !== "setup-required" && (
+        <FilterTabs value={filter} onChange={setFilter} />
+      )}
+
+      {state.status === "loading" && <LoadingSkeleton />}
+
+      {state.status === "ready" && (
+        <ArticlesTable articles={state.articles} filter={filter} />
+      )}
     </PageContainer>
   );
 }
 
-function ArticlesTable({ articles }: { articles: Article[] }) {
+function FilterTabs({
+  value,
+  onChange,
+}: {
+  value: FilterValue;
+  onChange: (next: FilterValue) => void;
+}) {
+  return (
+    <div
+      role="tablist"
+      aria-label="Filter articles by status"
+      className="mb-4 flex flex-wrap items-center gap-1 border-b border-ppa-border"
+    >
+      {FILTER_TABS.map((tab) => {
+        const active = tab.value === value;
+        return (
+          <button
+            key={tab.value}
+            type="button"
+            role="tab"
+            aria-selected={active}
+            onClick={() => onChange(tab.value)}
+            className={`px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors border-b-2 -mb-px ${
+              active
+                ? "text-ppa-black border-ppa-brass"
+                : "text-ppa-muted border-transparent hover:text-ppa-black hover:border-ppa-border"
+            }`}
+          >
+            {tab.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function NeedsReviewSection({ articles }: { articles: Article[] }) {
+  return (
+    <section
+      className="border border-[#BAE6FD] mb-8"
+      style={{ backgroundColor: "#F0F9FF" }}
+    >
+      <div className="flex items-baseline justify-between p-5 lg:p-6 border-b border-[#BAE6FD] gap-4 flex-wrap">
+        <div>
+          <div className="text-[11px] font-semibold uppercase tracking-[0.2em] mb-1" style={{ color: "#0C7CB0" }}>
+            Awaiting review
+          </div>
+          <h2 className="font-display text-xl text-ppa-black">
+            {articles.length} {articles.length === 1 ? "article" : "articles"} need your attention
+          </h2>
+        </div>
+        <StatusBadge status="in_review" />
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="text-left text-[11px] uppercase tracking-[0.15em] text-ppa-muted border-b border-[#BAE6FD]">
+              <th className="px-5 lg:px-6 py-3 font-semibold">Title</th>
+              <th className="px-3 py-3 font-semibold">Category</th>
+              <th className="px-3 py-3 font-semibold">Slug</th>
+              <th className="px-5 lg:px-6 py-3 font-semibold">Submitted</th>
+            </tr>
+          </thead>
+          <tbody>
+            {articles.map((a) => (
+              <tr
+                key={a.id}
+                className="border-b border-[#BAE6FD] last:border-0 hover:bg-white/60 transition-colors cursor-pointer"
+                onClick={() => {
+                  window.location.href = `/admin/articles/new?id=${a.id}`;
+                }}
+              >
+                <td className="px-5 lg:px-6 py-3 text-ppa-black font-medium max-w-md">
+                  <Link
+                    href={`/admin/articles/new?id=${a.id}`}
+                    className="hover:text-ppa-brass-dark transition-colors line-clamp-2"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {a.title || <span className="italic text-ppa-muted">Untitled</span>}
+                  </Link>
+                </td>
+                <td className="px-3 py-3 text-ppa-gray whitespace-nowrap">{a.category || "—"}</td>
+                <td className="px-3 py-3 text-ppa-muted text-xs font-mono">{a.slug}</td>
+                <td className="px-5 lg:px-6 py-3 text-ppa-gray whitespace-nowrap tabular-nums">
+                  {formatDateTime(a.updated_at)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
+function ArticlesTable({
+  articles,
+  filter,
+}: {
+  articles: Article[];
+  filter: FilterValue;
+}) {
   if (articles.length === 0) {
+    const filterLabel = FILTER_TABS.find((t) => t.value === filter)?.label ?? "All";
     return (
       <section className="bg-ppa-white border border-ppa-border p-10 text-center">
-        <h2 className="font-display text-xl text-ppa-black mb-2">No articles yet</h2>
+        <h2 className="font-display text-xl text-ppa-black mb-2">
+          {filter === "all" ? "No articles yet" : `No ${filterLabel.toLowerCase()} articles`}
+        </h2>
         <p className="text-sm text-ppa-gray mb-6">
-          Drafts and published posts will appear here.
+          {filter === "all"
+            ? "Drafts and published posts will appear here."
+            : "Nothing matches this filter right now."}
         </p>
-        <Link
-          href="/admin/articles/new"
-          className="inline-flex items-center gap-2 px-5 py-2.5 text-[12px] font-semibold uppercase tracking-[0.15em] text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark transition-colors"
-        >
-          + New article
-        </Link>
+        {filter === "all" && (
+          <Link
+            href="/admin/articles/new"
+            className="inline-flex items-center gap-2 px-5 py-2.5 text-[12px] font-semibold uppercase tracking-[0.15em] text-ppa-white bg-ppa-brass hover:bg-ppa-brass-dark transition-colors"
+          >
+            + New article
+          </Link>
+        )}
       </section>
     );
   }
+
+  const heading = FILTER_TABS.find((t) => t.value === filter)?.label ?? "All";
 
   return (
     <section className="bg-ppa-white border border-ppa-border">
       <div className="flex items-baseline justify-between p-5 lg:p-6 border-b border-ppa-border gap-4 flex-wrap">
         <div>
           <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-ppa-muted mb-1">
-            All articles
+            {heading === "All" ? "All articles" : heading}
           </div>
           <h2 className="font-display text-xl text-ppa-black">
             {articles.length} {articles.length === 1 ? "post" : "posts"}
@@ -181,12 +344,12 @@ function ArticlesTable({ articles }: { articles: Article[] }) {
                 key={a.id}
                 className="border-b border-ppa-border last:border-0 hover:bg-ppa-light/40 transition-colors cursor-pointer"
                 onClick={() => {
-                  window.location.href = `/admin/articles/${a.id}`;
+                  window.location.href = `/admin/articles/new?id=${a.id}`;
                 }}
               >
                 <td className="px-5 lg:px-6 py-3 text-ppa-black font-medium max-w-md">
                   <Link
-                    href={`/admin/articles/${a.id}`}
+                    href={`/admin/articles/new?id=${a.id}`}
                     className="hover:text-ppa-brass-dark transition-colors line-clamp-2"
                     onClick={(e) => e.stopPropagation()}
                   >
@@ -194,7 +357,7 @@ function ArticlesTable({ articles }: { articles: Article[] }) {
                   </Link>
                 </td>
                 <td className="px-3 py-3">
-                  <StatusBadge published={a.published} />
+                  <StatusBadge status={articleStatus(a)} />
                 </td>
                 <td className="px-3 py-3 text-ppa-gray whitespace-nowrap">{a.category || "—"}</td>
                 <td className="px-3 py-3 text-ppa-gray whitespace-nowrap tabular-nums">
@@ -210,21 +373,6 @@ function ArticlesTable({ articles }: { articles: Article[] }) {
         </table>
       </div>
     </section>
-  );
-}
-
-function StatusBadge({ published }: { published: boolean }) {
-  if (published) {
-    return (
-      <span className="inline-flex items-center px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-emerald-900 bg-emerald-100 border border-emerald-300 rounded-sm">
-        Published
-      </span>
-    );
-  }
-  return (
-    <span className="inline-flex items-center px-2 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-ppa-muted bg-ppa-light border border-ppa-border rounded-sm">
-      Draft
-    </span>
   );
 }
 

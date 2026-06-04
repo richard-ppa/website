@@ -16,6 +16,19 @@ import { Stat, StatGrid } from "@/components/admin/Stat";
 import { SetupRequired } from "@/components/admin/SetupRequired";
 import { serviceLabel, timelineLabel } from "@/lib/quoteFormLabels";
 
+interface LeadAttribution {
+  referer?: string;
+  userAgent?: string;
+  utm?: {
+    source?: string;
+    medium?: string;
+    campaign?: string;
+    content?: string;
+    term?: string;
+  };
+  gclid?: string;
+}
+
 interface LeadRecord {
   id: string;
   type: "quote" | "contact";
@@ -29,6 +42,40 @@ interface LeadRecord {
   timeline?: string;
   attachments?: number;
   messagePreview?: string;
+  attribution?: LeadAttribution;
+}
+
+/**
+ * Distill the attribution data into a short human-readable source label.
+ * "Google / organic", "Direct", "ppa.aero/blog/...", "Google Ads (utm_source=google)", etc.
+ */
+function summarizeAttribution(a?: LeadAttribution): string {
+  if (!a) return "—";
+  if (a.utm?.source || a.utm?.medium) {
+    const parts: string[] = [];
+    if (a.utm.source) parts.push(a.utm.source);
+    if (a.utm.medium) parts.push(a.utm.medium);
+    return parts.join(" / ");
+  }
+  if (a.gclid) return "Google Ads";
+  if (!a.referer) return "Direct";
+  try {
+    const u = new URL(a.referer);
+    const host = u.hostname.replace(/^www\./, "");
+    if (host === "ppa.aero" || host === "www.ppa.aero") {
+      return `Internal · ${u.pathname}`;
+    }
+    if (host.includes("google.")) return "Google / organic";
+    if (host.includes("bing.")) return "Bing / organic";
+    if (host.includes("duckduckgo")) return "DuckDuckGo / organic";
+    if (host.includes("facebook.") || host.includes("fb.com")) return "Facebook";
+    if (host.includes("linkedin.")) return "LinkedIn";
+    if (host.includes("instagram.")) return "Instagram";
+    if (host.includes("twitter.") || host.includes("x.com")) return "X / Twitter";
+    return host;
+  } catch {
+    return "Referrer (unparsed)";
+  }
 }
 
 interface LeadsSummary {
@@ -309,6 +356,7 @@ function LeadsDashboard({ data }: { data: LeadsSummary }) {
                   <th className="px-3 py-3 font-semibold">Name</th>
                   <th className="px-3 py-3 font-semibold">Company</th>
                   <th className="px-3 py-3 font-semibold">Email</th>
+                  <th className="px-3 py-3 font-semibold">Source</th>
                   <th className="px-5 lg:px-6 py-3 font-semibold">Detail</th>
                 </tr>
               </thead>
@@ -337,6 +385,12 @@ function LeadsDashboard({ data }: { data: LeadsSummary }) {
                       ) : (
                         "—"
                       )}
+                    </td>
+                    <td
+                      className="px-3 py-3 text-ppa-gray text-xs whitespace-nowrap"
+                      title={r.attribution?.referer || ""}
+                    >
+                      {summarizeAttribution(r.attribution)}
                     </td>
                     <td className="px-5 lg:px-6 py-3 text-ppa-gray max-w-md">
                       <DetailCell record={r} />

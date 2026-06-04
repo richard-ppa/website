@@ -7,7 +7,9 @@
     "build": "tsx --env-file-if-exists=.env.local scripts/fetch-articles.ts && next build",
     "start": "next start",
     "lint": "next lint",
-    "seed:articles": "tsx --env-file-if-exists=.env.local scripts/seed-articles.ts"
+    "seed:articles": "tsx --env-file-if-exists=.env.local scripts/seed-articles.ts",
+    "seed:challenger": "tsx --env-file-if-exists=.env.local scripts/seed-challenger-draft.ts",
+    "seed:challenger-96month": "tsx --env-file-if-exists=.env.local scripts/seed-challenger-96month.ts"
   },
   "devDependencies": {
     "tsx": "^4.19.2"

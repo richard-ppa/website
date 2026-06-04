@@ -50,8 +50,8 @@ export default function QuotePage() {
       <section className="relative h-[45vh] min-h-[350px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/hangar-work.jpg"
-            alt="Plane Place Aviation hangar operations"
+            src="/images/Citation%20Engine%20Overhaul%205.jpg"
+            alt="Plane Place Aviation technicians performing a Citation engine overhaul"
             fill
             className="object-cover"
             priority

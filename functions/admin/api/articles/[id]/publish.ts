@@ -53,7 +53,11 @@ export const onRequestPost: PagesHandler<Env> = async ({ env, params }) => {
   }
   if (!existing) return jsonResponse({ error: "not-found" }, { status: 404 });
 
-  const patch: { published: boolean; published_at?: string } = { published: true };
+  const patch: {
+    published: boolean;
+    status: "published";
+    published_at?: string;
+  } = { published: true, status: "published" };
   if (!existing.published_at) {
     patch.published_at = new Date().toISOString();
   }
