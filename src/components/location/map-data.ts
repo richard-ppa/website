@@ -63,7 +63,7 @@ export interface AirportInfo {
 }
 
 export const AIRPORT_INFO: AirportInfo = {
-  icao: "KCTP",
+  icao: "KCPT",
   iata: "CPT",
   name: "Cleburne Regional Airport",
   cityState: "Cleburne, Texas",

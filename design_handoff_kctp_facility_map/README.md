@@ -2,7 +2,7 @@
 
 ## Overview
 
-Interactive Cleburne Regional Airport (KCTP) facility map for the Plane Place
+Interactive Cleburne Regional Airport (KCPT) facility map for the Plane Place
 website. The component replaces the existing "Location" section: it bundles
 the eyebrow, heading, body copy, address (now embedded in the diagram), and
 the airport map into one self-contained card. Clicking a hangar opens a side
@@ -71,7 +71,7 @@ card naturally sizes; diagram has aspect ratio ~3:4).
 │   │ 🧭 RUNWAY 15/33  │                   │
 │   │    5,778 ft      │                   │
 │   │    ─── divider   │                   │
-│   │    KCTP · CPT    │                   │
+│   │    KCPT · CPT    │                   │
 │   │    32°21'13"N    │                   │
 │   │    97°25'59"W    │                   │
 │   └──────────────────┘                   │
@@ -163,7 +163,7 @@ asset).
     next to it `· Asphalt` `9.5px` color `#7A8194`.
   - Horizontal divider (1px, `#E1E5EB`).
   - Coordinates block (font-family JetBrains Mono):
-    - "KCTP · CPT" — `10px`, `font-weight: 700`,
+    - "KCPT · CPT" — `10px`, `font-weight: 700`,
       `letter-spacing: 0.18em`, color `#134B7A`.
     - "32°21′13″N" — `9px`, color `#7A8194`.
     - "97°25′59″W" — same.

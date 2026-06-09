@@ -130,8 +130,8 @@ const todayStr = () =>
   new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
 // Document-type prefixes used on the cover. Selected per-cover from the form.
-//   - "quote"    -  original customer quote -  prefix QKCTP
-//   - "estimate" -  addendum for an aircraft already in the shop -  prefix KCTP
+//   - "quote"    -  original customer quote -  prefix QKCPT
+//   - "estimate" -  addendum for an aircraft already in the shop -  prefix KCPT
 type DocType = "quote" | "estimate";
 type DowntimeUnit = "business" | "calendar" | "weeks";
 const DOWNTIME_UNIT_LABEL: Record<DowntimeUnit, string> = {
@@ -145,8 +145,8 @@ const DOWNTIME_UNIT_SHORT: Record<DowntimeUnit, string> = {
   weeks: "weeks",
 };
 const DOC_TYPE_PREFIX: Record<DocType, string> = {
-  quote: "QKCTP",
-  estimate: "KCTP",
+  quote: "QKCPT",
+  estimate: "KCPT",
 };
 const DOC_TYPE_LABEL: Record<DocType, string> = {
   quote: "Quote",
@@ -748,7 +748,7 @@ export default function EstimateCoverPage() {
                   <div className="grid grid-cols-2 gap-1.5">
                     {(["quote", "estimate"] as DocType[]).map((t) => {
                       const on = docType === t;
-                      const label = t === "quote" ? "Quote (QKCTP)" : "Estimate (KCTP)";
+                      const label = t === "quote" ? "Quote (QKCPT)" : "Estimate (KCPT)";
                       return (
                         <button
                           key={t}

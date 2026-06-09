@@ -239,7 +239,7 @@ export function MapSVG({ onHoverHangar, onMouseMove }: MapSVGProps = {}) {
       ref={wrapRef}
       style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
       role="img"
-      aria-label="Diagram of Cleburne Regional Airport (KCTP) showing four Plane Place Aviation hangars, the runway, and parked aircraft"
+      aria-label="Diagram of Cleburne Regional Airport (KCPT) showing four Plane Place Aviation hangars, the runway, and parked aircraft"
     >
       <style>{buildSvgCSS(".kctp-map-host")}</style>
       <div

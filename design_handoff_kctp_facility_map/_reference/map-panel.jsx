@@ -147,7 +147,7 @@ function SidePanel({ hangarId, theme, onClose, onQuoteClick, embedded, narrow })
               fontSize: 9.5, letterSpacing: "0.22em", textTransform: "uppercase",
               opacity: 0.7, fontWeight: 700, marginBottom: 6
             }}>
-              KCTP · Hangar
+              KCPT · Hangar
             </div>
             <div style={{ display: "flex", alignItems: "baseline", gap: 14 }}>
               <div style={{
@@ -373,7 +373,7 @@ function QuoteModal({ open, hangarPrefill, theme, onClose }) {
           fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase",
           color: theme.accent2, fontWeight: 700, marginBottom: 6
         }}>
-          Plane Place Aviation · KCTP
+          Plane Place Aviation · KCPT
         </div>
         <div style={{
           fontSize: 30, fontWeight: 800, lineHeight: 1.1, color: theme.text,

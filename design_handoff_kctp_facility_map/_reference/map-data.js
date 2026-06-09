@@ -94,7 +94,7 @@ window.MAP_THEME = {
 
 // Airport facts shown in the chrome
 window.AIRPORT_INFO = {
-  icao: "KCTP",
+  icao: "KCPT",
   iata: "CPT",
   name: "Cleburne Regional Airport",
   cityState: "Cleburne, Texas",
