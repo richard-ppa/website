@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "tsx --env-file-if-exists=.env.local scripts/fetch-articles.ts && next build",
+    "deploy": "next build && npx --yes wrangler@latest pages deploy out --project-name=ppa-website --branch=master --commit-dirty=true",
     "start": "next start",
     "lint": "next lint",
     "seed:articles": "tsx --env-file-if-exists=.env.local scripts/seed-articles.ts",
